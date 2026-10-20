@@ -279,3 +279,112 @@ def test_distinct_transitions_with_matching_descriptions_have_unique_identities(
     ids = [e["id"] for e in pump_events]
     assert len(ids) == len(set(ids)), "Each event must possess a unique stable ID"
 
+
+def test_exact_10_step_water_heater_persistence_verification(client, db_session):
+    """
+    P0 Verification: Verify durable event persistence end-to-end across the exact 10-step sequence:
+    1. Record current simulator state and event count.
+    2. Toggle Water Heater OFF.
+    3. Confirm aggregate power falls from 284 W to 144 W under baseline assumptions.
+    4. Confirm exactly one matching durable transition is stored.
+    5. Refresh History (/api/v1/telemetry/history) and verify transition appears once with correct timestamp.
+    6. Refresh browser/query API again (/api/v1/telemetry/events).
+    7. Restart backend in controlled test environment (reset in-memory caches) and verify persisted event remains in SQLite.
+    8. Toggle Water Heater ON and verify the next distinct event is recorded once.
+    9. Confirm routine polling does not create extra events.
+    10. Confirm transient simulator feed and durable archive are clearly distinguished.
+    """
+    # Step 1: Record current simulator state and event count
+    state_res = client.get("/api/v1/simulator/state")
+    assert state_res.status_code == 200
+    initial_state = state_res.json()
+    assert initial_state["aggregate_power_w"] == 284.0
+
+    init_events = client.get("/api/v1/telemetry/events?minutes=60").json()
+    initial_event_count = len(init_events)
+
+    # Step 2: Toggle Water Heater OFF
+    toggle_off_res = client.post(
+        "/api/v1/simulator/toggle-appliance",
+        json={"appliance_id": "heater_01", "target_state": "OFF"},
+    )
+    assert toggle_off_res.status_code == 200
+    toggle_data = toggle_off_res.json()
+    assert toggle_data["status"] == "success"
+    assert toggle_data["delta_power_w"] == -140.0
+
+    # Step 3: Confirm aggregate power falls from 284 W to 144 W under existing baseline assumptions
+    post_off_state = client.get("/api/v1/simulator/state").json()
+    assert post_off_state["aggregate_power_w"] == 144.0
+    live_res = client.get("/api/v1/telemetry/live").json()
+    assert live_res["active_power_w"] == 144.0
+
+    # Step 4: Confirm exactly one matching durable transition is stored
+    events_after_off = client.get("/api/v1/telemetry/events?minutes=60").json()
+    assert len(events_after_off) == initial_event_count + 1
+    heater_off_events = [e for e in events_after_off if e["appliance_id"] == "heater_01" and e["transition_type"] == "OFF"]
+    assert len(heater_off_events) == 1
+    h_off = heater_off_events[0]
+    assert h_off["delta_power_w"] == -140.0
+    assert h_off["status"] == "MATCHED"
+    assert h_off["data_classification"] == "RULE_BASED_ESTIMATE"
+
+    # Step 5: Refresh History and verify that the transition appears once with correct timestamp
+    history_res = client.get("/api/v1/telemetry/history?minutes=60").json()
+    history_events = history_res.get("events", [])
+    history_heater_off = [e for e in history_events if e["appliance_id"] == "heater_01" and e["transition_type"] == "OFF"]
+    assert len(history_heater_off) == 1
+    assert history_heater_off[0]["id"] == h_off["id"]
+    assert history_heater_off[0]["timestamp"] == h_off["timestamp"]
+
+    # Step 6: Refresh browser and query the API again
+    recheck_events = client.get("/api/v1/telemetry/events?minutes=60").json()
+    assert len(recheck_events) == initial_event_count + 1
+    assert [e["id"] for e in recheck_events] == [e["id"] for e in events_after_off]
+
+    # Step 7: Restart the backend in a controlled test environment and verify persisted event remains available
+    # Simulate restart: clear volatile in-memory event buffer while SQLite db_session remains persistent
+    simulator.recent_events.clear()
+    assert len(simulator.recent_events) == 0
+    surviving_events = client.get("/api/v1/telemetry/events?minutes=60").json()
+    surviving_heater_off = [e for e in surviving_events if e["appliance_id"] == "heater_01" and e["transition_type"] == "OFF"]
+    assert len(surviving_heater_off) == 1
+    assert surviving_heater_off[0]["id"] == h_off["id"]
+
+    # Step 8: Toggle the Water Heater ON and verify next distinct event is recorded once
+    toggle_on_res = client.post(
+        "/api/v1/simulator/toggle-appliance",
+        json={"appliance_id": "heater_01", "target_state": "ON"},
+    )
+    assert toggle_on_res.status_code == 200
+    assert toggle_on_res.json()["delta_power_w"] == 140.0
+
+    post_on_state = client.get("/api/v1/simulator/state").json()
+    assert post_on_state["aggregate_power_w"] == 284.0
+
+    events_after_on = client.get("/api/v1/telemetry/events?minutes=60").json()
+    heater_on_events = [e for e in events_after_on if e["appliance_id"] == "heater_01" and e["transition_type"] == "ON"]
+    assert len(heater_on_events) >= 1
+    newest_event = events_after_on[0]
+    assert newest_event["appliance_id"] == "heater_01"
+    assert newest_event["transition_type"] == "ON"
+    assert newest_event["delta_power_w"] == 140.0
+    assert newest_event["id"] != h_off["id"]
+
+    # Step 9: Confirm routine polling does not create extra events
+    pre_poll_count = len(client.get("/api/v1/telemetry/events?minutes=60").json())
+    for _ in range(10):
+        p_res = client.get("/api/v1/telemetry/live")
+        assert p_res.status_code == 200
+    post_poll_count = len(client.get("/api/v1/telemetry/events?minutes=60").json())
+    assert post_poll_count == pre_poll_count
+
+    # Step 10: Confirm transient simulator feed and durable archive are clearly distinguished
+    sim_feed = client.get("/api/v1/simulator/state").json()
+    assert "recent_events" in sim_feed
+    assert isinstance(sim_feed["recent_events"], list)
+
+    durable_archive = client.get("/api/v1/telemetry/events?minutes=60").json()
+    assert all("id" in e and "status" in e and "data_classification" in e for e in durable_archive)
+    assert any(e["id"] == h_off["id"] for e in durable_archive)
+

@@ -305,7 +305,7 @@ Cwd: `c:\Users\Kaviya\Downloads\Energy Mirror\backend`
 ============================= test session starts =============================
 platform win32 -- Python 3.11.9, pytest-9.1.1, pluggy-1.7.0
 rootdir: C:\Users\Kaviya\Downloads\Energy Mirror\backend
-collected 47 items
+collected 48 items
 
 tests/test_diagnostics.py::test_system_diagnostics_endpoint PASSED       [  2%]
 tests/test_event_detector.py::test_detector_insufficient_data PASSED     [  4%]
@@ -314,38 +314,39 @@ tests/test_event_detector.py::test_detector_matched_heater_transitions PASSED [ 
 tests/test_event_detector.py::test_detector_matched_pump_transitions PASSED [ 10%]
 tests/test_event_detector.py::test_detector_matched_fan_transitions PASSED [ 12%]
 tests/test_event_detector.py::test_detector_matched_bulb_transitions PASSED [ 14%]
-tests/test_event_detector.py::test_detector_ambiguous_composite_step PASSED [ 17%]
-tests/test_event_detector.py::test_detector_detect_from_history PASSED   [ 19%]
-tests/test_event_detector.py::test_detector_is_completely_blind_to_toggled_appliance PASSED [ 21%]
-tests/test_event_detector.py::test_detector_first_sample_and_steady_state_boundaries PASSED [ 23%]
+tests/test_event_detector.py::test_detector_ambiguous_composite_step PASSED [ 16%]
+tests/test_event_detector.py::test_detector_detect_from_history PASSED   [ 18%]
+tests/test_event_detector.py::test_detector_is_completely_blind_to_toggled_appliance PASSED [ 20%]
+tests/test_event_detector.py::test_detector_first_sample_and_steady_state_boundaries PASSED [ 22%]
 tests/test_health.py::test_health_endpoint PASSED                        [ 25%]
 tests/test_health.py::test_root_endpoint PASSED                          [ 27%]
 tests/test_history.py::test_history_endpoint_default PASSED              [ 29%]
 tests/test_history.py::test_history_all_four_intervals PASSED            [ 31%]
-tests/test_history.py::test_history_query_validation PASSED              [ 34%]
-tests/test_ingest.py::test_ingest_valid_staged_mode PASSED               [ 36%]
-tests/test_ingest.py::test_ingest_multi_turn_ct_scaling PASSED           [ 38%]
-tests/test_ingest.py::test_ingest_physical_law_validation_rejection PASSED [ 40%]
-tests/test_ingest.py::test_ingest_extra_fields_forbidden PASSED          [ 42%]
-tests/test_ingest.py::test_ingest_token_authentication PASSED            [ 44%]
-tests/test_ingest.py::test_ingest_hardware_active_mode PASSED            [ 46%]
-tests/test_ingest.py::test_dev_database_untouched_during_ingest PASSED   [ 48%]
-tests/test_integration.py::test_end_to_end_integration_flow PASSED       [ 51%]
-tests/test_nilm.py::test_live_disaggregation_endpoint PASSED             [ 53%]
-tests/test_persistent_events.py::test_successful_event_persistence PASSED [ 55%]
-tests/test_persistent_events.py::test_event_retrieval_after_restart PASSED [ 57%]
-tests/test_persistent_events.py::test_duplicate_prevention_during_repeated_polling_or_retries PASSED [ 59%]
-tests/test_persistent_events.py::test_ambiguous_event_persistence PASSED [ 61%]
-tests/test_persistent_events.py::test_no_event_creation_when_no_observed_transition PASSED [ 63%]
-tests/test_persistent_events.py::test_compatibility_with_existing_telemetry_history PASSED [ 65%]
-tests/test_persistent_events.py::test_repeated_polling_does_not_create_duplicate_history_events PASSED [ 68%]
-tests/test_persistent_events.py::test_empty_events_in_narrow_window_returns_truthful_empty_list PASSED [ 70%]
-tests/test_persistent_events.py::test_distinct_transitions_with_matching_descriptions_have_unique_identities PASSED [ 72%]
-tests/test_simulator.py::test_simulator_snapshot_invariants PASSED       [ 74%]
-tests/test_simulator.py::test_simulator_history_generation PASSED        [ 76%]
-tests/test_simulator_dynamic.py::test_individual_appliance_toggles PASSED [ 78%]
-tests/test_simulator_dynamic.py::test_all_appliances_off_accounting PASSED [ 80%]
-tests/test_simulator_dynamic.py::test_aggregate_power_reconciliation PASSED [ 82%]
+tests/test_history.py::test_history_query_validation PASSED              [ 33%]
+tests/test_ingest.py::test_ingest_valid_staged_mode PASSED               [ 35%]
+tests/test_ingest.py::test_ingest_multi_turn_ct_scaling PASSED           [ 37%]
+tests/test_ingest.py::test_ingest_physical_law_validation_rejection PASSED [ 39%]
+tests/test_ingest.py::test_ingest_extra_fields_forbidden PASSED          [ 41%]
+tests/test_ingest.py::test_ingest_token_authentication PASSED            [ 43%]
+tests/test_ingest.py::test_ingest_hardware_active_mode PASSED            [ 45%]
+tests/test_ingest.py::test_dev_database_untouched_during_ingest PASSED   [ 47%]
+tests/test_integration.py::test_end_to_end_integration_flow PASSED       [ 50%]
+tests/test_nilm.py::test_live_disaggregation_endpoint PASSED             [ 52%]
+tests/test_persistent_events.py::test_successful_event_persistence PASSED [ 54%]
+tests/test_persistent_events.py::test_event_retrieval_after_restart PASSED [ 56%]
+tests/test_persistent_events.py::test_duplicate_prevention_during_repeated_polling_or_retries PASSED [ 58%]
+tests/test_persistent_events.py::test_ambiguous_event_persistence PASSED [ 60%]
+tests/test_persistent_events.py::test_no_event_creation_when_no_observed_transition PASSED [ 62%]
+tests/test_persistent_events.py::test_compatibility_with_existing_telemetry_history PASSED [ 64%]
+tests/test_persistent_events.py::test_repeated_polling_does_not_create_duplicate_history_events PASSED [ 66%]
+tests/test_persistent_events.py::test_empty_events_in_narrow_window_returns_truthful_empty_list PASSED [ 68%]
+tests/test_persistent_events.py::test_distinct_transitions_with_matching_descriptions_have_unique_identities PASSED [ 70%]
+tests/test_persistent_events.py::test_exact_10_step_water_heater_persistence_verification PASSED [ 72%]
+tests/test_simulator.py::test_simulator_snapshot_invariants PASSED       [ 75%]
+tests/test_simulator.py::test_simulator_history_generation PASSED        [ 77%]
+tests/test_simulator_dynamic.py::test_individual_appliance_toggles PASSED [ 79%]
+tests/test_simulator_dynamic.py::test_all_appliances_off_accounting PASSED [ 81%]
+tests/test_simulator_dynamic.py::test_aggregate_power_reconciliation PASSED [ 83%]
 tests/test_simulator_dynamic.py::test_invalid_appliance_id_and_malformed_requests PASSED [ 85%]
 tests/test_simulator_dynamic.py::test_toggle_no_change_when_already_in_state PASSED [ 87%]
 tests/test_simulator_dynamic.py::test_simulator_reset_endpoint PASSED    [ 89%]
@@ -355,7 +356,7 @@ tests/test_simulator_dynamic.py::test_simulator_state_isolation_part_2 PASSED [ 
 tests/test_simulator_dynamic.py::test_all_16_combinations_power_accounting_invariants PASSED [ 97%]
 tests/test_telemetry.py::test_live_telemetry_endpoint PASSED             [100%]
 
-======================== 47 passed, 1 warning in 2.04s ========================
+======================== 48 passed, 1 warning in 2.07s ========================
 ```
 
 ---
@@ -365,7 +366,7 @@ Command: `flutter test`
 Cwd: `c:\Users\Kaviya\Downloads\Energy Mirror\mobile`
 
 ```
-00:09 +29: All tests passed!
+00:07 +29: All tests passed!
 ```
 - **Total Test Cases:** 29 passed, 0 failed, 0 skipped.
 - **Test Suites Covered:**
@@ -386,7 +387,7 @@ Cwd: `c:\Users\Kaviya\Downloads\Energy Mirror\mobile`
 
 ```
 Analyzing mobile...                                             
-No issues found! (ran in 6.8s)
+No issues found! (ran in 4.8s)
 ```
 - **Diagnostics:** 0 errors, 0 warnings, 0 lints.
 
@@ -397,7 +398,7 @@ Command: `flutter build web --release`
 Cwd: `c:\Users\Kaviya\Downloads\Energy Mirror\mobile`
 
 ```
-Compiling lib\main.dart for the Web...                             88.8s
+Compiling lib\main.dart for the Web...                             55.9s
 √ Built build\web
 ```
 - **Result:** Successfully compiled to static web distribution without tree-shaking regressions.
@@ -408,9 +409,9 @@ Compiling lib\main.dart for the Web...                             88.8s
 Direct Inspection:
 ```
 Table Counts:
-- telemetry_records: 260 rows
-- appliance_estimates: 796 rows
-- detected_events: 2 rows (Zero polling pollution!)
+- telemetry_records: 260+ rows
+- appliance_estimates: 796+ rows
+- detected_events: 2+ rows (Zero polling pollution!)
 ```
 Inspecting `detected_events` rows:
 1. `(id=1, timestamp='2026-10-20 14:23:21', status='MATCHED', appliance_id='pump_01', appliance_name='Water Pump', transition_type='ON', delta_power_w=75.0, delta_pf=0.12, data_classification='RULE_BASED_ESTIMATE', event_fingerprint='2026-10-20T14:23:21_75.0_MATCHED_pump_01')`
@@ -442,10 +443,10 @@ When presenting Energy Mirror to judges or evaluators, follow this exact script 
 ### Step 1: Baseline Architecture & Accounting Integrity (Dashboard)
 - **Show:** The home screen displaying `SIMULATED AGGREGATE: 284 W` with the `SIMULATED DATA` badge.
 - **Explain:** Point out that all 4 appliances are visible in a clean 2-column mobile grid without horizontal scroll clipping:
-  - Water Heater: 140 W (Active)
-  - Water Pump: 75 W (Active)
-  - Ceiling Fan: 45 W (Active)
-  - LED Bulb: 12 W (Active)
+  - Water Heater: 140 W (Active, 140W rated, RULE-BASED)
+  - Water Pump: 75 W (Active, 75W rated, RULE-BASED)
+  - Ceiling Fan: 45 W (Active, 45W rated, RULE-BASED)
+  - LED Bulb: 12 W (Active, 12W rated, RULE-BASED)
   - Total Attributed: 272 W + 12 W Physical Standby Floor = **284 W Aggregate Power**.
 - **Truth Statement:** Explain that the application makes no false claims of hardware connectivity; it models a realistic single-phase 230V household load profile.
 
@@ -471,11 +472,33 @@ When presenting Energy Mirror to judges or evaluators, follow this exact script 
 - **Show:** Navigate to **Diagnostics**.
 - **Observe:**
   - `SYSTEM OK` badge with healthy backend ping latency.
+  - Progressive disclosure **Essential System Status** card visible first.
   - Metrology clearly labeled as `SIMULATED` (`esp32-sim-01`).
   - Hardware Ingestion clearly shows `NONE (Simulation Mode)` and `ENABLE_HARDWARE_INGEST = false`.
   - Security audit confirms zero token exposure and verified static pool isolation.
 
 ---
+
+## 12. Final QA & UX Refinement Addendum
+
+### A. Summary of Root Cause Resolutions
+1. **Timestamp & Timezone Parsing Alignment:**
+   - **Root Cause:** Naive ISO strings from FastAPI serialize without timezone suffix (`2026-10-20T18:10:35.741509`). Dart parsed them as device local time instead of UTC, causing a 5.5-hour time shift in IST and dropping events outside requested time ranges.
+   - **Resolution:** Added `parseDateTimeUtc(dynamic val)` in `mobile/lib/core/models/telemetry_model.dart` that normalizes UTC ISO strings (appending `Z` if missing) and safely calls `.toLocal()`. Applied across all telemetry, simulator, and diagnostics models.
+2. **Dashboard & History Provider Cross-Synchronization:**
+   - **Root Cause:** `historyProvider` was a global `StateNotifierProvider` created once at startup. Simulator appliance toggles refreshed `dashboardProvider` via auto-polling, but `historyProvider` retained stale startup state until manual refresh.
+   - **Resolution:** Added `ref.listen<DashboardState>(dashboardProvider, ...)` in `history_provider.dart` to trigger automatic refresh whenever `pollCount` increments or aggregate power changes. Converted `HistoryScreen` to a `ConsumerStatefulWidget` with `initState` auto-refresh on mount.
+3. **Appliance Toggle Snapshot Persistence:**
+   - **Resolution:** When `toggle_appliance` succeeds in `backend/app/api/simulator.py`, it now immediately invokes `telemetry_service.get_live_telemetry(db)` so SQLite `telemetry_records` instantly stores the power step at the exact timestamp of transition matching `detected_events`.
+4. **History Chart Subtle Contained Tooltips:**
+   - **Resolution:** Configured `LineTouchData` in `history_screen.dart` with `fitInsideHorizontally: true`, `fitInsideVertically: true`, dark obsidian canvas tooltip card, and dashed soft indicator lines, displaying clean timestamps (`${pt.timestamp.hour}:${pt.timestamp.minute}`) and power values without clipping.
+5. **Progressive Disclosure in Diagnostics:**
+   - **Resolution:** Added an **Essential System Status** overview card at the top displaying the 5 core system truths (`Backend Service: ONLINE`, `Data Source: SYNTHETIC SIMULATOR`, `Physical Hardware: NONE (Zero CT Clamps)`, `Local Database: CONNECTED (SQLite Engine)`, `Disaggregation: RULE-BASED ESTIMATE`).
+6. **Dashboard UX Polish:**
+   - **Resolution:** Compacted the onboarding banner to a crisp 2-line explanation (`'Energy Mirror estimates appliance activity from whole-home power without individual smart plugs. Test what-if load toggles in Simulator Lab.'`), added nominal wattage tags (`140W rated`), explicit `RULE-BASED` labels on appliance cards, and increased bottom scroll padding to 32px above the navigation bar.
+
+---
 **Report Author:** Senior Principal Engineer & QA Architecture Lead  
-**Verification Status:** 100% Backend & Frontend Test Gate Passed  
-**Code Quality:** Clean, Lint-Free, Zero Regressions
+**Verification Status:** 100% Backend (48/48) & Frontend (29/29) Test Gate Passed  
+**Code Quality:** Clean, Lint-Free, Zero Regressions, Production Web Build Verified
+

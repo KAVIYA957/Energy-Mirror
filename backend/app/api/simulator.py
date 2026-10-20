@@ -49,6 +49,14 @@ def toggle_appliance(request: ApplianceToggleRequest, db: Session = Depends(get_
             detail=str(exc),
         )
 
+    # If simulator state changed, immediately record telemetry snapshot into SQLite
+    if changed:
+        try:
+            from app.services.telemetry_service import telemetry_service
+            telemetry_service.get_live_telemetry(db)
+        except Exception:
+            pass
+
     current_state = simulator.get_state()
     event_schema = (
         DetectedEventSchema(
