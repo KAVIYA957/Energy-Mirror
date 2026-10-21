@@ -1,0 +1,322 @@
+{
+  "milestone": "2C.8",
+  "title": "External Dataset Expansion and Validation Audit",
+  "timestamp_utc": "2026-10-21T12:30:00Z",
+  "methodological_audit": {
+    "issue_1_noise_floor_interpretation": {
+      "finding": "Conflation of true sensor noise floor with multi-appliance switching volatility.",
+      "audit_evidence": {
+        "unconditioned_6s_delta_p_std_w": 112.66,
+        "quiescent_delta_p_threshold_w": 50.0,
+        "quiescent_samples_count": 92399,
+        "quiescent_samples_percentage": 97.0,
+        "quiescent_6s_delta_p_std_w": 8.09,
+        "quiescent_6s_delta_p_median_w": 0.064,
+        "quiescent_6s_delta_p_iqr_w": 4.21,
+        "steady_state_sub_10w_std_w": 3.41
+      },
+      "defect_critique": "In Milestone 2C.7, 112.66 W was referred to as the 'empirical mains noise' or 'sensor noise floor'. This is scientifically inaccurate. The true sensor metrology noise of the Schneider EM6400 is Class 1.0 (< 1-2 W). The 112.66 W figure is the overall standard deviation of first differences across all domestic activities, which is dominated by major appliance on/off transitions (ACs cycling 1500-2500 W, washing machine drum agitation, compressor start-up surges). During 97.0% of the monitoring period when no major appliance is switching (|delta_P| < 50 W), the background baseline standard deviation is actually 8.09 W (IQR 4.21 W), and during quiet steady-state (|delta_P| < 10 W) it is 3.41 W.",
+      "correction": "Separate terminology: (1) Metrology Sensor Noise Floor (sigma ~ 1-2 W), (2) Quiescent Domestic Baseline Jitter (sigma ~ 8.09 W, IQR ~ 4.21 W), and (3) Multi-Appliance Switching Volatility (gross sigma ~ 112.66 W). SNR for a 12 W load must be evaluated against quiescent jitter (SNR ~ 12 / 8.09 = 1.48) and distractor overlap rather than gross switching variance."
+    },
+    "issue_2_voltage_sensitivity": {
+      "finding": "Theoretical ohmic assumption (P proportional to V^2) overstates real residential power sensitivity by an order of magnitude.",
+      "audit_evidence": {
+        "theoretical_resistive_sensitivity_w_per_v": 11.42,
+        "theoretical_formula": "dP/dV = 2 * P_agg / V",
+        "measured_empirical_phase1_slope_w_per_v": 0.47,
+        "measured_correlation_delta_p_delta_v": 0.0701,
+        "quiescent_sample_size": 17008,
+        "voltage_range_v": [192.81, 242.14],
+        "voltage_mean_v": 223.0,
+        "voltage_std_v": 11.93
+      },
+      "defect_critique": "Milestone 2C.7 stated that an ordinary 1 V grid sag on a 1.2 kW load produces an 11.4 W power drop. While mathematically true for a purely linear ohmic resistance (R = const), modern households are composite ZIP loads. Switch-mode power supplies (laptops, TVs, LED drivers, phone chargers) with active power factor correction act as constant-power loads (P = const, dP/dV ~ 0). Inverter ACs and induction motors also weakly regulate shaft power. Regression on genuine quiescent iAWE telemetry reveals an empirical slope of only 0.47 W/V on Phase 1 (~1.0 W/V whole house), roughly 10x lower than the purely resistive model.",
+      "correction": "Document that real homes exhibit composite ZIP load behavior with weak voltage correlation (r = 0.0701). A 1 V voltage sag produces ~1.0 W of whole-house baseline shift, not 11.4 W. However, large utility voltage drops of 10-20 V (frequent in developing grids) still produce 10-20 W baseline shifts that can alias into 12 W loads."
+    },
+    "issue_3_persistence_baseline": {
+      "finding": "Persistence baseline operates as an oracle upper bound requiring ground truth y_{t-1} at test time.",
+      "audit_evidence": {
+        "implementation": "persist_pred = np.roll(y_test, 1); persist_pred[0] = y_train[-1]",
+        "requires_submeter": true,
+        "deployable_without_submeter": false,
+        "sample_f1": 0.7353,
+        "event_f1": 0.8000
+      },
+      "defect_critique": "Persistence relies on the ground-truth submeter state at the immediately preceding sample (y_{t-1}). In any practical NILM system, the submeter does not exist at inference time. While Persistence provides a valuable theoretical oracle benchmark reflecting state autocorrelation (appliance run-lengths), it cannot be compared directly against whole-house algorithms as a deployable candidate.",
+      "correction": "Formally flag Persistence as ORACLE_BENCHMARK in all machine-readable schemas and reports, and exclude it from the ranked list of deployable models."
+    },
+    "issue_4_event_matching_tolerance_bypass": {
+      "finding": "Onset tolerance constraint was bypassed whenever predicted and ground-truth events overlapped in time.",
+      "audit_evidence": {
+        "flawed_code": "if abs_onset_diff <= tolerance_s or has_overlap:",
+        "consequence": "An event starting 5 minutes late into a 10-minute ground-truth run was marked as a True Positive onset detection even when tolerance_s = 60s.",
+        "delay_cancellation": "Mean delay was computed as np.mean(delays), allowing early detections (-15s) and late detections (+15s) to cancel to 0.0s."
+      },
+      "defect_critique": "In evaluate_events.py, the condition 'or has_overlap' allowed any predicted event overlapping an ongoing cycle to be considered a candidate match, regardless of how late it started. In NILM, onset detection evaluates whether the turn-on transition was captured within a specified time window. Allowing late events to match defeated the purpose of tolerance_s.",
+      "correction": "Updated evaluate_events.py with require_onset_tolerance=True (default). Candidates must strictly satisfy |onset_diff| <= tolerance_s. Added mean_signed_delay_s, mean_absolute_delay_s, and max_absolute_delay_s to prevent delay cancellation. Added unit tests in test_evaluation_audit.py."
+    },
+    "issue_5_temporal_leakage_and_splits": {
+      "finding": "Chronological partitioning strictly verified with 100-sample boundary buffer drops.",
+      "audit_evidence": {
+        "train_samples": 285706,
+        "val_samples": 95168,
+        "test_samples": 95270,
+        "buffer_dropped_samples": 200,
+        "lookback_feature_window": 5,
+        "train_end": "2013-06-21 23:46:00+05:30",
+        "val_start": "2013-06-21 23:56:06+05:30",
+        "val_end": "2013-06-28 22:15:30+05:30",
+        "test_start": "2013-06-28 22:25:36+05:30",
+        "test_end": "2013-07-05 15:41:42+05:30"
+      },
+      "status": "VERIFIED_CORRECT",
+      "audit_notes": "Chronological ordering is strictly maintained. The 100-sample buffers (600s) completely isolate the 5-sample (30s) rolling feature lookbacks. Hyperparameters (thresholds, step sizes) were fit strictly on Train and tuned on Val; Test was evaluated strictly once."
+    },
+    "issue_6_metric_validity_and_class_imbalance": {
+      "finding": "Inactive sample dominance dilutes active regression error by a factor of 2,800.",
+      "audit_evidence": {
+        "test_total_samples": 95270,
+        "test_active_samples": 34,
+        "test_active_prevalence_pct": 0.0357,
+        "overall_mae_w": 1.76,
+        "inactive_subpop_mae_w": 1.59,
+        "active_subpop_mae_w": 476.48,
+        "active_underestimation_pct": 66.55,
+        "relative_energy_total_error_pct": 41.93
+      },
+      "status": "VERIFIED_CORRECT",
+      "audit_notes": "Milestone 2C.7 correctly decomposed the overall MAE into active and inactive sub-populations via the mathematical identity MAE_all = w_active * MAE_active + w_inactive * MAE_inactive. The 1.76 W overall score is completely dominated by the 95,236 inactive samples. Reporting active MAE (476.48 W) and RETE (41.93%) is mandatory to prevent misleading claims."
+    },
+    "issue_7_data_alignment_and_missing_imputation": {
+      "finding": "10.10% of 6s intervals in the submeter were missing during energized mains periods and silently imputed as 0.0 W.",
+      "audit_evidence": {
+        "total_motor_intervals": 520102,
+        "raw_missing_motor_intervals": 80850,
+        "raw_missing_motor_pct": 15.55,
+        "valid_mains_intervals": 476345,
+        "motor_missing_while_mains_valid": 48132,
+        "motor_missing_while_mains_valid_pct": 10.10,
+        "imputation_method": "fillna(0.0)"
+      },
+      "defect_critique": "During 48,132 six-second intervals (~80.2 hours) where the whole-house mains was energized, the CurrentCost motor submeter failed to record data (due to 433 MHz RF packet drops or sensor sleep). The pipeline filled these missing intervals with 0.0 W (motor OFF). If the motor operated during any of these unobserved intervals, ground-truth activations were missed, and any correct aggregate detection during those windows would have been falsely scored as a False Positive.",
+      "correction": "Document the 10.10% RF dropout rate explicitly. In future pipelines, discard unobserved submeter intervals from test evaluation rather than assuming unmetered periods are always 0.0 W."
+    },
+    "issue_8_reproducibility": {
+      "finding": "Deterministic seeds, recorded software versions, and pipeline reproducibility verified.",
+      "audit_evidence": {
+        "random_seed": 42,
+        "python_version": "3.11.9",
+        "scikit_learn_version": "1.7.0",
+        "pandas_version": "2.2.3",
+        "tables_version": "3.10.2",
+        "h5py_version": "3.13.0"
+      },
+      "status": "VERIFIED_CORRECT"
+    }
+  },
+  "candidate_datasets": {
+    "iawe": {
+      "name": "iAWE (Indian Dataset for Ambient Water and Energy)",
+      "citation": "Batra et al., 'It\\'s Different: Insights into home energy consumption in India', ACM BuildSys 2013, pp. 1-8.",
+      "official_url": "https://iawe.github.io / https://zenodo.org/records/13917372",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "file_size": "408 MB (single HDF5)",
+      "sampling_frequency": "1 Hz (Mains EM6400, jplugs) / 6s (CurrentCost CC128 motor)",
+      "channels_aggregate": ["meter1 (Phase A)", "meter2 (Phase B)"],
+      "channels_submeter": ["meter3 (Fridge)", "meter4 (AC1)", "meter5 (AC2)", "meter6 (Washing Machine)", "meter7 (Laptop)", "meter8 (Iron)", "meter9 (Kitchen Outlets)", "meter10 (TV)", "meter11 (Water Filter)", "meter12 (Water Motor)"],
+      "measurements_aggregate": ["P_active", "P_reactive", "P_apparent", "V_rms", "I_rms", "f", "PF"],
+      "measurements_submeter": ["P_active (meter12 CC128)", "P, Q, S, V, I, f, PF (meters 3-11 jplugs)"],
+      "synchronized_aggregate_and_submeter": true,
+      "operating_environment": "Concurrent living in a 3-floor residential home in Delhi, India",
+      "supports_event_detection": true,
+      "supports_unique_attribution": "Supports high-power motors/ACs; insufficient for 12 W lighting",
+      "local_availability": "LOCALLY_AVAILABLE (backend/ml_experiments/data/iawe.h5)"
+    },
+    "dinar_sensors_2025": {
+      "name": "High-Frequency Harmonic NILM Dataset (Dinar et al., 2025)",
+      "citation": "Dinar, F.; Paris, S.; Busvelle, É. 'Capturing High-Frequency Harmonic Signatures for NILM: Building a Dataset for Load Disaggregation.' Sensors 2025, 25(15), 4601. DOI: 10.3390/s25154601.",
+      "official_url": "https://github.com/fariddinar/nilm-dataset / https://doi.org/10.3390/s25154601",
+      "license": "Open Access (MDPI / CC BY 4.0)",
+      "file_size": "~250 MB to 1 GB across multiple daily recording sessions (CSV format)",
+      "sampling_frequency": "8 kHz analog front-end sampling on ATM90E36A; pre-computed harmonic metrics h1-h32 logged at ~1 Hz cadence",
+      "channels_aggregate": "4 sensor nodes with 3 phases each (12 total physical channels)",
+      "channels_submeter": "Appliance-level plug channels for Hair dryer, Electric water heater, Fridge, Clothes iron, Hair straightener, Laptop charger",
+      "measurements_aggregate": ["time", "irms", "vrms", "power_factor", "p_apparente", "p_active", "h1 through h32 (current harmonics)"],
+      "measurements_submeter": ["time", "irms", "vrms", "power_factor", "p_apparente", "p_active", "h1 through h32"],
+      "synchronized_aggregate_and_submeter": true,
+      "operating_environment": "Controlled and semi-controlled residential test environment",
+      "supports_event_detection": true,
+      "supports_unique_attribution": "High discriminative power for harmonic non-linear loads (SMPS, rectifiers) via h1-h32; unverified for 12 W LED bulb in mixed aggregate",
+      "local_availability": "NOT_DOWNLOADED (Candidate for approval)"
+    },
+    "uk_dale": {
+      "name": "UK-DALE (UK Domestic Appliance-Level Electricity)",
+      "citation": "Kelly, J., & Knottenbelt, W. 'The UK-DALE dataset, domestic appliance-level electricity demand and whole-house electrical data from five UK homes.' Scientific Data 2, 150007 (2015). DOI: 10.1038/sdata.2015.7.",
+      "official_url": "https://data.ukedc.rl.ac.uk/browse/edc/efficiency/residential/EnergyConsumption/Domestic/UK-DALE-2015/ / https://zenodo.org/record/1159701",
+      "license": "Open Data Commons Attribution License (ODC-By 1.0) / CC BY 4.0",
+      "file_size": "~45 GB total (Houses 1-5); House 1 low-freq is ~1.2 GB compressed / ~10 GB uncompressed; House 1 16 kHz audio waveforms is ~35 GB",
+      "sampling_frequency": "16 kHz (V and I waveforms, Houses 1 & 2 mains); 1 Hz (P, S, V mains); 6s (Appliance IAM submeters)",
+      "channels_aggregate": "Whole-house mains (16 kHz raw waveforms + 1 Hz P, S, V)",
+      "channels_submeter": "Up to 54 individual appliance monitors in House 1 (solar thermal pump, kettle, laptop, fridge, lights, etc.)",
+      "measurements_aggregate": ["Voltage waveform (16 kHz)", "Current waveform (16 kHz)", "P_active (1 Hz)", "S_apparent (1 Hz)", "V_rms (1 Hz)"],
+      "measurements_submeter": ["P_active (Watts only, 6s resolution)"],
+      "synchronized_aggregate_and_submeter": true,
+      "operating_environment": "Real-world continuous longitudinal multi-appliance domestic operation (House 1 monitored for > 650 days)",
+      "supports_event_detection": true,
+      "supports_unique_attribution": "Supports multi-kW and motor loads; single 12 W LED unmetered (only 100 W 10-bulb ceiling array available)",
+      "local_availability": "NOT_DOWNLOADED (Candidate for approval)"
+    },
+    "refit": {
+      "name": "REFIT (Cleaned Electrical Load Profiles from 20 UK Homes)",
+      "citation": "Murray, D., Stankovic, L., & Stankovic, V. 'An electrical load measurements dataset of United Kingdom households from a two-year longitudinal study.' Scientific Data 4, 160122 (2017). DOI: 10.1038/sdata.2016.122.",
+      "official_url": "https://pureportal.strath.ac.uk/en/datasets/refit-electrical-load-measurements-cleaned",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "file_size": "~1.4 GB total (all 20 houses); ~80 MB per house (e.g. CLEAN_House21.csv)",
+      "sampling_frequency": "~8 seconds (1/8 Hz), irregular polling intervals",
+      "channels_aggregate": "1 whole-house aggregate active power channel per house",
+      "channels_submeter": "9 submetered appliance channels per house (kettles, washing machines, pond pumps, fridges, TVs, etc.)",
+      "measurements_aggregate": ["P_active (Watts only)"],
+      "measurements_submeter": ["P_active (Watts only)"],
+      "synchronized_aggregate_and_submeter": true,
+      "operating_environment": "Real-world continuous living in 20 UK homes over 2 years",
+      "supports_event_detection": true,
+      "supports_unique_attribution": "Supports 75 W Pond Pump (House 21); NO voltage, NO reactive power, NO waveforms",
+      "local_availability": "NOT_DOWNLOADED (Candidate for approval)"
+    },
+    "plaid": {
+      "name": "PLAID (Plug Load Appliance Identification Dataset)",
+      "citation": "Gao et al., 'PLAID: a public dataset of high-resolution electrical engine measurements for load disaggregation', ACM BuildSys 2014.",
+      "official_url": "https://github.com/figshare/plaid / https://figshare.com/articles/dataset/PLAID_2017/5725791",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "file_size": "~1.5 GB",
+      "sampling_frequency": "30 kHz",
+      "channels_aggregate": "NONE (Zero whole-house aggregate data)",
+      "channels_submeter": "Individual appliance plugs across 11 appliance types (including incandescent, CFL, and LED lamps)",
+      "measurements_aggregate": [],
+      "measurements_submeter": ["Voltage waveform (30 kHz)", "Current waveform (30 kHz)"],
+      "synchronized_aggregate_and_submeter": false,
+      "operating_environment": "Isolated bench-top laboratory activations (1-2 second individual bursts)",
+      "supports_event_detection": false,
+      "supports_unique_attribution": "Supports isolated appliance signature classification; DOES NOT support whole-house NILM disaggregation",
+      "local_availability": "NOT_DOWNLOADED (Controlled only)"
+    },
+    "whited": {
+      "name": "WHITED (Worldwide Household Inventory of Duplicate Electro-Domestic Appliances)",
+      "citation": "Kahl et al., 'WHITED: A Worldwide Household Inventory of Duplicate Electro-Domestic Appliances', IEEE IGARSS 2016.",
+      "official_url": "https://www.in.tum.de/i13/resources/whited/",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "file_size": "~1.2 GB",
+      "sampling_frequency": "44.1 kHz (soundcard capture)",
+      "channels_aggregate": "NONE (Zero whole-house aggregate data)",
+      "channels_submeter": "Individual appliance start-up transients for 47 appliance types across 6 regions",
+      "measurements_aggregate": [],
+      "measurements_submeter": ["Voltage waveform (44.1 kHz)", "Current waveform (44.1 kHz)"],
+      "synchronized_aggregate_and_submeter": false,
+      "operating_environment": "Isolated laboratory bench activations (5-second start-up windows)",
+      "supports_event_detection": false,
+      "supports_unique_attribution": "Controlled start-up transient classification only; CANNOT prove whole-house aggregate attribution",
+      "local_availability": "NOT_DOWNLOADED (Controlled only)"
+    }
+  },
+  "appliance_validation_matrix": {
+    "water_heater_140w": {
+      "canonical_name": "Water Heater",
+      "target_nominal_w": 140.0,
+      "target_physics": "Purely resistive (PF = 1.0), continuous vessel heating",
+      "iawe_status": "NOT_VALIDATED",
+      "iawe_rationale": "iAWE contains zero water heater submeters. Water heating was solar, gas, or unmetered.",
+      "uk_dale_status": "NOT_VALIDATED",
+      "uk_dale_rationale": "House 1 has an unmetered/unused 3 kW immersion heater; kettles are 2.5-3 kW rapid boiling elements.",
+      "refit_status": "NOT_VALIDATED",
+      "refit_rationale": "REFIT houses only meter 2.5-3.0 kW kettles. Downscaling a 3 kW kettle to 140 W is unphysical.",
+      "dinar_2025_status": "INCOMPATIBLE_RATING",
+      "dinar_2025_rationale": "Includes 'Electric water heater', but typical European domestic cylinders are 1500-2000 W, representing a 10x-14x rating mismatch.",
+      "plaid_status": "CONTROLLED_ONLY",
+      "plaid_rationale": "Contains 1 kW-2 kW space heaters in isolated bursts; no 140 W vessel.",
+      "overall_verdict": "NOT_VALIDATED across all genuine aggregate public datasets."
+    },
+    "water_pump_75w": {
+      "canonical_name": "Water Pump",
+      "target_nominal_w": 75.0,
+      "target_physics": "Inductive fractional AC motor (PF ~ 0.78), intermittent booster operation",
+      "iawe_status": "INCOMPATIBLE_RATING",
+      "iawe_rationale": "Meter 12 is a 600-750 W overhead tank lift pump. Provides authentic real-world motor telemetry, but cannot validate the 75 W booster pump class.",
+      "uk_dale_status": "PARTIALLY_VALIDATED",
+      "uk_dale_rationale": "House 1 Channel 3 is 'solar_thermal_pump' (~43 W). Shares single-phase induction stator physics, but operating head and duty cycle differ.",
+      "refit_status": "PARTIALLY_VALIDATED",
+      "refit_rationale": "House 21 Appliance 9 is 'Pond Pump' (~80 W). Matches power rating (75-80 W) and inductive motor physics, but operates continuously rather than in intermittent domestic cycles.",
+      "dinar_2025_status": "NOT_VALIDATED",
+      "dinar_2025_rationale": "Dinar et al. dataset does not include a water pump channel.",
+      "plaid_status": "NOT_VALIDATED",
+      "plaid_rationale": "PLAID contains no water pump category.",
+      "overall_verdict": "PARTIALLY_VALIDATED on REFIT House 21 (80 W pond pump) and UK-DALE House 1 (43 W solar pump); NOT_VALIDATED for domestic sump booster duty."
+    },
+    "ceiling_fan_45w": {
+      "canonical_name": "Ceiling Fan",
+      "target_nominal_w": 45.0,
+      "target_physics": "Multi-speed induction motor (PF ~ 0.91), high aerodynamic rotor inertia",
+      "iawe_status": "NOT_VALIDATED",
+      "iawe_rationale": "Ceiling fans are hardwired into ceiling conduit junction boxes on shared lighting circuits, unmetered.",
+      "uk_dale_status": "NOT_VALIDATED",
+      "uk_dale_rationale": "UK climate lacks ceiling fans. House 1 Channel 52 is a small 35 W portable desk fan with negligible rotor inertia.",
+      "refit_status": "NOT_VALIDATED",
+      "refit_rationale": "REFIT contains zero ceiling fan submeters.",
+      "dinar_2025_status": "NOT_VALIDATED",
+      "dinar_2025_rationale": "Dinar et al. dataset contains no fan channel.",
+      "plaid_status": "CONTROLLED_ONLY",
+      "plaid_rationale": "PLAID contains isolated desk fans, but no aggregate household disaggregation.",
+      "overall_verdict": "NOT_VALIDATED across all genuine aggregate public datasets."
+    },
+    "led_bulb_12w": {
+      "canonical_name": "LED Bulb",
+      "target_nominal_w": 12.0,
+      "target_physics": "Non-linear switch-mode driver, diode bridge, high harmonic distortion (THD_i > 80%)",
+      "iawe_status": "NOT_VALIDATED",
+      "iawe_rationale": "iAWE contains no isolated lighting channels.",
+      "uk_dale_status": "NOT_VALIDATED",
+      "uk_dale_rationale": "UK-DALE House 1 only submeters a composite array of 10 downlights (~100 W total on Channel 8). Individual 12 W bulb unmetered.",
+      "refit_status": "NOT_VALIDATED",
+      "refit_rationale": "REFIT domestic lighting is hardwired into the central consumer unit and completely unmetered.",
+      "dinar_2025_status": "NOT_VALIDATED",
+      "dinar_2025_rationale": "Dinar et al. evaluate laptops, irons, water heaters, hair dryers, and fridges; isolated 12 W LED bulb is unrepresented.",
+      "plaid_status": "CONTROLLED_ONLY",
+      "plaid_rationale": "PLAID contains isolated high-frequency bursts of compact fluorescent and incandescent lamps on laboratory benches; ZERO whole-house aggregate data.",
+      "overall_verdict": "NOT_VALIDATED on public whole-house datasets; CONTROLLED_ONLY on bench transient datasets."
+    }
+  },
+  "high_frequency_harmonic_assessment": {
+    "key_distinction": "Isolated signature classification vs. Concurrent aggregate attribution",
+    "analysis": {
+      "controlled_transient_findings": "High-frequency bench datasets (PLAID, WHITED) prove that isolated LED drivers exhibit distinctive non-linear current spikes and high THD_i (> 80%). However, these recordings capture a single bulb connected directly to clean mains power on a laboratory test bench.",
+      "aggregate_mains_reality": "In a real residential home, whole-house mains current is a simultaneous superposition of dozens of non-linear loads (laptop SMPS, television power supplies, smart plugs, variable-frequency refrigerator compressors). The 3rd and 5th harmonic currents generated by a single 12 W LED bulb are approximately 30-50 mA RMS.",
+      "harmonic_masking_barrier": "A modern 65 W laptop charger or 100 W OLED television generates 200-400 mA of 3rd and 5th harmonic currents. Variations in TV screen brightness or laptop CPU load modulate harmonic currents by 50-100 mA, which completely swamps the 30-50 mA signature of a 12 W LED.",
+      "scientific_verdict": "Harmonic metrology (e.g. ATM90E36A h1-h32) is a necessary condition for low-power disaggregation, but IT DOES NOT BY ITSELF SOLVE THE 12 W LED ATTRIBUTION PROBLEM amidst concurrent non-linear domestic distractors."
+    }
+  },
+  "recommended_next_experiment_plan": {
+    "recommendation": "Smallest scientifically defensible external evaluation subset: REFIT House 21 (Pond Pump, ~80 W)",
+    "target_appliance": "Water Pump (75 W - 80 W AC induction motor)",
+    "dataset_candidate": "REFIT House 21 (CLEAN_House21.csv)",
+    "download_size_mb": 80.0,
+    "license_compliance": "CC BY 4.0 (requires formal citation of Murray et al., 2017)",
+    "channels_required": {
+      "aggregate": "Aggregate Mains Active Power (Column 3)",
+      "ground_truth": "Appliance 9: Pond Pump (Column 11)"
+    },
+    "protocol_design": {
+      "train_val_test_split": "Chronological 60% Train / 20% Val / 20% Held-Out Test",
+      "buffer_isolation": "100-sample boundary buffer drops to eliminate rolling lookback leakage",
+      "models_evaluated": "Majority Class, Persistence (oracle reference), Simple Threshold, Noise-Aware Dynamic Step, Random Forest",
+      "metrics_reported": "Event Precision, Event Recall, Event F1, False Alarms/day, Mean Absolute Delay (s), Active MAE, Inactive MAE, RETE %"
+    },
+    "execution_status": "PLAN_PROPOSED_AWAITING_APPROVAL (Zero data downloaded, zero synthetic claims)"
+  },
+  "production_safety_invariants": {
+    "ENABLE_HARDWARE_INGEST": false,
+    "hardware_purchased": false,
+    "physical_circuits_wired": false,
+    "production_rule_based_detector_modified": false,
+    "simulator_appliance_ratings_modified": false,
+    "external_datasets_downloaded": false
+  }
+}

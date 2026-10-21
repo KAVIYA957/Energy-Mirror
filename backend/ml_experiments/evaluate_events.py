@@ -111,12 +111,15 @@ def match_events(
     pred_events: List[Dict[str, Any]],
     tolerance_s: float = 60.0,
     test_duration_days: float = 6.616,
+    require_onset_tolerance: bool = True,
 ) -> Dict[str, Any]:
     """
     Executes greedy one-to-one bipartite matching between ground-truth and predicted events.
 
     Matching Rationale:
-    - Candidate match valid if: |t_pred_start - t_gt_start| <= tolerance_s OR events overlap in time.
+    - When require_onset_tolerance=True (default): Candidate match valid if |t_pred_start - t_gt_start| <= tolerance_s.
+      Prevents late events (e.g., turning on minutes or hours into an ongoing cycle) from falsely claiming onset detection.
+    - When require_onset_tolerance=False: Candidate match valid if |onset_diff| <= tolerance_s OR events overlap in time.
     - Greedy assignment prioritizes pairs with smallest absolute onset distance.
     - Enforces strict one-to-one mapping (no predicted event matches multiple GT events and vice versa).
 
@@ -125,12 +128,25 @@ def match_events(
         pred_events: List of predicted events from extract_events.
         tolerance_s: Maximum onset difference in seconds to consider a candidate match.
         test_duration_days: Total test period duration in days for operational rate normalization.
+        require_onset_tolerance: If True, strictly requires onset within tolerance_s.
 
     Returns:
         Structured evaluation metrics dict.
     """
     n_gt = len(gt_events)
     n_pred = len(pred_events)
+
+    empty_delays = {
+        "delays_s": [],
+        "mean_delay_s": 0.0,
+        "mean_signed_delay_s": 0.0,
+        "mean_absolute_delay_s": 0.0,
+        "max_absolute_delay_s": 0.0,
+        "median_delay_s": 0.0,
+        "std_delay_s": 0.0,
+        "tolerance_s": tolerance_s,
+        "require_onset_tolerance": require_onset_tolerance,
+    }
 
     if n_gt == 0 and n_pred == 0:
         return {
@@ -144,11 +160,7 @@ def match_events(
             "f1_score": 1.0,
             "fp_per_day": 0.0,
             "fn_per_day": 0.0,
-            "delays_s": [],
-            "mean_delay_s": 0.0,
-            "median_delay_s": 0.0,
-            "std_delay_s": 0.0,
-            "tolerance_s": tolerance_s,
+            **empty_delays,
         }
 
     if n_gt == 0:
@@ -163,11 +175,7 @@ def match_events(
             "f1_score": 0.0,
             "fp_per_day": round(n_pred / max(test_duration_days, 1e-4), 3),
             "fn_per_day": 0.0,
-            "delays_s": [],
-            "mean_delay_s": 0.0,
-            "median_delay_s": 0.0,
-            "std_delay_s": 0.0,
-            "tolerance_s": tolerance_s,
+            **empty_delays,
         }
 
     if n_pred == 0:
@@ -182,11 +190,7 @@ def match_events(
             "f1_score": 0.0,
             "fp_per_day": 0.0,
             "fn_per_day": round(n_gt / max(test_duration_days, 1e-4), 3),
-            "delays_s": [],
-            "mean_delay_s": 0.0,
-            "median_delay_s": 0.0,
-            "std_delay_s": 0.0,
-            "tolerance_s": tolerance_s,
+            **empty_delays,
         }
 
     # Generate candidate bipartite pairs
@@ -195,9 +199,16 @@ def match_events(
         for pi, p in enumerate(pred_events):
             onset_diff = (p["start"] - g["start"]).total_seconds()
             abs_onset_diff = abs(onset_diff)
-            # Check temporal overlap
             has_overlap = not (p["end"] < g["start"] or p["start"] > g["end"])
-            if abs_onset_diff <= tolerance_s or has_overlap:
+
+            # Valid candidate condition
+            is_candidate = (
+                abs_onset_diff <= tolerance_s
+                if require_onset_tolerance
+                else (abs_onset_diff <= tolerance_s or has_overlap)
+            )
+
+            if is_candidate:
                 candidates.append((abs_onset_diff, gi, pi, onset_diff))
 
     # Sort greedily by lowest onset distance
@@ -229,6 +240,8 @@ def match_events(
 
     delays = [m["delay_s"] for m in matches]
     mean_delay = float(np.mean(delays)) if delays else 0.0
+    mean_abs_delay = float(np.mean(np.abs(delays))) if delays else 0.0
+    max_abs_delay = float(np.max(np.abs(delays))) if delays else 0.0
     median_delay = float(np.median(delays)) if delays else 0.0
     std_delay = float(np.std(delays)) if delays else 0.0
 
@@ -248,9 +261,13 @@ def match_events(
         "fn_per_day": round(fn_rate, 3),
         "delays_s": delays,
         "mean_delay_s": round(mean_delay, 2),
+        "mean_signed_delay_s": round(mean_delay, 2),
+        "mean_absolute_delay_s": round(mean_abs_delay, 2),
+        "max_absolute_delay_s": round(max_abs_delay, 2),
         "median_delay_s": round(median_delay, 2),
         "std_delay_s": round(std_delay, 2),
         "tolerance_s": tolerance_s,
+        "require_onset_tolerance": require_onset_tolerance,
         "matches": matches,
     }
 
