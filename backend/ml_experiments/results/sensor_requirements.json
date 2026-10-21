@@ -1,0 +1,318 @@
+{
+  "metadata": {
+    "document_title": "Energy Mirror Sensor Requirements and Real-World Validation Specification",
+    "milestone": "2C.5",
+    "base_checkpoint": "122fd36",
+    "date": "October 2026",
+    "status": "Engineering Specification & Software Analysis (Non-Energized / No Hardware Connected)"
+  },
+  "target_appliances": {
+    "bulb_01": {
+      "name": "12 W LED Bulb",
+      "category": "Lighting",
+      "nominal_active_power_w": 12.0,
+      "tolerance_envelope_w": [8.0, 16.0],
+      "power_factor": 0.85,
+      "load_character": "Non-linear switch-mode LED driver with bridge rectifier; high harmonic distortion (THD_i)"
+    },
+    "fan_01": {
+      "name": "45 W Ceiling Fan",
+      "category": "Motor",
+      "nominal_active_power_w": 45.0,
+      "tolerance_envelope_w": [38.0, 52.0],
+      "power_factor": 0.91,
+      "load_character": "Single-phase permanent split capacitor (PSC) induction motor; slight inductive phase lag"
+    },
+    "pump_01": {
+      "name": "75 W Water Pump",
+      "category": "Motor",
+      "nominal_active_power_w": 75.0,
+      "tolerance_envelope_w": [66.0, 84.0],
+      "power_factor": 0.78,
+      "load_character": "Fractional-HP domestic booster pump; pronounced inductive phase displacement (Q ~ 60 VAR)"
+    },
+    "heater_01": {
+      "name": "140 W Water Heater",
+      "category": "Heating",
+      "nominal_active_power_w": 140.0,
+      "tolerance_envelope_w": [128.0, 152.0],
+      "power_factor": 0.99,
+      "load_character": "Purely resistive immersion heating element; unity power factor"
+    }
+  },
+  "electrical_measurement_requirements": {
+    "tier_1_essential_prototype": {
+      "active_power_w": {
+        "required_range": "0 to 10000 W",
+        "minimum_resolution_w": 0.1,
+        "target_accuracy": "Class 1.0 (<= 1.0% of reading down to 20 W)",
+        "justification": "Primary metric for all differential edge and energy tracking NILM algorithms"
+      },
+      "rms_voltage_v": {
+        "required_range": "160 to 280 V RMS",
+        "minimum_resolution_v": 0.1,
+        "target_accuracy": "<= 0.5% of reading",
+        "justification": "Essential for voltage sag compensation (P / V^2 normalization) to eliminate grid-induced drift"
+      },
+      "rms_current_a": {
+        "required_range": "0.01 to 45 A RMS",
+        "minimum_resolution_a": 0.001,
+        "target_accuracy": "<= 0.5% of reading",
+        "justification": "Required for apparent power calculation and overcurrent protection diagnostics"
+      },
+      "apparent_power_va": {
+        "required_range": "0 to 12000 VA",
+        "minimum_resolution_va": 0.1,
+        "target_accuracy": "<= 1.0% of reading",
+        "justification": "Necessary denominator for power factor derivation (S = V_rms * I_rms)"
+      },
+      "power_factor": {
+        "required_range": "0.00 to 1.00",
+        "minimum_resolution": 0.01,
+        "target_accuracy": "<= 0.02 absolute",
+        "justification": "Differentiates motor/inductive loads (pump PF 0.78) from resistive loads (heater PF 0.99)"
+      },
+      "synchronized_timestamp": {
+        "format": "Unix epoch UTC in milliseconds (ISO 8601)",
+        "max_allowable_clock_drift_ms": 100,
+        "justification": "Enables strict 1-to-1 temporal alignment between mains telemetry and submeter ground truth"
+      },
+      "sensor_quality_indicators": {
+        "parameters": [
+          "crc_checksum_valid",
+          "saturation_flag",
+          "adc_underrun_flag",
+          "telemetry_sequence_id"
+        ],
+        "justification": "Prevents corrupted packets or ADC saturation spikes from creating false NILM transition events"
+      }
+    },
+    "tier_2_secondary_features": {
+      "signed_reactive_power_var": {
+        "required_range": "-5000 to +5000 VAR",
+        "minimum_resolution_var": 0.1,
+        "target_accuracy": "<= 2.0% of reading",
+        "justification": "Critical for disaggregating fractional pumps from SMPS electronics, but requires sign verification"
+      },
+      "line_frequency_hz": {
+        "required_range": "45.0 to 65.0 Hz",
+        "minimum_resolution_hz": 0.05,
+        "target_accuracy": "<= 0.1 Hz",
+        "justification": "Diagnostics for grid stability and synchronous timing verification"
+      },
+      "half_cycle_inrush_current": {
+        "required_window_ms": "10 to 20 ms",
+        "justification": "Detects high-amplitude motor starting current transients (5x to 8x nominal)"
+      }
+    },
+    "tier_3_advanced_research_features": {
+      "harmonic_distortion_spectrum": {
+        "parameters": ["THD_i", "THD_v", "3rd_harmonic", "5th_harmonic", "7th_harmonic"],
+        "justification": "Required if 12 W LED bulbs are ever to be distinguished from background electronic noise"
+      },
+      "v_i_trajectory": {
+        "sampling_rate_khz": ">= 4.0 kHz raw streaming",
+        "justification": "Lissajous curve feature extraction for complex multi-state non-linear load identification"
+      }
+    }
+  },
+  "metrology_timing_hierarchy": {
+    "high_frequency_waveform_sampling": {
+      "typical_rate": "4.0 kHz to 1.0 MHz",
+      "mechanism": "Continuous Sigma-Delta ADC sampling of instantaneous v(t) and i(t)",
+      "scope": "Internal to metering IC or high-speed DSP; produces raw waveform points"
+    },
+    "per_cycle_electrical_metrology": {
+      "typical_rate": "50 Hz / 60 Hz (every 10 to 20 ms)",
+      "mechanism": "Cycle-synchronous numerical integration of v(t)*i(t) and RMS accumulators",
+      "scope": "Internal DSP register updates; captures sub-cycle inrush transients"
+    },
+    "periodic_telemetry_snapshot": {
+      "typical_rate": "1.0 s (prototype) or 6.0 s (standard Energy Mirror ingestion)",
+      "mechanism": "Time-averaged RMS and power registers polled or streamed over UART/SPI/MQTT",
+      "scope": "Transmitted payload received by edge gateway / backend; does NOT represent ADC rate"
+    },
+    "nilm_feature_window": {
+      "typical_rate": "30 s to 60 s (5 to 10 consecutive 6-second samples)",
+      "mechanism": "Rolling lookback buffers computing Delta P, rolling std, rolling mean, and min/max",
+      "scope": "Software inference layer in backend or edge model for event extraction and filtering"
+    }
+  },
+  "candidate_architectures": {
+    "ADE9153A": {
+      "manufacturer": "Analog Devices",
+      "part_type": "Single-Phase Energy Metering IC with mSure Autocalibration",
+      "quantities_measured": [
+        "Active Power (W)",
+        "Reactive Power (VAR)",
+        "Apparent Power (VA)",
+        "RMS Voltage (V)",
+        "RMS Current (A)",
+        "Power Factor",
+        "Line Frequency (Hz)",
+        "Half-Cycle RMS",
+        "Phase Angle",
+        "Dip and Swell"
+      ],
+      "accuracy_spec": "Class 1.0 / Class 2.0 active energy across dynamic range; typ 0.1% active energy error over 3000:1 dynamic range with mSure",
+      "adc_architecture": "Three independent 24-bit Sigma-Delta ADCs, 88 dB SNR",
+      "update_rate": "Half-cycle (10 ms) internal updates, 1.0s or programmable register streaming",
+      "digital_interface": "SPI (up to 10 MHz) with CRC-16 register protection",
+      "isolation_and_safety": "IC is referenced to mains hot/neutral shunt; REQUIRES external digital isolators (e.g., ADuM1401 / ISO7741) or isolated host MCU",
+      "suitability_for_12w_detection": "Metrologically capable of resolving < 1 W with low-value shunt (1 mOhm) and mSure drift correction, but cannot overcome mains voltage drift without software compensation",
+      "approximate_cost_usd": "IC alone: $4.50 - $7.00 USD; Evaluation Shield (EV-ADE9153ASHIELDZ): ~$80.00 USD (verified via Mouser/DigiKey)",
+      "evidence_status": "VERIFIED from official Analog Devices Rev 0 datasheet",
+      "important_unknowns": [
+        "Phase calibration stability when using low-cost external split-core CT instead of direct shunt",
+        "Firmware complexity for non-standard mSure autocalibration sequences on ESP32 hosts"
+      ]
+    },
+    "BL0942": {
+      "manufacturer": "Shanghai Belling",
+      "part_type": "Calibration-Free Single-Phase Energy Metering SoC",
+      "quantities_measured": [
+        "Active Power (W)",
+        "RMS Voltage (V)",
+        "RMS Current (A)",
+        "Reactive Power (VAR - internal register)",
+        "Power Factor (derived)",
+        "Line Frequency (Hz)",
+        "Raw Waveform Samples"
+      ],
+      "accuracy_spec": "< 0.1% active energy error across 4000:1 dynamic range; batch factory gain error < 1%",
+      "adc_architecture": "Two 24-bit Sigma-Delta ADCs with internal 1.218 V bandgap reference",
+      "update_rate": "Registers update internally every ~200 ms; max SPI clock 900 kHz",
+      "digital_interface": "Shared pin selectable UART (4800 to 38400 baud) or SPI (up to 900 kHz)",
+      "isolation_and_safety": "Non-isolated ground plane tied to mains line/neutral; REQUIRES optocouplers for USB/UART debug connection",
+      "suitability_for_12w_detection": "Current channel resolves down to 10 mA (~2.3 W at 230 V); suitable for 45 W and 75 W, marginal for 12 W in noisy environments",
+      "approximate_cost_usd": "IC alone: $0.60 - $1.20 USD (LCSC); Pre-assembled smart plugs with BL0942: ~$10.00 - $16.00 USD",
+      "evidence_status": "VERIFIED from official Shanghai Belling BL0942 datasheet (Rev 1.0)",
+      "important_unknowns": [
+        "Exact sign and linearity of reactive power register under heavily distorted capacitive loads",
+        "Temperature coefficient of internal bandgap reference under high ambient temperatures (40 C+)"
+      ]
+    },
+    "PZEM_004T_V3": {
+      "manufacturer": "Peacefair Electronic",
+      "part_type": "Pre-Assembled AC Power/Energy Metering Module with Split-Core CT",
+      "quantities_measured": [
+        "Active Power (W)",
+        "RMS Voltage (V)",
+        "RMS Current (A)",
+        "Active Energy (kWh)",
+        "Power Factor",
+        "Line Frequency (Hz)"
+      ],
+      "accuracy_spec": "Headline +/- 0.5% for Voltage, Current, Power, Energy; +/- 1.0% for Power Factor",
+      "adc_architecture": "Dedicated metering SoC (SD3004 / V9881 core)",
+      "update_rate": "Internal register updates ~200 ms to 500 ms; polling faster than 200 ms yields cached duplicate values; recommended polling 1.0s to 2.0s",
+      "digital_interface": "Optocoupled TTL UART (9600 bps, 8N1) implementing Modbus-RTU subset",
+      "isolation_and_safety": "BUILT-IN optocoupler isolation between AC mains front-end and TTL UART pins; safe to interface directly to 3.3V/5V MCU or USB-UART converter",
+      "suitability_for_12w_detection": "POOR for 12 W. Current starting threshold is 0.02 A (~4.6 W); resolution is 0.1 W, but noise floor and phase error with 100A CT degrade incremental accuracy below 20 W",
+      "approximate_cost_usd": "$9.00 - $14.00 USD complete with 100A split-core CT (verified via authorized distributors)",
+      "evidence_status": "VERIFIED from Peacefair PZEM-004T V3.0 User Manual and Modbus specification",
+      "important_unknowns": [
+        "Does NOT report reactive power (VAR) over Modbus; reactive power must be estimated without polarity",
+        "Split-core CT phase angle error at low currents (< 0.2 A) causes up to +/- 0.08 error in power factor"
+      ]
+    }
+  },
+  "small_load_detectability_budget": {
+    "12w_led_bulb": {
+      "nominal_step_w": 12.0,
+      "snr_ideal_low_noise": 8.0,
+      "snr_realistic_residential": 2.0,
+      "mains_voltage_sag_sensitivity": "A 1.0% grid voltage drop on an 800 W residential background load creates a 16.0 W apparent drop, completely burying the 12 W step",
+      "current_transformer_floor": "On a 100A CT, 12 W corresponds to ~52 mA RMS (0.052% of full-scale), operating in the non-linear magnetizing knee of low-cost iron cores",
+      "detectability_verdict": "NOT RELIABLY DISTINGUISHABLE from whole-house aggregate active power under realistic domestic noise floors without high-frequency harmonic metrology",
+      "mitigation_in_software": "Normalizing active power by instantaneous squared voltage (P / V^2) eliminates linear resistive drift, but does not cancel SMPS constant-power load fluctuations"
+    },
+    "45w_ceiling_fan": {
+      "nominal_step_w": 45.0,
+      "snr_realistic_residential": 7.5,
+      "distractor_collision_risk": "High overlap with 45 W - 65 W USB-C laptop chargers and 25 W - 50 W television backlight modulation",
+      "detectability_verdict": "CONDITIONALLY FEASIBLE in isolation, but VULNERABLE to concurrent switching and competing switch-mode electronic steps"
+    },
+    "75w_water_pump": {
+      "nominal_step_w": 75.0,
+      "snr_realistic_residential": 12.5,
+      "reactive_power_separation": "Inductive phase lag (Q ~ 60 VAR, PF ~ 0.78) provides strong physical separation from resistive heaters and SMPS supplies",
+      "detectability_verdict": "FEASIBLE provided aggregate reactive power (Q) or accurate power factor is measured"
+    }
+  },
+  "ground_truth_architecture": {
+    "aggregate_channel": {
+      "sensor": "Calibrated Mains Metering Front-End (e.g., ADE9153A with 1 mOhm shunt or Class 0.5 CT)",
+      "location": "Service entrance panel / main distribution board breaker",
+      "reporting_interval_s": 1.0
+    },
+    "submeter_reference_channels": {
+      "sensor": "Individual isolated inline submeters or calibrated smart plugs (e.g., BL0942 or PZEM-004T 10A model)",
+      "channels": [
+        "dedicated_channel_bulb_12w",
+        "dedicated_channel_fan_45w",
+        "dedicated_channel_pump_75w",
+        "dedicated_channel_heater_140w"
+      ],
+      "reporting_interval_s": 1.0
+    },
+    "timestamp_synchronization": {
+      "method": "Local Network NTP Server with Millisecond Precision / Hardware Master Trigger",
+      "max_acceptable_clock_skew_ms": 100,
+      "verification_procedure": "Heartbeat synchronization ping logged every 60 seconds; reject records exceeding 200 ms skew"
+    },
+    "ground_truth_labeling_logic": {
+      "derivation": "Strictly derived from individual submeter reference channel active power; NEVER inferred from aggregate signal",
+      "hysteresis_rules": {
+        "bulb_01": "ON if P_sub >= 8.0 W for 3s; OFF if P_sub < 4.0 W for 3s",
+        "fan_01": "ON if P_sub >= 30.0 W for 3s; OFF if P_sub < 15.0 W for 3s",
+        "pump_01": "ON if P_sub >= 50.0 W for 3s; OFF if P_sub < 20.0 W for 3s",
+        "heater_01": "ON if P_sub >= 100.0 W for 3s; OFF if P_sub < 40.0 W for 3s"
+      }
+    },
+    "label_isolation_enforcement": "Ground-truth states and reference powers are archived in separate SQLite/HDF5 tables and strictly excluded from the detector input feature matrix"
+  },
+  "validation_protocol": {
+    "experimental_phases": [
+      {
+        "phase_id": "phase_1_sensor_calibration",
+        "description": "Zero-offset and gain calibration against laboratory reference multimeter (true RMS DMM) across 10 W to 2000 W loads"
+      },
+      {
+        "phase_id": "phase_2_isolated_appliance_cycles",
+        "description": "Single-appliance repeated ON/OFF cycles (20 trials each for 12 W bulb, 45 W fan, 75 W pump) with constant baseline load"
+      },
+      {
+        "phase_id": "phase_3_concurrent_switching_stress",
+        "description": "Simultaneous switching trials where bulb, fan, and pump toggle within +/- 1 second of each other and background loads"
+      },
+      {
+        "phase_id": "phase_4_distractor_interference",
+        "description": "Operation of 50 W laptop chargers, 25 W monitors, and cycling refrigerators alongside target appliances"
+      },
+      {
+        "phase_id": "phase_5_unsupervised_multi_day_run",
+        "description": "Continuous 72-hour unconstrained domestic operation with strict train/val/test chronological partition"
+      }
+    ],
+    "acceptance_criteria": {
+      "preliminary_event_f1_target": 0.80,
+      "max_false_alarms_per_hour": 1.0,
+      "max_detection_delay_s": 12.0,
+      "max_active_power_estimation_error_pct": 20.0,
+      "max_relative_energy_total_error_pct": 15.0
+    },
+    "decision_framework": {
+      "proceed_to_integration": "Appliance achieves Event F1 >= 0.80 and FA/hr <= 1.0 across all phases including concurrent switching",
+      "repeat_calibration": "Appliance achieves Event F1 between 0.50 and 0.80, with failures attributable to identifiable gain/offset errors",
+      "declare_fundamentally_infeasible": "Appliance exhibits Event F1 < 0.50 or FA/hr > 3.0 due to noise floor submergence or distractor collisions"
+    }
+  },
+  "safety_and_compliance": {
+    "mains_isolation_mandatory": "All microcontrollers and host interfaces must utilize optocouplers or galvanic digital isolators rated for >= 2.5 kV RMS",
+    "enclosure_spec": "All live terminals enclosed in UL94-V0 flame-retardant, IP30 minimum non-conductive enclosures",
+    "overcurrent_protection": "Dedicated fast-acting fuse (e.g., 250 mA 250V ceramic fuse on voltage sensing inputs)",
+    "personnel_qualification": "Installation on electrical switchboards must be conducted exclusively by a licensed electrician under de-energized Lockout/Tagout (LOTO) protocols",
+    "software_gate": "ENABLE_HARDWARE_INGEST remains FALSE until all bench metrology acceptance gates are formally certified"
+  }
+}
