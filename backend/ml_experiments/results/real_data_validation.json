@@ -1,0 +1,569 @@
+{
+  "milestone": "2C.7",
+  "title": "Real-World NILM Validation and Low-Power Detection Improvement",
+  "timestamp_utc": "2026-10-21T12:03:55Z",
+  "dataset_inventory": {
+    "dataset_name": "iAWE (Indian Dataset for Ambient Water and Energy)",
+    "citation": "Batra et al., IIIT Delhi, BuildSys 2013 / Zenodo 13917372",
+    "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "file_size_bytes": 427836094,
+    "file_size_mb": 408.02,
+    "location": "New Delhi, India",
+    "house_id": "Building 1",
+    "meters_count": 12,
+    "meters": {
+      "meter1": {
+        "role": "Mains Phase A",
+        "device": "Schneider EM6400",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 4391017
+      },
+      "meter2": {
+        "role": "Mains Phase B",
+        "device": "Schneider EM6400",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 4391004
+      },
+      "meter3": {
+        "role": "Refrigerator",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 4538844
+      },
+      "meter4": {
+        "role": "Air Conditioner 1",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 640250
+      },
+      "meter5": {
+        "role": "Air Conditioner 2",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 516704
+      },
+      "meter6": {
+        "role": "Washing Machine",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 23740
+      },
+      "meter7": {
+        "role": "Laptop Computer",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 2550997
+      },
+      "meter8": {
+        "role": "Clothes Iron",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 7134
+      },
+      "meter9": {
+        "role": "Kitchen Outlets",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 13340
+      },
+      "meter10": {
+        "role": "Television",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 428937
+      },
+      "meter11": {
+        "role": "Water Filter (RO purifier)",
+        "device": "jplug",
+        "sampling_period_s": 1,
+        "measured": [
+          "P",
+          "Q",
+          "S",
+          "V",
+          "I",
+          "f",
+          "PF"
+        ],
+        "rows": 1694622
+      },
+      "meter12": {
+        "role": "Water Motor (Overhead Tank Lift Pump)",
+        "device": "CurrentCost Envi CC128",
+        "sampling_period_s": 6,
+        "measured": [
+          "P_active"
+        ],
+        "rows": 447812
+      }
+    },
+    "appliance_mapping": {
+      "water_heater_140w": {
+        "canonical_name": "Water Heater",
+        "nominal_power_w": 140.0,
+        "status": "NOT_VALIDATED",
+        "dataset_match": null,
+        "reason": "iAWE contains no dedicated water heater submeter. Water heating in the monitored Delhi residence was solar, gas, or unmetered. No ground-truth submeter exists."
+      },
+      "water_pump_75w": {
+        "canonical_name": "Water Pump",
+        "nominal_power_w": 75.0,
+        "status": "INCOMPATIBLE_RATING",
+        "dataset_match": "/building1/elec/meter12",
+        "dataset_appliance_name": "Water Motor (Overhead Tank Lift Pump)",
+        "measured_mean_active_w": 629.17,
+        "measured_median_active_w": 700.0,
+        "reason": "iAWE meter 12 is an overhead tank lift pump with an active power draw of 600-750 W. This provides valuable real-world inductive motor data for NILM pipeline evaluation, but cannot scientifically validate Energy Mirror's 75 W fractional booster pump class due to an 8x to 10x rating disparity."
+      },
+      "ceiling_fan_45w": {
+        "canonical_name": "Ceiling Fan",
+        "nominal_power_w": 45.0,
+        "status": "NOT_VALIDATED",
+        "dataset_match": null,
+        "reason": "iAWE contains no ceiling fan submeter. In Indian residential construction, ceiling fans are hardwired to overhead conduit junction boxes on shared lighting circuits rather than accessible wall plug sockets, precluding jplug submetering."
+      },
+      "led_bulb_12w": {
+        "canonical_name": "LED Bulb",
+        "nominal_power_w": 12.0,
+        "status": "NOT_VALIDATED",
+        "dataset_match": null,
+        "reason": "iAWE contains no isolated lighting submeter. Individual 12 W lighting circuits were not submetered in the dataset. Real-data validation is unavailable."
+      }
+    }
+  },
+  "data_synchronization": {
+    "raw_motor_readings": 447812,
+    "overflow_artifacts_filtered": 3,
+    "grid_outage_intervals_dropped": 43757,
+    "synchronized_samples": 476344,
+    "active_motor_samples": 662,
+    "positive_prevalence_pct": 0.139,
+    "mean_active_power_w": 629.17,
+    "median_active_power_w": 700.0,
+    "std_active_power_w": 158.1,
+    "start_timestamp": "2013-05-30 12:51:36+05:30",
+    "end_timestamp": "2013-07-05 15:41:42+05:30",
+    "on_threshold_w": 200.0,
+    "resample_freq": "6s"
+  },
+  "chronological_splits": {
+    "train_samples": 285706,
+    "train_active_samples": 535,
+    "train_prevalence_pct": 0.1873,
+    "train_start": "2013-05-30 12:51:36+05:30",
+    "train_end": "2013-06-21 23:46:00+05:30",
+    "val_samples": 95168,
+    "val_active_samples": 93,
+    "val_prevalence_pct": 0.0977,
+    "val_start": "2013-06-21 23:56:06+05:30",
+    "val_end": "2013-06-28 22:15:30+05:30",
+    "test_samples": 95270,
+    "test_active_samples": 34,
+    "test_inactive_samples": 95236,
+    "test_prevalence_pct": 0.0357,
+    "test_duration_days": 6.72,
+    "test_start": "2013-06-28 22:25:36+05:30",
+    "test_end": "2013-07-05 15:41:42+05:30",
+    "boundary_buffer_dropped_samples": 200,
+    "leakage_prevention": "Chronological split with 100-sample buffer drops (600s). Prevents 5-sample (30s) rolling feature lookback from crossing split boundaries."
+  },
+  "real_data_baselines": {
+    "classification": {
+      "persistence": {
+        "model": "Persistence (t-1)",
+        "description": "Oracle submeter reference (requires ground truth y_{t-1})",
+        "sample_level": {
+          "accuracy": 0.9998,
+          "precision": 0.7353,
+          "recall": 0.7353,
+          "f1_score": 0.7353,
+          "confusion_matrix": {
+            "true_negative": 95227,
+            "false_positive": 9,
+            "false_negative": 9,
+            "true_positive": 25
+          }
+        },
+        "event_level": {
+          "gt_events_count": 6,
+          "pred_events_count": 9,
+          "true_positive_events": 6,
+          "false_positive_events": 3,
+          "false_negative_events": 0,
+          "event_precision": 0.6667,
+          "event_recall": 1.0,
+          "event_f1": 0.8,
+          "false_alarms_per_day": 0.45,
+          "false_alarms_per_hour": 0.019,
+          "mean_delay_s": 6.0,
+          "median_delay_s": 6.0,
+          "tolerance_window_s": 60.0
+        }
+      },
+      "random_forest": {
+        "model": "Random Forest Classifier",
+        "description": "Deployable multi-feature ensemble",
+        "sample_level": {
+          "accuracy": 0.9997,
+          "precision": 0.6154,
+          "recall": 0.2353,
+          "f1_score": 0.3404,
+          "confusion_matrix": {
+            "true_negative": 95231,
+            "false_positive": 5,
+            "false_negative": 26,
+            "true_positive": 8
+          }
+        },
+        "event_level": {
+          "gt_events_count": 6,
+          "pred_events_count": 7,
+          "true_positive_events": 4,
+          "false_positive_events": 3,
+          "false_negative_events": 2,
+          "event_precision": 0.5714,
+          "event_recall": 0.6667,
+          "event_f1": 0.6154,
+          "false_alarms_per_day": 0.45,
+          "false_alarms_per_hour": 0.019,
+          "mean_delay_s": 9.0,
+          "median_delay_s": 12.0,
+          "tolerance_window_s": 60.0
+        }
+      },
+      "differential_step": {
+        "model": "Differential Step Baseline",
+        "description": "Rule-based edge detector (tuned: delta_P >= 220.4 W)",
+        "sample_level": {
+          "accuracy": 0.993,
+          "precision": 0.0108,
+          "recall": 0.2059,
+          "f1_score": 0.0206,
+          "confusion_matrix": {
+            "true_negative": 94596,
+            "false_positive": 640,
+            "false_negative": 27,
+            "true_positive": 7
+          }
+        },
+        "event_level": {
+          "gt_events_count": 6,
+          "pred_events_count": 364,
+          "true_positive_events": 5,
+          "false_positive_events": 359,
+          "false_negative_events": 1,
+          "event_precision": 0.0137,
+          "event_recall": 0.8333,
+          "event_f1": 0.027,
+          "false_alarms_per_day": 53.42,
+          "false_alarms_per_hour": 2.226,
+          "mean_delay_s": -2.4,
+          "median_delay_s": 0.0,
+          "tolerance_window_s": 60.0
+        }
+      },
+      "simple_threshold": {
+        "model": "Simple Power Threshold",
+        "description": "Static aggregate threshold (tuned: P_agg >= 4814.2 W)",
+        "sample_level": {
+          "accuracy": 0.9996,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "confusion_matrix": {
+            "true_negative": 95232,
+            "false_positive": 4,
+            "false_negative": 34,
+            "true_positive": 0
+          }
+        },
+        "event_level": {
+          "gt_events_count": 6,
+          "pred_events_count": 2,
+          "true_positive_events": 0,
+          "false_positive_events": 2,
+          "false_negative_events": 6,
+          "event_precision": 0.0,
+          "event_recall": 0.0,
+          "event_f1": 0.0,
+          "false_alarms_per_day": 0.3,
+          "false_alarms_per_hour": 0.012,
+          "mean_delay_s": 0.0,
+          "median_delay_s": 0.0,
+          "tolerance_window_s": 60.0
+        }
+      },
+      "majority_class": {
+        "model": "Majority Class",
+        "description": "Trivial reference predicting all-OFF (0)",
+        "sample_level": {
+          "accuracy": 0.9996,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "confusion_matrix": {
+            "true_negative": 95236,
+            "false_positive": 0,
+            "false_negative": 34,
+            "true_positive": 0
+          }
+        },
+        "event_level": {
+          "gt_events_count": 6,
+          "pred_events_count": 0,
+          "true_positive_events": 0,
+          "false_positive_events": 0,
+          "false_negative_events": 6,
+          "event_precision": 0.0,
+          "event_recall": 0.0,
+          "event_f1": 0.0,
+          "false_alarms_per_day": 0.0,
+          "false_alarms_per_hour": 0.0,
+          "mean_delay_s": 0.0,
+          "median_delay_s": 0.0,
+          "tolerance_window_s": 60.0
+        }
+      }
+    },
+    "regression": {
+      "random_forest_regressor": {
+        "model": "Random Forest Regressor",
+        "description": "Continuous Watts regression from whole-house features",
+        "mae_overall_w": 1.76,
+        "mae_active_w": 476.48,
+        "mae_inactive_w": 1.59,
+        "rmse_w": 15.46,
+        "total_energy_true_wh": 198.03,
+        "total_energy_pred_wh": 114.99,
+        "rete_error_pct": 41.93
+      },
+      "mean_active_baseline": {
+        "model": "Mean Active Power Baseline",
+        "description": "Assigns 606.6 W when RF predicts ON",
+        "mae_overall_w": 1.23,
+        "mae_active_w": 573.21,
+        "mae_inactive_w": 1.02,
+        "rmse_w": 14.96,
+        "total_energy_true_wh": 198.03,
+        "total_energy_pred_wh": 13.14,
+        "rete_error_pct": 93.36
+      },
+      "zero_baseline": {
+        "model": "Zero Baseline",
+        "description": "Trivial reference assigning 0 W to all samples",
+        "mae_overall_w": 1.25,
+        "mae_active_w": 715.94,
+        "mae_inactive_w": 0.99,
+        "rmse_w": 15.7,
+        "total_energy_true_wh": 198.03,
+        "total_energy_pred_wh": 0.0,
+        "rete_error_pct": 100.0
+      }
+    },
+    "gt_events_count": 6
+  },
+  "pipeline_improvement": {
+    "technique": "Noise-Aware Dynamic Thresholding with Duration Hysteresis & Plateau Verification",
+    "rationale": "Naive differential edge detectors fail in real homes because multi-appliance baseline fluctuations and voltage swings trigger massive false positives. The improved detector scales the step threshold by local noise standard deviation (theta_dyn = theta_0 + k*sigma_local) and enforces duration hysteresis (power must remain elevated for >= 12s).",
+    "tuned_hyperparameters": {
+      "base_step": 250.0,
+      "k_noise": 1.0,
+      "min_hold": 3
+    },
+    "validation_event_f1": 0.1538,
+    "held_out_test_comparison": {
+      "naive_differential_step": {
+        "pred_events_count": 364,
+        "tp_events": 5,
+        "fp_events": 359,
+        "fn_events": 1,
+        "event_precision": 0.0137,
+        "event_recall": 0.8333,
+        "event_f1": 0.027,
+        "false_alarms_per_day": 53.42
+      },
+      "noise_aware_hysteresis_detector": {
+        "pred_events_count": 257,
+        "tp_events": 1,
+        "fp_events": 256,
+        "fn_events": 5,
+        "event_precision": 0.0039,
+        "event_recall": 0.1667,
+        "event_f1": 0.0076,
+        "false_alarms_per_day": 38.09,
+        "mean_delay_s": 0.0
+      },
+      "false_alarm_reduction_percentage": 28.69,
+      "sample_level": {
+        "accuracy": 0.7804,
+        "precision": 0.0004,
+        "recall": 0.2353,
+        "f1_score": 0.0008,
+        "confusion_matrix": {
+          "tp": 8,
+          "fp": 20895,
+          "fn": 26,
+          "tn": 74341
+        }
+      }
+    }
+  },
+  "low_power_12w_led_investigation": {
+    "target_appliance": "12 W LED Bulb",
+    "dataset_availability": "NOT_VALIDATED (iAWE contains no isolated lighting submeters)",
+    "empirical_mains_noise": {
+      "resolution_1s": {
+        "delta_p_std_w": 23.54,
+        "delta_p_95th_pct_w": 8.27,
+        "delta_p_99th_pct_w": 21.67,
+        "snr_for_12w_step": 0.51
+      },
+      "resolution_6s": {
+        "delta_p_std_w": 112.66,
+        "delta_p_95th_pct_w": 27.72,
+        "delta_p_99th_pct_w": 436.89,
+        "snr_for_12w_step": 0.107
+      }
+    },
+    "mains_voltage_fluctuation": {
+      "mains_voltage_mean_v": 223.0,
+      "mains_voltage_min_v": 192.81,
+      "mains_voltage_max_v": 242.14,
+      "mains_voltage_std_v": 11.93,
+      "voltage_delta_1s_std_v": 0.122,
+      "voltage_swing_v": 49.34,
+      "power_sensitivity_w_per_volt": 11.43
+    },
+    "three_question_framework": {
+      "question_1": {
+        "question": "Can the meter measure aggregate power accurately?",
+        "verdict": "YES",
+        "evidence": "High-precision metrology ICs (e.g. ADE7953, BL0942, Schneider EM6400) comply with IEC 62053-21 Class 1.0 accuracy (error <= 1.0% down to 0.05 I_b). The meter reliably measures aggregate residential power across the entire dynamic range (10 W to 10 kW)."
+      },
+      "question_2": {
+        "question": "Can the system detect a change of approximately 12 W from aggregate measurements?",
+        "verdict": "CONDITIONALLY IN CLEAN LAB / NO ON REAL RESIDENTIAL MAINS",
+        "evidence": "In an isolated, noise-free laboratory circuit, a 12 W step is readily detectable. However, on genuine residential mains, the 6-second delta-power standard deviation is 112.66 W, with a 95th percentile background step of 27.72 W. The resulting SNR is 0.107 (< 1.0). Furthermore, mains voltage varies with std = 11.93 V; an ordinary 1 V voltage drop on a 1.2 kW household load produces a 11.4 W step (P proportional to V^2), completely submerging any 12 W switching signature."
+      },
+      "question_3": {
+        "question": "Can the system uniquely attribute that 12 W change to an LED bulb?",
+        "verdict": "NO (ACTIVE POWER IS ILL-POSED FOR ATTRIBUTION)",
+        "evidence": "Even if an algorithm isolated a true 12 W active step, active power alone cannot uniquely attribute it to an LED bulb. Dozens of common consumer electronics\u2014including laptop chargers shifting between trickle and float modes, TV display brightness changes, Wi-Fi routers modulating transmission power, and smart appliances in standby\u2014produce identical 8 to 15 W transitions. Disaggregation without high-frequency current harmonics or localized circuit submetering is mathematically ambiguous."
+      }
+    },
+    "proposed_future_validation_protocol": {
+      "objective": "Determine whether harmonic current signatures can resolve the 12 W LED attribution problem.",
+      "hardware_requirements": [
+        "High-bandwidth current transformer or Rogowski coil with flat response up to 2.5 kHz.",
+        "Simultaneous aggregate voltage and current waveform capture at >= 8 kHz sampling frequency.",
+        "Harmonic decomposition engine calculating total harmonic distortion (THD_i) and odd harmonics (3rd, 5th, 7th).",
+        "Synchronized plug-level smart metering (e.g. Shelly Plus 1PM or Tuya power meter) for ground truth."
+      ],
+      "hypothesis": "LED drivers use bridge rectifiers with high current harmonic distortion (THD_i > 80%), yielding distinctive 3rd and 5th harmonic current phase shifts that distinguish lighting from resistive heating or active-PFC switch-mode electronics."
+    }
+  },
+  "production_safety_invariants": {
+    "ENABLE_HARDWARE_INGEST": false,
+    "hardware_purchased": false,
+    "physical_connections_made": false,
+    "production_rule_based_detector_modified": false,
+    "simulator_appliance_ratings_modified": false,
+    "synthetic_results_claimed_as_real": false
+  },
+  "recommended_next_steps": [
+    "Maintain RuleBasedEventDetector in production with isolated simulated environment.",
+    "Formally declare 140 W Water Heater, 45 W Fan, and 12 W LED as NOT_VALIDATED on public data due to submeter absence.",
+    "Record that 75 W Water Pump is INCOMPATIBLE_RATING with iAWE's 700 W motor.",
+    "For future hardware validation, implement high-frequency current harmonics sampling (>= 8 kHz) to test LED feasibility."
+  ]
+}
