@@ -2,7 +2,7 @@
 run_public_dataset_experiment.py - Public NILM Dataset Experiment Pipeline
 
 Supports empirical evaluation on real residential electricity datasets:
-  - REFIT (Houses 11 & 12: Pond Pump single-phase induction motor)
+  - REFIT (House 21: Appliance 9 Pond Pump single-phase induction motor; Houses 11 & 12 rejected as invalid)
   - UK-DALE (House 1: Solar Thermal Pump / Boiler circulation pump)
 
 Evaluation Protocols:
