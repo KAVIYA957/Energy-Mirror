@@ -90,7 +90,7 @@ $$P_{\text{aggregate}} (W) \equiv \sum P_{\text{attributed}} (W) + 12.0\text{ W 
 
 ## 5. Scope of Testing: What Has Been Tested vs What Has NOT
 
-### What Has Been Thoroughly Verified (189 Automated Tests Passed)
+### What Has Been Thoroughly Verified (193 Automated Tests Passed + Real Browser Acceptance)
 1. **Backend Integration & Robustness (92 Tests):**
    - API security hardening: Local loopback authorization for administrative mutations; remote mutations blocked with HTTP 403.
    - Dynamic appliance registry CRUD and protection of default appliance definitions against deletion.
@@ -100,18 +100,23 @@ $$P_{\text{aggregate}} (W) \equiv \sum P_{\text{attributed}} (W) + 12.0\text{ W 
 2. **Machine Learning & Public Dataset Benchmarks (63 Tests):**
    - Evaluation scripts for REFIT and iAWE building datasets.
    - Derivative step filtering, inrush current handling, and intermittent transition extraction.
-3. **Frontend Presentation & Responsiveness (34 Tests):**
+3. **Frontend Presentation & Responsiveness (38 Tests across 11 Suites):**
    - Responsive multi-device layout checks (Compact 393 × 852 vs Desktop 1440 × 900).
+   - Dynamic appliance registry models, UI panel, add/edit form dialogs, and protected deletion guards.
    - Offline banner display when backend is disconnected.
    - Navigation rail/bar destination switching and route preservation across refreshes.
    - Static analysis: `flutter analyze` completed with 0 warnings or errors.
    - Production web build: `flutter build web --release` compiled cleanly.
+4. **Real Browser Acceptance Testing (Microsoft Edge via CDP):**
+   - Automated live sessions against `http://localhost:5000` via Chrome DevTools Protocol WebSocket.
+   - Desktop (1440 × 900) and mobile (393 × 852) viewports tested with 0 uncaught console errors.
+   - Dynamic appliance lifecycle (create 850 W kettle, update to 900 W, delete, verify 404) verified visually.
+   - Simulator power accounting ($284\text{ W} \to 144\text{ W} \to 284\text{ W}$) verified live.
 
 ### What Has NOT Been Tested (Explicit Limitations)
-1. **Physical Electrical Bench Testing:** No physical AC main lines, breakers, or live circuits have been measured.
+1. **Physical Electrical Bench Testing:** No physical AC main lines, breakers, or live circuits have been measured (`ENABLE_HARDWARE_INGEST=false`).
 2. **PostgreSQL Live Runtime Integration:** Verified through SQLAlchemy connection string parsing and SQLite migrations; integration against an active PostgreSQL daemon on port 5432 was **NOT PERFORMED** due to the absence of a local PostgreSQL server.
-3. **Automated Headless Browser Drivers:** Automated Playwright/Selenium runs were not performed due to driver distribution constraints in this Windows environment; manual browser verification across Edge, Chrome, and Mobile was executed instead.
-4. **General Multi-Appliance NILM Accuracy:** The prototype does not claim to recognize uncalibrated appliances or simultaneous multi-device switches.
+3. **General Multi-Appliance NILM Accuracy:** The prototype does not claim to recognize uncalibrated appliances or simultaneous multi-device switches.
 
 ---
 
