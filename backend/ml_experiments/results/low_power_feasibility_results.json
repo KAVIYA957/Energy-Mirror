@@ -1,0 +1,2300 @@
+{
+  "metadata": {
+    "study_name": "Milestone 2C.4 Low-Power Appliance Feasibility Study",
+    "timestamp": "2026-10-21T11:12:24.460699",
+    "random_seed": 42,
+    "sampling_interval_s": 6.0,
+    "simulated_duration_per_run_hours": 24.0,
+    "train_runs_count": 3,
+    "val_runs_count": 1,
+    "test_runs_count": 1,
+    "target_appliances": {
+      "bulb_01": {
+        "name": "12 W LED Bulb",
+        "nominal_power_w": 12.0,
+        "tolerance_w": 4.0,
+        "power_factor": 0.85
+      },
+      "fan_01": {
+        "name": "45 W Ceiling Fan",
+        "nominal_power_w": 45.0,
+        "tolerance_w": 7.0,
+        "power_factor": 0.91
+      },
+      "pump_01": {
+        "name": "75 W Water Pump",
+        "nominal_power_w": 75.0,
+        "tolerance_w": 9.0,
+        "power_factor": 0.78
+      },
+      "heater_01": {
+        "name": "140 W Water Heater",
+        "nominal_power_w": 140.0,
+        "tolerance_w": 12.0,
+        "power_factor": 0.99
+      }
+    },
+    "research_target_criteria": {
+      "min_event_f1": 0.8,
+      "max_false_alarms_per_hour": 1.0
+    }
+  },
+  "scenarios": {
+    "scenario_1_ideal": {
+      "noise_sigma_w": 1.5,
+      "adc_quantization_w": 0.1,
+      "appliances": {
+        "bulb_01": {
+          "name": "12 W LED Bulb",
+          "nominal_power_w": 12.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.3844,
+                "precision": 0.1732,
+                "recall": 0.9483,
+                "f1_score": 0.2929,
+                "confusion_matrix": {
+                  "true_negative": 3699,
+                  "false_positive": 8765,
+                  "false_negative": 100,
+                  "true_positive": 1836
+                },
+                "positive_prevalence_pct": 13.444,
+                "false_alarms_per_hour": 365.21
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 16,
+                "tp": 1,
+                "fp": 15,
+                "fn": 7,
+                "precision": 0.0625,
+                "recall": 0.125,
+                "f1_score": 0.0833,
+                "false_alarms_per_day": 15.0,
+                "false_alarms_per_hour": 0.62,
+                "mean_delay_s": -12216.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.9495,
+                "precision": 1.0,
+                "recall": 0.6245,
+                "f1_score": 0.7688,
+                "confusion_matrix": {
+                  "true_negative": 12464,
+                  "false_positive": 0,
+                  "false_negative": 727,
+                  "true_positive": 1209
+                },
+                "positive_prevalence_pct": 13.444,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 7,
+                "tp": 7,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.875,
+                "f1_score": 0.9333,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.9495,
+                "precision": 1.0,
+                "recall": 0.6245,
+                "f1_score": 0.7688,
+                "confusion_matrix": {
+                  "true_negative": 12464,
+                  "false_positive": 0,
+                  "false_negative": 727,
+                  "true_positive": 1209
+                },
+                "positive_prevalence_pct": 13.444,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 7,
+                "tp": 7,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.875,
+                "f1_score": 0.9333,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.7892,
+                "precision": 0.0656,
+                "recall": 0.0429,
+                "f1_score": 0.0518,
+                "confusion_matrix": {
+                  "true_negative": 11281,
+                  "false_positive": 1183,
+                  "false_negative": 1853,
+                  "true_positive": 83
+                },
+                "positive_prevalence_pct": 13.444,
+                "false_alarms_per_hour": 49.29
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 96,
+                "tp": 2,
+                "fp": 94,
+                "fn": 6,
+                "precision": 0.0208,
+                "recall": 0.25,
+                "f1_score": 0.0385,
+                "false_alarms_per_day": 94.0,
+                "false_alarms_per_hour": 3.92,
+                "mean_delay_s": 864.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.7633,
+                "precision": 0.0964,
+                "recall": 0.0909,
+                "f1_score": 0.0936,
+                "confusion_matrix": {
+                  "true_negative": 10815,
+                  "false_positive": 1649,
+                  "false_negative": 1760,
+                  "true_positive": 176
+                },
+                "positive_prevalence_pct": 13.444,
+                "false_alarms_per_hour": 68.71
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 133,
+                "tp": 2,
+                "fp": 131,
+                "fn": 6,
+                "precision": 0.015,
+                "recall": 0.25,
+                "f1_score": 0.0284,
+                "false_alarms_per_day": 131.0,
+                "false_alarms_per_hour": 5.46,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.8473,
+                "precision": 0.4077,
+                "recall": 0.3001,
+                "f1_score": 0.3457,
+                "confusion_matrix": {
+                  "true_negative": 11620,
+                  "false_positive": 844,
+                  "false_negative": 1355,
+                  "true_positive": 581
+                },
+                "positive_prevalence_pct": 13.444,
+                "false_alarms_per_hour": 35.17
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 156,
+                "tp": 4,
+                "fp": 152,
+                "fn": 4,
+                "precision": 0.0256,
+                "recall": 0.5,
+                "f1_score": 0.0488,
+                "false_alarms_per_day": 152.0,
+                "false_alarms_per_hour": 6.33,
+                "mean_delay_s": 346.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "fan_01": {
+          "name": "45 W Ceiling Fan",
+          "nominal_power_w": 45.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.557,
+                "precision": 0.1252,
+                "recall": 0.1477,
+                "f1_score": 0.1355,
+                "confusion_matrix": {
+                  "true_negative": 7521,
+                  "false_positive": 3494,
+                  "false_negative": 2885,
+                  "true_positive": 500
+                },
+                "positive_prevalence_pct": 23.507,
+                "false_alarms_per_hour": 145.58
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 29,
+                "tp": 1,
+                "fp": 28,
+                "fn": 3,
+                "precision": 0.0345,
+                "recall": 0.25,
+                "f1_score": 0.0606,
+                "false_alarms_per_day": 28.0,
+                "false_alarms_per_hour": 1.17,
+                "mean_delay_s": -1932.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "confusion_matrix": {
+                  "true_negative": 11015,
+                  "false_positive": 0,
+                  "false_negative": 0,
+                  "true_positive": 3385
+                },
+                "positive_prevalence_pct": 23.507,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 4,
+                "tp": 4,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "confusion_matrix": {
+                  "true_negative": 11015,
+                  "false_positive": 0,
+                  "false_negative": 0,
+                  "true_positive": 3385
+                },
+                "positive_prevalence_pct": 23.507,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 4,
+                "tp": 4,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.521,
+                "precision": 0.088,
+                "recall": 0.1108,
+                "f1_score": 0.0981,
+                "confusion_matrix": {
+                  "true_negative": 7128,
+                  "false_positive": 3887,
+                  "false_negative": 3010,
+                  "true_positive": 375
+                },
+                "positive_prevalence_pct": 23.507,
+                "false_alarms_per_hour": 161.96
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 148,
+                "tp": 3,
+                "fp": 145,
+                "fn": 1,
+                "precision": 0.0203,
+                "recall": 0.75,
+                "f1_score": 0.0395,
+                "false_alarms_per_day": 145.0,
+                "false_alarms_per_hour": 6.04,
+                "mean_delay_s": 2350.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.5162,
+                "precision": 0.1929,
+                "recall": 0.3323,
+                "f1_score": 0.2441,
+                "confusion_matrix": {
+                  "true_negative": 6308,
+                  "false_positive": 4707,
+                  "false_negative": 2260,
+                  "true_positive": 1125
+                },
+                "positive_prevalence_pct": 23.507,
+                "false_alarms_per_hour": 196.12
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 187,
+                "tp": 3,
+                "fp": 184,
+                "fn": 1,
+                "precision": 0.016,
+                "recall": 0.75,
+                "f1_score": 0.0314,
+                "false_alarms_per_day": 184.0,
+                "false_alarms_per_hour": 7.67,
+                "mean_delay_s": -656.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.6621,
+                "precision": 0.3113,
+                "recall": 0.361,
+                "f1_score": 0.3343,
+                "confusion_matrix": {
+                  "true_negative": 8312,
+                  "false_positive": 2703,
+                  "false_negative": 2163,
+                  "true_positive": 1222
+                },
+                "positive_prevalence_pct": 23.507,
+                "false_alarms_per_hour": 112.62
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 175,
+                "tp": 3,
+                "fp": 172,
+                "fn": 1,
+                "precision": 0.0171,
+                "recall": 0.75,
+                "f1_score": 0.0335,
+                "false_alarms_per_day": 172.0,
+                "false_alarms_per_hour": 7.17,
+                "mean_delay_s": 492.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "pump_01": {
+          "name": "75 W Water Pump",
+          "nominal_power_w": 75.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.9557,
+                "precision": 0.3506,
+                "recall": 0.6618,
+                "f1_score": 0.4584,
+                "confusion_matrix": {
+                  "true_negative": 13492,
+                  "false_positive": 500,
+                  "false_negative": 138,
+                  "true_positive": 270
+                },
+                "positive_prevalence_pct": 2.833,
+                "false_alarms_per_hour": 20.83
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 3,
+                "tp": 2,
+                "fp": 1,
+                "fn": 1,
+                "precision": 0.6667,
+                "recall": 0.6667,
+                "f1_score": 0.6667,
+                "false_alarms_per_day": 1.0,
+                "false_alarms_per_hour": 0.04,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "INCONCLUSIVE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "confusion_matrix": {
+                  "true_negative": 13992,
+                  "false_positive": 0,
+                  "false_negative": 0,
+                  "true_positive": 408
+                },
+                "positive_prevalence_pct": 2.833,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 3,
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 1.0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "confusion_matrix": {
+                  "true_negative": 13992,
+                  "false_positive": 0,
+                  "false_negative": 0,
+                  "true_positive": 408
+                },
+                "positive_prevalence_pct": 2.833,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 3,
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1_score": 1.0,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.936,
+                "precision": 0.0997,
+                "recall": 0.1569,
+                "f1_score": 0.1219,
+                "confusion_matrix": {
+                  "true_negative": 13414,
+                  "false_positive": 578,
+                  "false_negative": 344,
+                  "true_positive": 64
+                },
+                "positive_prevalence_pct": 2.833,
+                "false_alarms_per_hour": 24.08
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 20,
+                "tp": 1,
+                "fp": 19,
+                "fn": 2,
+                "precision": 0.05,
+                "recall": 0.3333,
+                "f1_score": 0.087,
+                "false_alarms_per_day": 19.0,
+                "false_alarms_per_hour": 0.79,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.9231,
+                "precision": 0.0814,
+                "recall": 0.1667,
+                "f1_score": 0.1094,
+                "confusion_matrix": {
+                  "true_negative": 13225,
+                  "false_positive": 767,
+                  "false_negative": 340,
+                  "true_positive": 68
+                },
+                "positive_prevalence_pct": 2.833,
+                "false_alarms_per_hour": 31.96
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 34,
+                "tp": 2,
+                "fp": 32,
+                "fn": 1,
+                "precision": 0.0588,
+                "recall": 0.6667,
+                "f1_score": 0.1081,
+                "false_alarms_per_day": 32.0,
+                "false_alarms_per_hour": 1.33,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.9676,
+                "precision": 0.4668,
+                "recall": 1.0,
+                "f1_score": 0.6365,
+                "confusion_matrix": {
+                  "true_negative": 13526,
+                  "false_positive": 466,
+                  "false_negative": 0,
+                  "true_positive": 408
+                },
+                "positive_prevalence_pct": 2.833,
+                "false_alarms_per_hour": 19.42
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 5,
+                "tp": 3,
+                "fp": 2,
+                "fn": 0,
+                "precision": 0.6,
+                "recall": 1.0,
+                "f1_score": 0.75,
+                "false_alarms_per_day": 2.0,
+                "false_alarms_per_hour": 0.08,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "INCONCLUSIVE"
+            }
+          }
+        }
+      }
+    },
+    "scenario_2_realistic": {
+      "noise_sigma_w": 6.0,
+      "adc_quantization_w": 1.0,
+      "appliances": {
+        "bulb_01": {
+          "name": "12 W LED Bulb",
+          "nominal_power_w": 12.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.4949,
+                "precision": 0.0662,
+                "recall": 0.2416,
+                "f1_score": 0.104,
+                "confusion_matrix": {
+                  "true_negative": 6704,
+                  "false_positive": 5949,
+                  "false_negative": 1325,
+                  "true_positive": 422
+                },
+                "positive_prevalence_pct": 12.132,
+                "false_alarms_per_hour": 247.88
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 12,
+                "tp": 1,
+                "fp": 11,
+                "fn": 7,
+                "precision": 0.0833,
+                "recall": 0.125,
+                "f1_score": 0.1,
+                "false_alarms_per_day": 11.0,
+                "false_alarms_per_hour": 0.46,
+                "mean_delay_s": -5844.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.5008,
+                "precision": 0.1295,
+                "recall": 0.5444,
+                "f1_score": 0.2092,
+                "confusion_matrix": {
+                  "true_negative": 6261,
+                  "false_positive": 6392,
+                  "false_negative": 796,
+                  "true_positive": 951
+                },
+                "positive_prevalence_pct": 12.132,
+                "false_alarms_per_hour": 266.33
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 893,
+                "tp": 8,
+                "fp": 885,
+                "fn": 0,
+                "precision": 0.009,
+                "recall": 1.0,
+                "f1_score": 0.0178,
+                "false_alarms_per_day": 885.0,
+                "false_alarms_per_hour": 36.88,
+                "mean_delay_s": -12.75
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.5008,
+                "precision": 0.1295,
+                "recall": 0.5444,
+                "f1_score": 0.2092,
+                "confusion_matrix": {
+                  "true_negative": 6261,
+                  "false_positive": 6392,
+                  "false_negative": 796,
+                  "true_positive": 951
+                },
+                "positive_prevalence_pct": 12.132,
+                "false_alarms_per_hour": 266.33
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 893,
+                "tp": 8,
+                "fp": 885,
+                "fn": 0,
+                "precision": 0.009,
+                "recall": 1.0,
+                "f1_score": 0.0178,
+                "false_alarms_per_day": 885.0,
+                "false_alarms_per_hour": 36.88,
+                "mean_delay_s": -12.75
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.7783,
+                "precision": 0.0212,
+                "recall": 0.0183,
+                "f1_score": 0.0196,
+                "confusion_matrix": {
+                  "true_negative": 11175,
+                  "false_positive": 1478,
+                  "false_negative": 1715,
+                  "true_positive": 32
+                },
+                "positive_prevalence_pct": 12.132,
+                "false_alarms_per_hour": 61.58
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 128,
+                "tp": 2,
+                "fp": 126,
+                "fn": 6,
+                "precision": 0.0156,
+                "recall": 0.25,
+                "f1_score": 0.0294,
+                "false_alarms_per_day": 126.0,
+                "false_alarms_per_hour": 5.25,
+                "mean_delay_s": -30.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.7612,
+                "precision": 0.0845,
+                "recall": 0.0985,
+                "f1_score": 0.0909,
+                "confusion_matrix": {
+                  "true_negative": 10789,
+                  "false_positive": 1864,
+                  "false_negative": 1575,
+                  "true_positive": 172
+                },
+                "positive_prevalence_pct": 12.132,
+                "false_alarms_per_hour": 77.67
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 154,
+                "tp": 4,
+                "fp": 150,
+                "fn": 4,
+                "precision": 0.026,
+                "recall": 0.5,
+                "f1_score": 0.0494,
+                "false_alarms_per_day": 150.0,
+                "false_alarms_per_hour": 6.25,
+                "mean_delay_s": 610.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.777,
+                "precision": 0.1296,
+                "recall": 0.1465,
+                "f1_score": 0.1375,
+                "confusion_matrix": {
+                  "true_negative": 10933,
+                  "false_positive": 1720,
+                  "false_negative": 1491,
+                  "true_positive": 256
+                },
+                "positive_prevalence_pct": 12.132,
+                "false_alarms_per_hour": 71.67
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 164,
+                "tp": 4,
+                "fp": 160,
+                "fn": 4,
+                "precision": 0.0244,
+                "recall": 0.5,
+                "f1_score": 0.0465,
+                "false_alarms_per_day": 160.0,
+                "false_alarms_per_hour": 6.67,
+                "mean_delay_s": 624.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "fan_01": {
+          "name": "45 W Ceiling Fan",
+          "nominal_power_w": 45.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.4349,
+                "precision": 0.4016,
+                "recall": 0.9108,
+                "f1_score": 0.5574,
+                "confusion_matrix": {
+                  "true_negative": 1138,
+                  "false_positive": 7636,
+                  "false_negative": 502,
+                  "true_positive": 5124
+                },
+                "positive_prevalence_pct": 39.069,
+                "false_alarms_per_hour": 318.17
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 11,
+                "tp": 2,
+                "fp": 9,
+                "fn": 2,
+                "precision": 0.1818,
+                "recall": 0.5,
+                "f1_score": 0.2667,
+                "false_alarms_per_day": 9.0,
+                "false_alarms_per_hour": 0.38,
+                "mean_delay_s": -354.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.8815,
+                "precision": 1.0,
+                "recall": 0.6966,
+                "f1_score": 0.8212,
+                "confusion_matrix": {
+                  "true_negative": 8774,
+                  "false_positive": 0,
+                  "false_negative": 1707,
+                  "true_positive": 3919
+                },
+                "positive_prevalence_pct": 39.069,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 3,
+                "tp": 3,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1_score": 0.8571,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.8815,
+                "precision": 1.0,
+                "recall": 0.6966,
+                "f1_score": 0.8212,
+                "confusion_matrix": {
+                  "true_negative": 8774,
+                  "false_positive": 0,
+                  "false_negative": 1707,
+                  "true_positive": 3919
+                },
+                "positive_prevalence_pct": 39.069,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 3,
+                "tp": 3,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1_score": 0.8571,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.5828,
+                "precision": 0.4721,
+                "recall": 0.5747,
+                "f1_score": 0.5184,
+                "confusion_matrix": {
+                  "true_negative": 5159,
+                  "false_positive": 3615,
+                  "false_negative": 2393,
+                  "true_positive": 3233
+                },
+                "positive_prevalence_pct": 39.069,
+                "false_alarms_per_hour": 150.62
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 267,
+                "tp": 4,
+                "fp": 263,
+                "fn": 0,
+                "precision": 0.015,
+                "recall": 1.0,
+                "f1_score": 0.0295,
+                "false_alarms_per_day": 263.0,
+                "false_alarms_per_hour": 10.96,
+                "mean_delay_s": 361.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.6015,
+                "precision": 0.4902,
+                "recall": 0.4977,
+                "f1_score": 0.4939,
+                "confusion_matrix": {
+                  "true_negative": 5862,
+                  "false_positive": 2912,
+                  "false_negative": 2826,
+                  "true_positive": 2800
+                },
+                "positive_prevalence_pct": 39.069,
+                "false_alarms_per_hour": 121.33
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 209,
+                "tp": 4,
+                "fp": 205,
+                "fn": 0,
+                "precision": 0.0191,
+                "recall": 1.0,
+                "f1_score": 0.0376,
+                "false_alarms_per_day": 205.0,
+                "false_alarms_per_hour": 8.54,
+                "mean_delay_s": 535.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.6047,
+                "precision": 0.4948,
+                "recall": 0.5619,
+                "f1_score": 0.5262,
+                "confusion_matrix": {
+                  "true_negative": 5546,
+                  "false_positive": 3228,
+                  "false_negative": 2465,
+                  "true_positive": 3161
+                },
+                "positive_prevalence_pct": 39.069,
+                "false_alarms_per_hour": 134.5
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 192,
+                "tp": 4,
+                "fp": 188,
+                "fn": 0,
+                "precision": 0.0208,
+                "recall": 1.0,
+                "f1_score": 0.0408,
+                "false_alarms_per_day": 188.0,
+                "false_alarms_per_hour": 7.83,
+                "mean_delay_s": 553.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "pump_01": {
+          "name": "75 W Water Pump",
+          "nominal_power_w": 75.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.8076,
+                "precision": 0.0495,
+                "recall": 0.3411,
+                "f1_score": 0.0864,
+                "confusion_matrix": {
+                  "true_negative": 11499,
+                  "false_positive": 2517,
+                  "false_negative": 253,
+                  "true_positive": 131
+                },
+                "positive_prevalence_pct": 2.667,
+                "false_alarms_per_hour": 104.88
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 34,
+                "tp": 1,
+                "fp": 33,
+                "fn": 2,
+                "precision": 0.0294,
+                "recall": 0.3333,
+                "f1_score": 0.0541,
+                "false_alarms_per_day": 33.0,
+                "false_alarms_per_hour": 1.38,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.9956,
+                "precision": 1.0,
+                "recall": 0.8359,
+                "f1_score": 0.9106,
+                "confusion_matrix": {
+                  "true_negative": 14016,
+                  "false_positive": 0,
+                  "false_negative": 63,
+                  "true_positive": 321
+                },
+                "positive_prevalence_pct": 2.667,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1_score": 0.8,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.9956,
+                "precision": 1.0,
+                "recall": 0.8359,
+                "f1_score": 0.9106,
+                "confusion_matrix": {
+                  "true_negative": 14016,
+                  "false_positive": 0,
+                  "false_negative": 63,
+                  "true_positive": 321
+                },
+                "positive_prevalence_pct": 2.667,
+                "false_alarms_per_hour": 0.0
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1_score": 0.8,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.9681,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "confusion_matrix": {
+                  "true_negative": 13940,
+                  "false_positive": 76,
+                  "false_negative": 384,
+                  "true_positive": 0
+                },
+                "positive_prevalence_pct": 2.667,
+                "false_alarms_per_hour": 3.17
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 14,
+                "tp": 0,
+                "fp": 14,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "false_alarms_per_day": 14.0,
+                "false_alarms_per_hour": 0.58,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.9563,
+                "precision": 0.0342,
+                "recall": 0.0234,
+                "f1_score": 0.0278,
+                "confusion_matrix": {
+                  "true_negative": 13762,
+                  "false_positive": 254,
+                  "false_negative": 375,
+                  "true_positive": 9
+                },
+                "positive_prevalence_pct": 2.667,
+                "false_alarms_per_hour": 10.58
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 29,
+                "tp": 2,
+                "fp": 27,
+                "fn": 1,
+                "precision": 0.069,
+                "recall": 0.6667,
+                "f1_score": 0.125,
+                "false_alarms_per_day": 27.0,
+                "false_alarms_per_hour": 1.12,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.9786,
+                "precision": 0.6338,
+                "recall": 0.4688,
+                "f1_score": 0.5389,
+                "confusion_matrix": {
+                  "true_negative": 13912,
+                  "false_positive": 104,
+                  "false_negative": 204,
+                  "true_positive": 180
+                },
+                "positive_prevalence_pct": 2.667,
+                "false_alarms_per_hour": 4.33
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 9,
+                "tp": 3,
+                "fp": 6,
+                "fn": 0,
+                "precision": 0.3333,
+                "recall": 1.0,
+                "f1_score": 0.5,
+                "false_alarms_per_day": 6.0,
+                "false_alarms_per_hour": 0.25,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "INCONCLUSIVE"
+            }
+          }
+        }
+      }
+    },
+    "scenario_3_adverse_concurrent": {
+      "noise_sigma_w": 10.0,
+      "adc_quantization_w": 1.0,
+      "appliances": {
+        "bulb_01": {
+          "name": "12 W LED Bulb",
+          "nominal_power_w": 12.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.3817,
+                "precision": 0.1164,
+                "recall": 0.5113,
+                "f1_score": 0.1897,
+                "confusion_matrix": {
+                  "true_negative": 4454,
+                  "false_positive": 7908,
+                  "false_negative": 996,
+                  "true_positive": 1042
+                },
+                "positive_prevalence_pct": 14.153,
+                "false_alarms_per_hour": 329.5
+              },
+              "event_metrics": {
+                "gt_events_count": 10,
+                "pred_events_count": 24,
+                "tp": 2,
+                "fp": 22,
+                "fn": 8,
+                "precision": 0.0833,
+                "recall": 0.2,
+                "f1_score": 0.1176,
+                "false_alarms_per_day": 22.0,
+                "false_alarms_per_hour": 0.92,
+                "mean_delay_s": -3714.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.4947,
+                "precision": 0.1386,
+                "recall": 0.4926,
+                "f1_score": 0.2163,
+                "confusion_matrix": {
+                  "true_negative": 6120,
+                  "false_positive": 6242,
+                  "false_negative": 1034,
+                  "true_positive": 1004
+                },
+                "positive_prevalence_pct": 14.153,
+                "false_alarms_per_hour": 260.08
+              },
+              "event_metrics": {
+                "gt_events_count": 10,
+                "pred_events_count": 889,
+                "tp": 10,
+                "fp": 879,
+                "fn": 0,
+                "precision": 0.0112,
+                "recall": 1.0,
+                "f1_score": 0.0222,
+                "false_alarms_per_day": 879.0,
+                "false_alarms_per_hour": 36.62,
+                "mean_delay_s": 0.6
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.4947,
+                "precision": 0.1386,
+                "recall": 0.4926,
+                "f1_score": 0.2163,
+                "confusion_matrix": {
+                  "true_negative": 6120,
+                  "false_positive": 6242,
+                  "false_negative": 1034,
+                  "true_positive": 1004
+                },
+                "positive_prevalence_pct": 14.153,
+                "false_alarms_per_hour": 260.08
+              },
+              "event_metrics": {
+                "gt_events_count": 10,
+                "pred_events_count": 889,
+                "tp": 10,
+                "fp": 879,
+                "fn": 0,
+                "precision": 0.0112,
+                "recall": 1.0,
+                "f1_score": 0.0222,
+                "false_alarms_per_day": 879.0,
+                "false_alarms_per_hour": 36.62,
+                "mean_delay_s": 0.6
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.7597,
+                "precision": 0.0973,
+                "recall": 0.0844,
+                "f1_score": 0.0904,
+                "confusion_matrix": {
+                  "true_negative": 10767,
+                  "false_positive": 1595,
+                  "false_negative": 1866,
+                  "true_positive": 172
+                },
+                "positive_prevalence_pct": 14.153,
+                "false_alarms_per_hour": 66.46
+              },
+              "event_metrics": {
+                "gt_events_count": 10,
+                "pred_events_count": 228,
+                "tp": 4,
+                "fp": 224,
+                "fn": 6,
+                "precision": 0.0175,
+                "recall": 0.4,
+                "f1_score": 0.0336,
+                "false_alarms_per_day": 224.0,
+                "false_alarms_per_hour": 9.33,
+                "mean_delay_s": 400.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.7385,
+                "precision": 0.1197,
+                "recall": 0.1335,
+                "f1_score": 0.1262,
+                "confusion_matrix": {
+                  "true_negative": 10362,
+                  "false_positive": 2000,
+                  "false_negative": 1766,
+                  "true_positive": 272
+                },
+                "positive_prevalence_pct": 14.153,
+                "false_alarms_per_hour": 83.33
+              },
+              "event_metrics": {
+                "gt_events_count": 10,
+                "pred_events_count": 183,
+                "tp": 5,
+                "fp": 178,
+                "fn": 5,
+                "precision": 0.0273,
+                "recall": 0.5,
+                "f1_score": 0.0518,
+                "false_alarms_per_day": 178.0,
+                "false_alarms_per_hour": 7.42,
+                "mean_delay_s": 346.8
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.7314,
+                "precision": 0.1106,
+                "recall": 0.1276,
+                "f1_score": 0.1185,
+                "confusion_matrix": {
+                  "true_negative": 10272,
+                  "false_positive": 2090,
+                  "false_negative": 1778,
+                  "true_positive": 260
+                },
+                "positive_prevalence_pct": 14.153,
+                "false_alarms_per_hour": 87.08
+              },
+              "event_metrics": {
+                "gt_events_count": 10,
+                "pred_events_count": 153,
+                "tp": 4,
+                "fp": 149,
+                "fn": 6,
+                "precision": 0.0261,
+                "recall": 0.4,
+                "f1_score": 0.0491,
+                "false_alarms_per_day": 149.0,
+                "false_alarms_per_hour": 6.21,
+                "mean_delay_s": 568.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "fan_01": {
+          "name": "45 W Ceiling Fan",
+          "nominal_power_w": 45.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.2408,
+                "precision": 0.1553,
+                "recall": 0.9063,
+                "f1_score": 0.2652,
+                "confusion_matrix": {
+                  "true_negative": 1494,
+                  "false_positive": 10729,
+                  "false_negative": 204,
+                  "true_positive": 1973
+                },
+                "positive_prevalence_pct": 15.118,
+                "false_alarms_per_hour": 447.04
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 18,
+                "tp": 3,
+                "fp": 15,
+                "fn": 1,
+                "precision": 0.1667,
+                "recall": 0.75,
+                "f1_score": 0.2727,
+                "false_alarms_per_day": 15.0,
+                "false_alarms_per_hour": 0.62,
+                "mean_delay_s": -226.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.4417,
+                "precision": 0.125,
+                "recall": 0.4488,
+                "f1_score": 0.1955,
+                "confusion_matrix": {
+                  "true_negative": 5383,
+                  "false_positive": 6840,
+                  "false_negative": 1200,
+                  "true_positive": 977
+                },
+                "positive_prevalence_pct": 15.118,
+                "false_alarms_per_hour": 285.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 33,
+                "tp": 4,
+                "fp": 29,
+                "fn": 0,
+                "precision": 0.1212,
+                "recall": 1.0,
+                "f1_score": 0.2162,
+                "false_alarms_per_day": 29.0,
+                "false_alarms_per_hour": 1.21,
+                "mean_delay_s": 33.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.4417,
+                "precision": 0.125,
+                "recall": 0.4488,
+                "f1_score": 0.1955,
+                "confusion_matrix": {
+                  "true_negative": 5383,
+                  "false_positive": 6840,
+                  "false_negative": 1200,
+                  "true_positive": 977
+                },
+                "positive_prevalence_pct": 15.118,
+                "false_alarms_per_hour": 285.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 33,
+                "tp": 4,
+                "fp": 29,
+                "fn": 0,
+                "precision": 0.1212,
+                "recall": 1.0,
+                "f1_score": 0.2162,
+                "false_alarms_per_day": 29.0,
+                "false_alarms_per_hour": 1.21,
+                "mean_delay_s": 33.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.3906,
+                "precision": 0.1715,
+                "recall": 0.791,
+                "f1_score": 0.2819,
+                "confusion_matrix": {
+                  "true_negative": 3903,
+                  "false_positive": 8320,
+                  "false_negative": 455,
+                  "true_positive": 1722
+                },
+                "positive_prevalence_pct": 15.118,
+                "false_alarms_per_hour": 346.67
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 272,
+                "tp": 4,
+                "fp": 268,
+                "fn": 0,
+                "precision": 0.0147,
+                "recall": 1.0,
+                "f1_score": 0.029,
+                "false_alarms_per_day": 268.0,
+                "false_alarms_per_hour": 11.17,
+                "mean_delay_s": 535.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.3878,
+                "precision": 0.1555,
+                "recall": 0.6881,
+                "f1_score": 0.2536,
+                "confusion_matrix": {
+                  "true_negative": 4086,
+                  "false_positive": 8137,
+                  "false_negative": 679,
+                  "true_positive": 1498
+                },
+                "positive_prevalence_pct": 15.118,
+                "false_alarms_per_hour": 339.04
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 228,
+                "tp": 4,
+                "fp": 224,
+                "fn": 0,
+                "precision": 0.0175,
+                "recall": 1.0,
+                "f1_score": 0.0345,
+                "false_alarms_per_day": 224.0,
+                "false_alarms_per_hour": 9.33,
+                "mean_delay_s": -108.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.4819,
+                "precision": 0.2173,
+                "recall": 0.9329,
+                "f1_score": 0.3525,
+                "confusion_matrix": {
+                  "true_negative": 4908,
+                  "false_positive": 7315,
+                  "false_negative": 146,
+                  "true_positive": 2031
+                },
+                "positive_prevalence_pct": 15.118,
+                "false_alarms_per_hour": 304.79
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 146,
+                "tp": 4,
+                "fp": 142,
+                "fn": 0,
+                "precision": 0.0274,
+                "recall": 1.0,
+                "f1_score": 0.0533,
+                "false_alarms_per_day": 142.0,
+                "false_alarms_per_hour": 5.92,
+                "mean_delay_s": 598.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "pump_01": {
+          "name": "75 W Water Pump",
+          "nominal_power_w": 75.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.9559,
+                "precision": 0.0518,
+                "recall": 0.0447,
+                "f1_score": 0.048,
+                "confusion_matrix": {
+                  "true_negative": 13749,
+                  "false_positive": 293,
+                  "false_negative": 342,
+                  "true_positive": 16
+                },
+                "positive_prevalence_pct": 2.486,
+                "false_alarms_per_hour": 12.21
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 18,
+                "tp": 1,
+                "fp": 17,
+                "fn": 2,
+                "precision": 0.0556,
+                "recall": 0.3333,
+                "f1_score": 0.0952,
+                "false_alarms_per_day": 17.0,
+                "false_alarms_per_hour": 0.71,
+                "mean_delay_s": -18.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.624,
+                "precision": 0.062,
+                "recall": 1.0,
+                "f1_score": 0.1168,
+                "confusion_matrix": {
+                  "true_negative": 8627,
+                  "false_positive": 5415,
+                  "false_negative": 0,
+                  "true_positive": 358
+                },
+                "positive_prevalence_pct": 2.486,
+                "false_alarms_per_hour": 225.62
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 1,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.3333,
+                "f1_score": 0.4,
+                "false_alarms_per_day": 1.0,
+                "false_alarms_per_hour": 0.04,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.624,
+                "precision": 0.062,
+                "recall": 1.0,
+                "f1_score": 0.1168,
+                "confusion_matrix": {
+                  "true_negative": 8627,
+                  "false_positive": 5415,
+                  "false_negative": 0,
+                  "true_positive": 358
+                },
+                "positive_prevalence_pct": 2.486,
+                "false_alarms_per_hour": 225.62
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 1,
+                "fp": 1,
+                "fn": 2,
+                "precision": 0.5,
+                "recall": 0.3333,
+                "f1_score": 0.4,
+                "false_alarms_per_day": 1.0,
+                "false_alarms_per_hour": 0.04,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.9708,
+                "precision": 0.1538,
+                "recall": 0.0391,
+                "f1_score": 0.0624,
+                "confusion_matrix": {
+                  "true_negative": 13965,
+                  "false_positive": 77,
+                  "false_negative": 344,
+                  "true_positive": 14
+                },
+                "positive_prevalence_pct": 2.486,
+                "false_alarms_per_hour": 3.21
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 12,
+                "tp": 1,
+                "fp": 11,
+                "fn": 2,
+                "precision": 0.0833,
+                "recall": 0.3333,
+                "f1_score": 0.1333,
+                "false_alarms_per_day": 11.0,
+                "false_alarms_per_hour": 0.46,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.9653,
+                "precision": 0.1553,
+                "recall": 0.0894,
+                "f1_score": 0.1135,
+                "confusion_matrix": {
+                  "true_negative": 13868,
+                  "false_positive": 174,
+                  "false_negative": 326,
+                  "true_positive": 32
+                },
+                "positive_prevalence_pct": 2.486,
+                "false_alarms_per_hour": 7.25
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 33,
+                "tp": 1,
+                "fp": 32,
+                "fn": 2,
+                "precision": 0.0303,
+                "recall": 0.3333,
+                "f1_score": 0.0556,
+                "false_alarms_per_day": 32.0,
+                "false_alarms_per_hour": 1.33,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.9804,
+                "precision": 0.5757,
+                "recall": 0.8073,
+                "f1_score": 0.6721,
+                "confusion_matrix": {
+                  "true_negative": 13829,
+                  "false_positive": 213,
+                  "false_negative": 69,
+                  "true_positive": 289
+                },
+                "positive_prevalence_pct": 2.486,
+                "false_alarms_per_hour": 8.88
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 15,
+                "tp": 2,
+                "fp": 13,
+                "fn": 1,
+                "precision": 0.1333,
+                "recall": 0.6667,
+                "f1_score": 0.2222,
+                "false_alarms_per_day": 13.0,
+                "false_alarms_per_hour": 0.54,
+                "mean_delay_s": 198.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        }
+      }
+    },
+    "scenario_4_missing_jitter": {
+      "noise_sigma_w": 6.0,
+      "adc_quantization_w": 1.0,
+      "appliances": {
+        "bulb_01": {
+          "name": "12 W LED Bulb",
+          "nominal_power_w": 12.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.4599,
+                "precision": 0.1624,
+                "recall": 0.8658,
+                "f1_score": 0.2735,
+                "confusion_matrix": {
+                  "true_negative": 5158,
+                  "false_positive": 7551,
+                  "false_negative": 227,
+                  "true_positive": 1464
+                },
+                "positive_prevalence_pct": 11.743,
+                "false_alarms_per_hour": 314.62
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 35,
+                "tp": 4,
+                "fp": 31,
+                "fn": 4,
+                "precision": 0.1143,
+                "recall": 0.5,
+                "f1_score": 0.186,
+                "false_alarms_per_day": 31.0,
+                "false_alarms_per_hour": 1.29,
+                "mean_delay_s": -2158.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.4974,
+                "precision": 0.1128,
+                "recall": 0.4778,
+                "f1_score": 0.1825,
+                "confusion_matrix": {
+                  "true_negative": 6354,
+                  "false_positive": 6355,
+                  "false_negative": 883,
+                  "true_positive": 808
+                },
+                "positive_prevalence_pct": 11.743,
+                "false_alarms_per_hour": 264.79
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 732,
+                "tp": 8,
+                "fp": 724,
+                "fn": 0,
+                "precision": 0.0109,
+                "recall": 1.0,
+                "f1_score": 0.0216,
+                "false_alarms_per_day": 724.0,
+                "false_alarms_per_hour": 30.17,
+                "mean_delay_s": 15.75
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.4974,
+                "precision": 0.1128,
+                "recall": 0.4778,
+                "f1_score": 0.1825,
+                "confusion_matrix": {
+                  "true_negative": 6354,
+                  "false_positive": 6355,
+                  "false_negative": 883,
+                  "true_positive": 808
+                },
+                "positive_prevalence_pct": 11.743,
+                "false_alarms_per_hour": 264.79
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 732,
+                "tp": 8,
+                "fp": 724,
+                "fn": 0,
+                "precision": 0.0109,
+                "recall": 1.0,
+                "f1_score": 0.0216,
+                "false_alarms_per_day": 724.0,
+                "false_alarms_per_hour": 30.17,
+                "mean_delay_s": 15.75
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.749,
+                "precision": 0.1883,
+                "recall": 0.3436,
+                "f1_score": 0.2433,
+                "confusion_matrix": {
+                  "true_negative": 10205,
+                  "false_positive": 2504,
+                  "false_negative": 1110,
+                  "true_positive": 581
+                },
+                "positive_prevalence_pct": 11.743,
+                "false_alarms_per_hour": 104.33
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 258,
+                "tp": 7,
+                "fp": 251,
+                "fn": 1,
+                "precision": 0.0271,
+                "recall": 0.875,
+                "f1_score": 0.0526,
+                "false_alarms_per_day": 251.0,
+                "false_alarms_per_hour": 10.46,
+                "mean_delay_s": 78.86
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.7351,
+                "precision": 0.188,
+                "recall": 0.3785,
+                "f1_score": 0.2512,
+                "confusion_matrix": {
+                  "true_negative": 9945,
+                  "false_positive": 2764,
+                  "false_negative": 1051,
+                  "true_positive": 640
+                },
+                "positive_prevalence_pct": 11.743,
+                "false_alarms_per_hour": 115.17
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 225,
+                "tp": 7,
+                "fp": 218,
+                "fn": 1,
+                "precision": 0.0311,
+                "recall": 0.875,
+                "f1_score": 0.0601,
+                "false_alarms_per_day": 218.0,
+                "false_alarms_per_hour": 9.08,
+                "mean_delay_s": 24.86
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.7506,
+                "precision": 0.1976,
+                "recall": 0.3672,
+                "f1_score": 0.257,
+                "confusion_matrix": {
+                  "true_negative": 10188,
+                  "false_positive": 2521,
+                  "false_negative": 1070,
+                  "true_positive": 621
+                },
+                "positive_prevalence_pct": 11.743,
+                "false_alarms_per_hour": 105.04
+              },
+              "event_metrics": {
+                "gt_events_count": 8,
+                "pred_events_count": 128,
+                "tp": 6,
+                "fp": 122,
+                "fn": 2,
+                "precision": 0.0469,
+                "recall": 0.75,
+                "f1_score": 0.0882,
+                "false_alarms_per_day": 122.0,
+                "false_alarms_per_hour": 5.08,
+                "mean_delay_s": -176.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "fan_01": {
+          "name": "45 W Ceiling Fan",
+          "nominal_power_w": 45.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.4675,
+                "precision": 0.335,
+                "recall": 0.4382,
+                "f1_score": 0.3797,
+                "confusion_matrix": {
+                  "true_negative": 4385,
+                  "false_positive": 4659,
+                  "false_negative": 3009,
+                  "true_positive": 2347
+                },
+                "positive_prevalence_pct": 37.194,
+                "false_alarms_per_hour": 194.12
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 26,
+                "tp": 3,
+                "fp": 23,
+                "fn": 1,
+                "precision": 0.1154,
+                "recall": 0.75,
+                "f1_score": 0.2,
+                "false_alarms_per_day": 23.0,
+                "false_alarms_per_hour": 0.96,
+                "mean_delay_s": -698.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.906,
+                "precision": 0.9995,
+                "recall": 0.7478,
+                "f1_score": 0.8555,
+                "confusion_matrix": {
+                  "true_negative": 9042,
+                  "false_positive": 2,
+                  "false_negative": 1351,
+                  "true_positive": 4005
+                },
+                "positive_prevalence_pct": 37.194,
+                "false_alarms_per_hour": 0.08
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 3,
+                "tp": 3,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1_score": 0.8571,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 4.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.906,
+                "precision": 0.9995,
+                "recall": 0.7478,
+                "f1_score": 0.8555,
+                "confusion_matrix": {
+                  "true_negative": 9042,
+                  "false_positive": 2,
+                  "false_negative": 1351,
+                  "true_positive": 4005
+                },
+                "positive_prevalence_pct": 37.194,
+                "false_alarms_per_hour": 0.08
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 3,
+                "tp": 3,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1_score": 0.8571,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 4.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.5057,
+                "precision": 0.371,
+                "recall": 0.4731,
+                "f1_score": 0.4159,
+                "confusion_matrix": {
+                  "true_negative": 4748,
+                  "false_positive": 4296,
+                  "false_negative": 2822,
+                  "true_positive": 2534
+                },
+                "positive_prevalence_pct": 37.194,
+                "false_alarms_per_hour": 179.0
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 287,
+                "tp": 4,
+                "fp": 283,
+                "fn": 0,
+                "precision": 0.0139,
+                "recall": 1.0,
+                "f1_score": 0.0275,
+                "false_alarms_per_day": 283.0,
+                "false_alarms_per_hour": 11.79,
+                "mean_delay_s": 115.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.5425,
+                "precision": 0.3317,
+                "recall": 0.2267,
+                "f1_score": 0.2693,
+                "confusion_matrix": {
+                  "true_negative": 6598,
+                  "false_positive": 2446,
+                  "false_negative": 4142,
+                  "true_positive": 1214
+                },
+                "positive_prevalence_pct": 37.194,
+                "false_alarms_per_hour": 101.92
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 222,
+                "tp": 4,
+                "fp": 218,
+                "fn": 0,
+                "precision": 0.018,
+                "recall": 1.0,
+                "f1_score": 0.0354,
+                "false_alarms_per_day": 218.0,
+                "false_alarms_per_hour": 9.08,
+                "mean_delay_s": 763.5
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.5807,
+                "precision": 0.3688,
+                "recall": 0.1791,
+                "f1_score": 0.2411,
+                "confusion_matrix": {
+                  "true_negative": 7403,
+                  "false_positive": 1641,
+                  "false_negative": 4397,
+                  "true_positive": 959
+                },
+                "positive_prevalence_pct": 37.194,
+                "false_alarms_per_hour": 68.38
+              },
+              "event_metrics": {
+                "gt_events_count": 4,
+                "pred_events_count": 198,
+                "tp": 4,
+                "fp": 194,
+                "fn": 0,
+                "precision": 0.0202,
+                "recall": 1.0,
+                "f1_score": 0.0396,
+                "false_alarms_per_day": 194.0,
+                "false_alarms_per_hour": 8.08,
+                "mean_delay_s": 534.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        },
+        "pump_01": {
+          "name": "75 W Water Pump",
+          "nominal_power_w": 75.0,
+          "methods": {
+            "static_power_threshold": {
+              "sample_metrics": {
+                "accuracy": 0.9602,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "confusion_matrix": {
+                  "true_negative": 13827,
+                  "false_positive": 177,
+                  "false_negative": 396,
+                  "true_positive": 0
+                },
+                "positive_prevalence_pct": 2.75,
+                "false_alarms_per_hour": 7.38
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 5,
+                "tp": 0,
+                "fp": 5,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "false_alarms_per_day": 5.0,
+                "false_alarms_per_hour": 0.21,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "differential_step_baseline": {
+              "sample_metrics": {
+                "accuracy": 0.6199,
+                "precision": 0.0672,
+                "recall": 0.9949,
+                "f1_score": 0.1258,
+                "confusion_matrix": {
+                  "true_negative": 8532,
+                  "false_positive": 5472,
+                  "false_negative": 2,
+                  "true_positive": 394
+                },
+                "positive_prevalence_pct": 2.75,
+                "false_alarms_per_hour": 228.0
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1_score": 0.8,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 6.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "production_rule_based_detector": {
+              "sample_metrics": {
+                "accuracy": 0.6199,
+                "precision": 0.0672,
+                "recall": 0.9949,
+                "f1_score": 0.1258,
+                "confusion_matrix": {
+                  "true_negative": 8532,
+                  "false_positive": 5472,
+                  "false_negative": 2,
+                  "true_positive": 394
+                },
+                "positive_prevalence_pct": 2.75,
+                "false_alarms_per_hour": 228.0
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1_score": 0.8,
+                "false_alarms_per_day": 0.0,
+                "false_alarms_per_hour": 0.0,
+                "mean_delay_s": 6.0
+              },
+              "feasibility_verdict": "FEASIBLE_SYNTHETIC"
+            },
+            "random_forest_ablation_a_active_only": {
+              "sample_metrics": {
+                "accuracy": 0.9628,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "confusion_matrix": {
+                  "true_negative": 13865,
+                  "false_positive": 139,
+                  "false_negative": 396,
+                  "true_positive": 0
+                },
+                "positive_prevalence_pct": 2.75,
+                "false_alarms_per_hour": 5.79
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 1,
+                "tp": 0,
+                "fp": 1,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "false_alarms_per_day": 1.0,
+                "false_alarms_per_hour": 0.04,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_b_active_temporal": {
+              "sample_metrics": {
+                "accuracy": 0.9624,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "confusion_matrix": {
+                  "true_negative": 13858,
+                  "false_positive": 146,
+                  "false_negative": 396,
+                  "true_positive": 0
+                },
+                "positive_prevalence_pct": 2.75,
+                "false_alarms_per_hour": 6.08
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 2,
+                "tp": 0,
+                "fp": 2,
+                "fn": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1_score": 0.0,
+                "false_alarms_per_day": 2.0,
+                "false_alarms_per_hour": 0.08,
+                "mean_delay_s": 0.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            },
+            "random_forest_ablation_c_reactive_pf": {
+              "sample_metrics": {
+                "accuracy": 0.9626,
+                "precision": 0.3235,
+                "recall": 0.3308,
+                "f1_score": 0.3271,
+                "confusion_matrix": {
+                  "true_negative": 13730,
+                  "false_positive": 274,
+                  "false_negative": 265,
+                  "true_positive": 131
+                },
+                "positive_prevalence_pct": 2.75,
+                "false_alarms_per_hour": 11.42
+              },
+              "event_metrics": {
+                "gt_events_count": 3,
+                "pred_events_count": 20,
+                "tp": 2,
+                "fp": 18,
+                "fn": 1,
+                "precision": 0.1,
+                "recall": 0.6667,
+                "f1_score": 0.1739,
+                "false_alarms_per_day": 18.0,
+                "false_alarms_per_hour": 0.75,
+                "mean_delay_s": 309.0
+              },
+              "feasibility_verdict": "NOT_FEASIBLE"
+            }
+          }
+        }
+      }
+    }
+  }
+}
