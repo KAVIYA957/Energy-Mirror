@@ -154,8 +154,9 @@ class NILMPreprocessor:
         n_train = int(N * self.config.train_ratio)
         n_val = int(N * self.config.val_ratio)
 
-        # Buffer: drop boundary window to prevent temporal leakage
-        buffer_len = min(self.config.window_size_samples, 5)
+        # Buffer: drop exactly window_size_samples between partitions to guarantee
+        # zero temporal or raw sample overlap across sliding windows.
+        buffer_len = self.config.window_size_samples
 
         train_end = n_train
         val_start = train_end + buffer_len
@@ -176,7 +177,8 @@ class NILMPreprocessor:
                 "train": (0, train_end),
                 "val": (val_start, val_end),
                 "test": (test_start, N),
-                "buffer_dropped": buffer_len * 2,
+                "buffer_dropped_per_boundary": buffer_len,
+                "total_buffer_dropped": buffer_len * 2,
             }
         }
 
