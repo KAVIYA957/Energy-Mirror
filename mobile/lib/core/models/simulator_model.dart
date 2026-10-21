@@ -8,6 +8,7 @@ class SimulatorAppliance {
   final double nominalPowerW;
   final double currentPowerW;
   final String status;
+  final String? detectionCapability;
   final DateTime? lastToggledAt;
 
   SimulatorAppliance({
@@ -18,6 +19,7 @@ class SimulatorAppliance {
     required this.nominalPowerW,
     required this.currentPowerW,
     required this.status,
+    this.detectionCapability,
     this.lastToggledAt,
   });
 
@@ -30,6 +32,7 @@ class SimulatorAppliance {
       nominalPowerW: (json['nominal_power_w'] as num?)?.toDouble() ?? 0.0,
       currentPowerW: (json['current_power_w'] as num?)?.toDouble() ?? 0.0,
       status: json['status'] as String? ?? 'OFF',
+      detectionCapability: json['detection_capability'] as String?,
       lastToggledAt: json['last_toggled_at'] != null
           ? parseDateTimeUtc(json['last_toggled_at'])
           : null,

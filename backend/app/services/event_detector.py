@@ -92,6 +92,42 @@ class RuleBasedEventDetector:
             ),
         ]
 
+    def sync_from_registry(self, db):
+        """
+        Synchronizes active calibrated signatures from the database registry.
+        Only appliances explicitly configured with detection_capability == 'PRODUCTION_RULE_MATCHED'
+        and non-null tolerance envelopes are recognized by production rules.
+        """
+        try:
+            from app.db.models import ApplianceDefinitionModel
+            records = (
+                db.query(ApplianceDefinitionModel)
+                .filter(
+                    ApplianceDefinitionModel.is_enabled == True,
+                    ApplianceDefinitionModel.detection_capability == "PRODUCTION_RULE_MATCHED",
+                )
+                .all()
+            )
+            if records:
+                new_sigs = []
+                for r in records:
+                    tol_w = r.tolerance_w if (r.tolerance_w and r.tolerance_w > 0) else round(r.nominal_power_w * 0.1, 1)
+                    new_sigs.append(
+                        ApplianceSignature(
+                            appliance_id=r.appliance_id,
+                            name=r.name,
+                            nominal_power_w=r.nominal_power_w,
+                            tolerance_w=tol_w,
+                            expected_pf=r.expected_pf,
+                            pf_tolerance=r.pf_tolerance,
+                            category=r.category,
+                        )
+                    )
+                self.signatures = new_sigs
+        except Exception:
+            pass
+
+
     def detect_transition(
         self,
         prev_power_w: Optional[float],

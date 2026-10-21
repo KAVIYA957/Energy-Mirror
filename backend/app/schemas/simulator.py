@@ -44,7 +44,9 @@ class SimulatorApplianceState(BaseModel):
     nominal_power_w: float
     current_power_w: float
     status: Literal["ON", "OFF", "RUNNING", "IDLE"]
+    detection_capability: Optional[str] = "PRODUCTION_RULE_MATCHED"
     last_toggled_at: Optional[datetime] = None
+
 
 
 class SimulatorStateResponse(BaseModel):

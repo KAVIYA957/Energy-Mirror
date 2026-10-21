@@ -229,12 +229,38 @@ class SimulatorLabPanel extends ConsumerWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          Text(
-                            '${app.category} • Nominal ${app.nominalPowerW.toInt()} W',
-                            style: GoogleFonts.inter(
-                              color: EnergyMirrorColors.textMuted,
-                              fontSize: 10.5,
-                            ),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  '${app.category} • Nominal ${app.nominalPowerW.toInt()} W',
+                                  style: GoogleFonts.inter(
+                                    color: EnergyMirrorColors.textMuted,
+                                    fontSize: 10.5,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (app.detectionCapability == 'UNSUPPORTED') ...[
+                                const SizedBox(width: 4),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: EnergyMirrorColors.surfaceSubtle,
+                                    borderRadius: BorderRadius.circular(3),
+                                    border: Border.all(color: EnergyMirrorColors.surfaceBorder),
+                                  ),
+                                  child: Text(
+                                    'UNMATCHED',
+                                    style: GoogleFonts.inter(
+                                      color: EnergyMirrorColors.textMuted,
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ],
                       ),

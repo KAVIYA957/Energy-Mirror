@@ -57,3 +57,24 @@ class DetectedEventModel(Base):
     data_classification = Column(String(64), default="RULE_BASED_ESTIMATE", nullable=False)
     event_fingerprint = Column(String(128), unique=True, index=True, nullable=True)
 
+
+class ApplianceDefinitionModel(Base):
+    __tablename__ = "appliance_definitions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    appliance_id = Column(String(64), unique=True, index=True, nullable=False)
+    name = Column(String(128), nullable=False)
+    category = Column(String(64), default="General", nullable=False)
+    nominal_power_w = Column(Float, nullable=False)
+    expected_pf = Column(Float, nullable=True)
+    tolerance_w = Column(Float, nullable=True)
+    pf_tolerance = Column(Float, nullable=True)
+    is_enabled = Column(Boolean, default=True, nullable=False)
+    is_simulator_supported = Column(Boolean, default=True, nullable=False)
+    detection_capability = Column(String(64), default="UNSUPPORTED", nullable=False)  # "PRODUCTION_RULE_MATCHED", "UNSUPPORTED", "EXPERIMENTAL_ONLY"
+    confidence_score = Column(Float, nullable=True)
+    evidence_notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+

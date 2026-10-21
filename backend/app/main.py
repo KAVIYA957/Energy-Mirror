@@ -5,15 +5,21 @@ from app.config import settings
 from app.db.session import engine, Base, SessionLocal
 from app.db.models import TelemetryModel, ApplianceEstimateModel, DetectedEventModel
 from app.services.telemetry_service import telemetry_service
-from app.api import health, telemetry, ingest, simulator, diagnostics
+from app.services.appliance_registry import appliance_registry
+from app.services.simulator import simulator
+from app.services.event_detector import event_detector
+from app.api import health, telemetry, ingest, simulator as sim_router, diagnostics, appliances
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: create SQLite tables if they do not exist
     Base.metadata.create_all(bind=engine)
-    # Seed initial history if empty
+    # Seed appliance registry and initial history if empty
     db = SessionLocal()
     try:
+        appliance_registry.seed_defaults(db)
+        simulator.sync_from_registry(db)
+        event_detector.sync_from_registry(db)
         telemetry_service.seed_initial_history(db)
     finally:
         db.close()
@@ -40,8 +46,9 @@ app.add_middleware(
 app.include_router(health.router, prefix=settings.API_V1_PREFIX)
 app.include_router(telemetry.router, prefix=settings.API_V1_PREFIX)
 app.include_router(ingest.router, prefix=settings.API_V1_PREFIX)
-app.include_router(simulator.router, prefix=settings.API_V1_PREFIX)
+app.include_router(sim_router.router, prefix=settings.API_V1_PREFIX)
 app.include_router(diagnostics.router, prefix=settings.API_V1_PREFIX)
+app.include_router(appliances.router, prefix=settings.API_V1_PREFIX)
 
 @app.get("/")
 def root():

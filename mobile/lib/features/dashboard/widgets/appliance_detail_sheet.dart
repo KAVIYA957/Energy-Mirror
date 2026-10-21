@@ -83,13 +83,19 @@ class ApplianceDetailSheet extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: EnergyMirrorColors.softSky,
+                            color: appliance.detectionCapability == 'UNSUPPORTED'
+                                ? EnergyMirrorColors.surfaceSubtle
+                                : EnergyMirrorColors.softSky,
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            'RULE-BASED ESTIMATE',
+                            appliance.detectionCapability == 'UNSUPPORTED'
+                                ? 'SIMULATED ONLY'
+                                : 'RULE-BASED ESTIMATE',
                             style: GoogleFonts.inter(
-                              color: EnergyMirrorColors.primaryBlue,
+                              color: appliance.detectionCapability == 'UNSUPPORTED'
+                                  ? EnergyMirrorColors.textMuted
+                                  : EnergyMirrorColors.primaryBlue,
                               fontSize: 9.5,
                               fontWeight: FontWeight.w700,
                             ),
@@ -203,7 +209,12 @@ class ApplianceDetailSheet extends StatelessWidget {
                 ],
                 _buildRow('Appliance Identifier', appliance.applianceId),
                 const SizedBox(height: 6),
-                _buildRow('Detection Method', 'Rule-Based Step Classifier'),
+                _buildRow(
+                  'Detection Method',
+                  appliance.detectionCapability == 'UNSUPPORTED'
+                      ? 'Simulated Only (No Calibrated NILM Envelope)'
+                      : 'Rule-Based Step Classifier',
+                ),
                 const SizedBox(height: 6),
                 _buildRow('Telemetry Source', 'Simulated Virtual Environment'),
                 const SizedBox(height: 6),

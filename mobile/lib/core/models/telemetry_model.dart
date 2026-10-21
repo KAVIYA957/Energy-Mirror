@@ -16,6 +16,8 @@ class ApplianceEstimate {
   final String category;
   final String status;
   final double estimatedPowerW;
+  final double? nominalPowerW;
+  final String? detectionCapability;
   final String dataSource;
   final double? confidenceScore;
   final String? evidenceNotes;
@@ -27,6 +29,8 @@ class ApplianceEstimate {
     required this.category,
     required this.status,
     required this.estimatedPowerW,
+    this.nominalPowerW,
+    this.detectionCapability,
     required this.dataSource,
     this.confidenceScore,
     this.evidenceNotes,
@@ -40,6 +44,8 @@ class ApplianceEstimate {
       category: json['category'] as String? ?? 'general',
       status: json['status'] as String? ?? 'RUNNING',
       estimatedPowerW: (json['estimated_power_w'] as num?)?.toDouble() ?? 0.0,
+      nominalPowerW: (json['nominal_power_w'] as num?)?.toDouble(),
+      detectionCapability: json['detection_capability'] as String?,
       dataSource: json['data_source'] as String? ?? 'NILM_ESTIMATED',
       confidenceScore: (json['confidence_score'] as num?)?.toDouble(),
       evidenceNotes: json['evidence_notes'] as String?,

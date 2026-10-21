@@ -17,6 +17,9 @@ class ApplianceNode extends StatelessWidget {
   });
 
   int get _nominalWattage {
+    if (appliance.nominalPowerW != null && appliance.nominalPowerW! > 0) {
+      return appliance.nominalPowerW!.round();
+    }
     switch (appliance.applianceId) {
       case 'heater_01':
         return 140;
@@ -141,13 +144,17 @@ class ApplianceNode extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   decoration: BoxDecoration(
-                    color: EnergyMirrorColors.softSky,
+                    color: appliance.detectionCapability == 'UNSUPPORTED'
+                        ? EnergyMirrorColors.surfaceSubtle
+                        : EnergyMirrorColors.softSky,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    'RULE-BASED',
+                    appliance.detectionCapability == 'UNSUPPORTED' ? 'SIMULATED' : 'RULE-BASED',
                     style: GoogleFonts.inter(
-                      color: EnergyMirrorColors.primaryBlue,
+                      color: appliance.detectionCapability == 'UNSUPPORTED'
+                          ? EnergyMirrorColors.textMuted
+                          : EnergyMirrorColors.primaryBlue,
                       fontSize: 8,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.3,

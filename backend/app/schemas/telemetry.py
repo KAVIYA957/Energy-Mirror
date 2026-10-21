@@ -12,10 +12,13 @@ class ApplianceEstimateSchema(BaseModel):
     category: str = "general"
     status: Literal["OFF", "ON", "RUNNING", "IDLE"] = "RUNNING"
     estimated_power_w: float = Field(ge=0.0)
+    nominal_power_w: Optional[float] = Field(default=None, ge=0.0)
+    detection_capability: Optional[str] = "PRODUCTION_RULE_MATCHED"
     data_source: Literal["NILM_ESTIMATED"] = "NILM_ESTIMATED"
     confidence_score: Optional[float] = Field(default=None, ge=0.0, le=1.0)
     evidence_notes: Optional[str] = None
     timestamp: datetime
+
 
 
 class TelemetryResponse(BaseModel):

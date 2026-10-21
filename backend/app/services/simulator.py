@@ -32,7 +32,7 @@ class TelemetrySimulator:
         self.unattributed_w = 12.0
         self.standby_pf = 0.90
 
-        # Controllable 4-appliance model matching Living Current design specification
+        # Controllable appliance model matching dynamic registry
         self._init_appliances()
         self.reset()
 
@@ -48,6 +48,7 @@ class TelemetrySimulator:
                 "last_toggled_at": None,
                 "confidence_score": 0.94,
                 "evidence_notes": "Sharp +140W step with near-unity power factor (PF ~ 0.99), typical of resistive heating element.",
+                "detection_capability": "PRODUCTION_RULE_MATCHED",
             },
             "pump_01": {
                 "appliance_id": "pump_01",
@@ -59,6 +60,7 @@ class TelemetrySimulator:
                 "last_toggled_at": None,
                 "confidence_score": 0.88,
                 "evidence_notes": "Inductive motor signature (+75W, PF ~ 0.78 lagging) detected following inrush transient.",
+                "detection_capability": "PRODUCTION_RULE_MATCHED",
             },
             "fan_01": {
                 "appliance_id": "fan_01",
@@ -70,6 +72,7 @@ class TelemetrySimulator:
                 "last_toggled_at": None,
                 "confidence_score": 0.91,
                 "evidence_notes": "Continuous steady rotation load of 45W with slight reactive component.",
+                "detection_capability": "PRODUCTION_RULE_MATCHED",
             },
             "bulb_01": {
                 "appliance_id": "bulb_01",
@@ -81,18 +84,67 @@ class TelemetrySimulator:
                 "last_toggled_at": None,
                 "confidence_score": 0.85,
                 "evidence_notes": "Constant low-wattage step characteristic of high-efficiency switch-mode LED driver.",
+                "detection_capability": "PRODUCTION_RULE_MATCHED",
             },
         }
 
-    def reset(self):
-        """Restore all appliances to baseline all-ON state (284 W aggregate) and reset event history."""
-        self._init_appliances()
+    def sync_from_registry(self, db: Any):
+        """
+        Synchronizes simulator appliances from the dynamic appliance registry.
+        Preserves existing runtime toggle states where appliance IDs match,
+        and adds newly registered simulator-supported appliances.
+        """
+        try:
+            from app.db.models import ApplianceDefinitionModel
+            records = (
+                db.query(ApplianceDefinitionModel)
+                .filter(
+                    ApplianceDefinitionModel.is_enabled == True,
+                    ApplianceDefinitionModel.is_simulator_supported == True,
+                )
+                .order_by(ApplianceDefinitionModel.id.asc())
+                .all()
+            )
+            if records:
+                updated_appliances = {}
+                for r in records:
+                    existing = self.appliances.get(r.appliance_id)
+                    is_on = existing["is_on"] if existing else True
+                    last_toggled = existing["last_toggled_at"] if existing else None
+
+                    updated_appliances[r.appliance_id] = {
+                        "appliance_id": r.appliance_id,
+                        "name": r.name,
+                        "category": r.category,
+                        "nominal_power_w": r.nominal_power_w,
+                        "expected_pf": r.expected_pf if r.expected_pf is not None else 0.95,
+                        "is_on": is_on,
+                        "last_toggled_at": last_toggled,
+                        "confidence_score": r.confidence_score if r.confidence_score is not None else 0.85,
+                        "evidence_notes": r.evidence_notes or f"Simulated load step (+{r.nominal_power_w:.0f} W).",
+                        "detection_capability": r.detection_capability,
+                    }
+                self.appliances = updated_appliances
+        except Exception:
+            pass
+
+    def reset(self, db: Optional[Any] = None):
+        """Restore all appliances to baseline all-ON state and reset event history."""
+        if db is not None:
+            self.sync_from_registry(db)
+        else:
+            self._init_appliances()
+
         for app in self.appliances.values():
             app["is_on"] = True
             app["last_toggled_at"] = None
 
-        self.story_headline = "Baseline steady state: All 4 appliances running (284 W)"
-        self.story_detail = "Simulated aggregate power is 284 W (272 W attributed + 12 W fixed residual floor). Detector is monitoring for load step transitions."
+        total_attr = self.get_attributed_power()
+        total_agg = self.get_aggregate_power()
+        n_apps = len(self.appliances)
+
+        self.story_headline = f"Baseline steady state: All {n_apps} appliances running ({total_agg:.0f} W)"
+        self.story_detail = f"Simulated aggregate power is {total_agg:.0f} W ({total_attr:.0f} W attributed + {self.unattributed_w:.0f} W fixed residual floor). Detector is monitoring for load step transitions."
 
         initial_event = DetectedEvent(
             status="MATCHED",
@@ -105,6 +157,7 @@ class TelemetrySimulator:
             data_classification="RULE_BASED_ESTIMATE",
         )
         self.recent_events: List[DetectedEvent] = [initial_event]
+
 
     def get_attributed_power(self) -> float:
         """Sum nominal power of all currently active virtual appliances."""
@@ -158,6 +211,9 @@ class TelemetrySimulator:
         Returns:
             (changed: bool, prev_state: str, new_state: str, delta_power_w: float, event: Optional[DetectedEvent])
         """
+        if appliance_id not in self.appliances and db is not None:
+            self.sync_from_registry(db)
+
         if appliance_id not in self.appliances:
             valid_ids = list(self.appliances.keys())
             raise KeyError(f"Invalid appliance ID '{appliance_id}'. Valid IDs are: {valid_ids}")
@@ -245,6 +301,8 @@ class TelemetrySimulator:
                     category=item["category"],
                     status="RUNNING" if is_on else "OFF",
                     estimated_power_w=power,
+                    nominal_power_w=item.get("nominal_power_w"),
+                    detection_capability=item.get("detection_capability", "PRODUCTION_RULE_MATCHED"),
                     data_source="NILM_ESTIMATED",
                     confidence_score=item["confidence_score"] if is_on else None,
                     evidence_notes=item["evidence_notes"] if is_on else "Appliance is currently OFF (0 W detected).",
@@ -307,6 +365,7 @@ class TelemetrySimulator:
                     nominal_power_w=app["nominal_power_w"],
                     current_power_w=app["nominal_power_w"] if is_on else 0.0,
                     status="RUNNING" if is_on else "OFF",
+                    detection_capability=app.get("detection_capability", "PRODUCTION_RULE_MATCHED"),
                     last_toggled_at=app["last_toggled_at"],
                 )
             )
