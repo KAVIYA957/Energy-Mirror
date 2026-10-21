@@ -1,0 +1,178 @@
+{
+  "milestone": "2C.10",
+  "title": "Dataset Suitability and Intermittent Event Detection Audit",
+  "audit_date": "2026-10-21",
+  "refit_methodological_audit": {
+    "dataset": "REFIT House 21",
+    "verified_channel": "Appliance 9 (Pond Pump, ~44 W active power)",
+    "confirmed_evaluation_defects": [
+      {
+        "defect_id": "DEFECT-REFIT-01",
+        "name": "Irregular Sampling Event Duration Multiplier Error",
+        "location": "backend/ml_experiments/evaluate_events.py:extract_events",
+        "description": "Event duration was computed as sample_count * dt_0, where dt_0 was inferred solely from (index[1] - index[0]). In REFIT, intervals vary from 1s to 15s. This caused duration estimation errors of up to -30.78 hours (-15.9%) on Event #2, -9.51 hours (-28.6%) on Event #3, and +20.8% on Event #11.",
+        "status": "FIXED",
+        "correction": "Refactored extract_events to compute duration from true timestamp boundary intervals."
+      },
+      {
+        "defect_id": "DEFECT-REFIT-02",
+        "name": "Split-Boundary Crossing False Onset Fabrication",
+        "location": "backend/ml_experiments/evaluate_events.py:extract_events & run_refit_experiment.py",
+        "description": "When a test partition slice begins while an appliance was already running continuously in validation, extract_events prepended index 0 to start_indices. This fabricated a false onset at t=0 of the test partition, which matched the model's initial ON prediction and falsely awarded 1 True Positive onset. In reality, zero onsets occurred at t=0, and the model achieved 0 true onset detections in test.",
+        "status": "FIXED",
+        "correction": "Added initial_state_on flag to extract_events and exclude_boundary_onsets option to match_events, properly isolating ongoing activations from genuine onsets."
+      },
+      {
+        "defect_id": "DEFECT-REFIT-03",
+        "name": "Unmasked Event Extraction Over Missing Ground-Truth Intervals",
+        "location": "backend/ml_experiments/run_refit_experiment.py:222-248",
+        "description": "Event extraction was executed over the raw unmasked test Series, meaning candidate predictions during sensor dropouts (Issues == 1) were automatically counted as False Positives rather than isolated as unverified intervals.",
+        "status": "DOCUMENTED_AND_ISOLATED",
+        "correction": "Documented impact; isolated 40,429 invalid test samples (3.75%) from verified operational scoring."
+      },
+      {
+        "defect_id": "DEFECT-REFIT-04",
+        "name": "Sample-Level Prevalence Fallacy",
+        "location": "REFIT_PUMP_VALIDATION_REPORT.md",
+        "description": "Reported sample F1 score of 0.9933 was driven by 99.36% positive class prevalence in test (continuous spring/summer pond aeration). Specificity was only 0.0318 (211/6,630 true negatives), meaning the model failed to detect 96.8% of OFF periods. Operational event F1 is 0.0005 with 33.66 false alarms per day.",
+        "status": "AUDITED_AND_RECONCILED",
+        "correction": "Reconciled confusion matrix and explicitly declared REFIT pond pump untrustworthy for intermittent onset disaggregation."
+      }
+    ],
+    "label_threshold_sensitivity": {
+      "nominal_threshold_w": 20.0,
+      "audit_findings": {
+        "th_10w_active_samples": 3284433,
+        "th_10w_events_count": 57,
+        "th_15w_active_samples": 3284421,
+        "th_15w_events_count": 67,
+        "th_20w_active_samples": 3284420,
+        "th_20w_events_count": 67,
+        "th_25w_active_samples": 3284397,
+        "th_25w_events_count": 86,
+        "th_30w_active_samples": 3284394,
+        "th_30w_events_count": 87,
+        "th_35w_active_samples": 3284383,
+        "th_35w_events_count": 96
+      },
+      "conclusion": "Sample count is exceptionally stable (only 1 sample difference between 15W and 20W across 5.38M readings; 37 samples between 20W and 35W). Event count varies from 57 to 96 due to minor voltage sags dipping below 25W during long runs. 20W remains scientifically sound."
+    }
+  },
+  "candidate_dataset_inventory": [
+    {
+      "name": "REFIT",
+      "citation": "Murray et al., Sci. Data 2017",
+      "license": "CC BY 4.0",
+      "official_url": "https://pure.strath.ac.uk/ws/portalfiles/portal/62090184/CLEAN_REFIT_081116.7z",
+      "archive_size_compressed": "490.4 MB (all 20 houses)",
+      "sampling_rate": "~8 seconds (irregular, median 7.0s)",
+      "channels": "Mains Aggregate + 9 IAM submeters per house",
+      "target_appliances_present": {
+        "pump": "House 21 Appliance 9 (Pond Pump, ~44 W active)",
+        "heater": "Houses 1, 9, 16 (Electric Space Heaters, 1-2 kW; not 140 W water heater)",
+        "fan": "House 2 Appliance 9 (Overhead Fan; unverified continuous usage)",
+        "led": "NONE (Lighting hardwired into consumer unit)"
+      },
+      "intermittent_cycle_suitability": "POOR (Pond pump runs continuously 24/7 for months; only 13 events across 110 days in test; 0 verified onsets detected)",
+      "verification_status": "VERIFIED_LOCALLY",
+      "validation_rating": "NOT_SUITABLE_FOR_INTERMITTENT_NILM"
+    },
+    {
+      "name": "UK-DALE",
+      "citation": "Kelly & Knottenbelt, Sci. Data 2015",
+      "license": "CC BY 4.0",
+      "official_url": "https://data.ukedc.rl.ac.uk/browse/edc/efficiency/residential/EnergyConsumption/Domestic/UK-DALE-2015/",
+      "archive_size_compressed": "Monolithic 30 GB (House 1 ~22 GB; House 2 ~4 GB; Houses 3-5 ~1-2 GB each)",
+      "sampling_rate": "1 Hz / 16 kHz (Mains), 1/6 Hz (Submeters, uniform 6.0s)",
+      "channels": "Mains (V, I, P, S) + up to 54 appliance submeters in House 1",
+      "target_appliances_present": {
+        "pump": "House 1 Ch 3 (solar_thermal_pump, ~43 W active; intermittent based on solar radiation)",
+        "heater": "House 1 Ch 0 (immersion_heater, 3 kW; documented unused)",
+        "fan": "House 1 Ch 52 (office_fan, 35 W desk fan; not ceiling fan)",
+        "led": "House 1 Ch 8 (100 W dimmable downlight circuit; not single 12 W bulb)"
+      },
+      "intermittent_cycle_suitability": "MODERATE_FOR_KETTLE_AND_SOLAR_PUMP (Solar pump has repeated daily cycles during sunny periods; domestic kettles have 10-20 cycles/day, but huge 30 GB download overhead)",
+      "verification_status": "VERIFIED_VIA_PRIMARY_LITERATURE",
+      "validation_rating": "PARTIALLY_SUITABLE_BUT_LARGE_DOWNLOAD"
+    },
+    {
+      "name": "PLAID",
+      "citation": "Gao et al., BuildSys 2014; Medico et al., Sci. Data 2020",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "official_url": "https://figshare.com/articles/dataset/PLAID_2017/5488426",
+      "archive_size_compressed": "~1.5 GB",
+      "sampling_rate": "30 kHz (High-Frequency Current & Voltage)",
+      "channels": "Single plug-level Current (I) and Voltage (V) waveforms; NO aggregate household mains",
+      "target_appliances_present": {
+        "pump": "Air conditioner / compressor loads present; specific domestic water pump UNVERIFIED",
+        "heater": "Heaters, hair dryers, soldering irons (resistive)",
+        "fan": "Fans present (several makes/models)",
+        "led": "Compact fluorescent lamps (CFL) and incandescent bulbs present; LED UNVERIFIED"
+      },
+      "intermittent_cycle_suitability": "NOT_APPLICABLE (Isolated single-appliance plug captures lasting 1-5 seconds; zero aggregate mains, zero concurrent background noise)",
+      "verification_status": "VERIFIED_VIA_PRIMARY_LITERATURE",
+      "validation_rating": "CONTROLLED_CLASSIFICATION_ONLY_NOT_HOUSEHOLD_NILM"
+    },
+    {
+      "name": "WHITED",
+      "citation": "Kahl et al., IEEE PIMRC 2016",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "official_url": "https://www.in.tum.de/i13/resources/whited/",
+      "archive_size_compressed": "~1.2 GB (flac audio format)",
+      "sampling_rate": "44.1 kHz (Sound-card 16-bit ADC)",
+      "channels": "Single plug-level Current (I) and Voltage (V); captures first 5 seconds of appliance startup",
+      "target_appliances_present": {
+        "pump": "Drills, blenders, small motors present; domestic water pump UNVERIFIED",
+        "heater": "Kettles, irons, toasters, space heaters present",
+        "fan": "Desk and pedestal fans present",
+        "led": "CFL, halogen, and incandescent present; specific single 12 W LED UNVERIFIED"
+      },
+      "intermittent_cycle_suitability": "NOT_APPLICABLE (Exclusively startup transient waveform bursts; zero continuous operation, zero household aggregate disaggregation)",
+      "verification_status": "VERIFIED_VIA_PRIMARY_LITERATURE",
+      "validation_rating": "CONTROLLED_CLASSIFICATION_ONLY_NOT_HOUSEHOLD_NILM"
+    },
+    {
+      "name": "DRED",
+      "citation": "Uttama Nambi et al., ACM e-Energy 2015",
+      "license": "Creative Commons Attribution 4.0 (CC BY 4.0)",
+      "official_url": "https://dred.ewi.tudelft.nl/",
+      "archive_size_compressed": "~250 MB",
+      "sampling_rate": "1 Hz (Uniform active power)",
+      "channels": "Mains aggregate + 12 individual submeters + ambient temperature/occupancy",
+      "target_appliances_present": {
+        "pump": "NONE (Dutch residential apartment, no water pump instrumented)",
+        "heater": "Electric kettle, coffee maker, toaster present; no 140 W water heater",
+        "fan": "NONE (Dutch temperate climate)",
+        "led": "Living room lighting submetered as a aggregate lighting circuit"
+      },
+      "intermittent_cycle_suitability": "GOOD_FOR_KITCHEN_APPLIANCES (Frequent daily switching of microwave, kettle, toaster at 1 Hz), but ZERO representation of Energy Mirror target appliances",
+      "verification_status": "VERIFIED_VIA_PRIMARY_LITERATURE",
+      "validation_rating": "NOT_SUITABLE_DUE_TO_APPLIANCE_ABSENCE"
+    },
+    {
+      "name": "iAWE",
+      "citation": "Batra et al., BuildSys 2013 / Zenodo 13917372",
+      "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+      "official_url": "https://zenodo.org/records/13917372",
+      "archive_size_compressed": "427.8 MB (already downloaded and verified locally as backend/ml_experiments/data/iawe.h5)",
+      "sampling_rate": "1 Hz (Schneider EM6400 Mains), 1/6 Hz (CurrentCost Submeters, uniform 6.0s)",
+      "channels": "Mains Phase 1 + Phase 2 + 33 appliance submeters",
+      "target_appliances_present": {
+        "pump": "Meter 12 (Water Motor, ~800 W inductive booster pump; verified 1-3 batch cycles/day, 15-45 min duration)",
+        "heater": "Meter 4 & 5 (Geysers, 2 kW; not 140 W water heater)",
+        "fan": "Meters 6, 8, 10 (Ceiling fans, unmetered or low-resolution submetering)",
+        "led": "NONE (General lighting unmetered)"
+      },
+      "intermittent_cycle_suitability": "EXCELLENT_FOR_INTERMITTENT_PUMP_DISAGGREGATION (Repeated daily batch filling cycles with genuine onsets and offsets amidst realistic Indian grid voltage fluctuations and background household noise)",
+      "verification_status": "VERIFIED_LOCALLY_ACTIVE_FILE",
+      "validation_rating": "STRONGEST_AGGREGATE_INTERMITTENT_CANDIDATE"
+    }
+  ],
+  "recommended_next_experiment": {
+    "recommended_dataset": "iAWE (using existing local file backend/ml_experiments/data/iawe.h5)",
+    "experiment_type": "Intermittent Batch-Cycle Water Motor Disaggregation",
+    "rationale": "iAWE Meter 12 contains a genuine domestic overhead-tank water pump with repeated daily switching cycles (1-3 cycles per day, 15-45 minutes per cycle), authentic ON and OFF periods across train, validation, and test splits, and realistic Indian household concurrent loads. It requires ZERO new downloads (427.8 MB file already exists locally).",
+    "evaluation_protocol": "Apply the corrected evaluate_events.py with strict onset tolerance (+/- 60s), true timestamp elapsed duration, and split-boundary onset isolation. Evaluate sample-level precision, recall, specificity, F1, and event-level precision, recall, F1, and false alarm rate per day.",
+    "scientific_caveat": "The iAWE pump draws ~800 W, which is higher than Energy Mirror's simulated 75 W target. It validates intermittent motor batch detection, but cannot claim validation of low-power 75 W pumps without scaling analysis."
+  }
+}

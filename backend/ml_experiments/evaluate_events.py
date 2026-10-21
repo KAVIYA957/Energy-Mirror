@@ -34,6 +34,7 @@ def extract_events(
     series: pd.Series,
     min_duration_s: float = 0.0,
     max_gap_s: float = 0.0,
+    initial_state_on: bool = False,
 ) -> List[Dict[str, Any]]:
     """
     Extracts contiguous ON events from a binary pandas Series with DatetimeIndex.
@@ -42,14 +43,18 @@ def extract_events(
         series: Binary pd.Series (1 for ON, 0 for OFF) indexed by DatetimeIndex.
         min_duration_s: Minimum duration in seconds to retain an event.
         max_gap_s: If > 0, merges consecutive events separated by <= max_gap_s.
+        initial_state_on: If True, indicates the appliance was already ON in the
+            sample immediately prior to this series slice (flags boundary onset).
 
     Returns:
         List of dicts representing events with keys:
         - event_id: integer index
         - start: pd.Timestamp of event onset
         - end: pd.Timestamp of event offset
-        - duration_s: duration in seconds
+        - duration_s: duration in seconds (computed from true timestamps)
         - sample_count: number of active samples in the event
+        - is_boundary_onset: boolean indicating activation was already running at slice start
+        - is_boundary_offset: boolean indicating activation was still running at slice end
     """
     if len(series) == 0 or (series == 0).all():
         return []
@@ -65,19 +70,25 @@ def extract_events(
     if is_on.iloc[-1] == 1:
         end_indices = end_indices + [len(series) - 1]
 
-    # Infer sampling interval if available
-    sample_interval_s = 6.0
-    if len(series.index) > 1:
-        dt = (series.index[1] - series.index[0]).total_seconds()
-        if dt > 0:
-            sample_interval_s = dt
-
     events = []
+    n_series = len(series.index)
     for idx, (s_idx, e_idx) in enumerate(zip(start_indices, end_indices)):
         s_time = series.index[s_idx]
         e_time = series.index[e_idx]
         sample_count = e_idx - s_idx + 1
-        dur_s = sample_count * sample_interval_s
+
+        # Use true elapsed time between actual timestamps rather than assuming uniform cadence
+        if e_idx + 1 < n_series:
+            dur_s = (series.index[e_idx + 1] - s_time).total_seconds()
+        elif n_series > 1:
+            local_dt = (series.index[-1] - series.index[-2]).total_seconds()
+            dur_s = (e_time - s_time).total_seconds() + max(local_dt, 0.0)
+        else:
+            dur_s = (e_time - s_time).total_seconds()
+
+        is_boundary_onset = bool(s_idx == 0 and initial_state_on)
+        is_boundary_offset = bool(e_idx == n_series - 1)
+
         if dur_s >= min_duration_s:
             events.append({
                 "event_id": idx + 1,
@@ -85,6 +96,8 @@ def extract_events(
                 "end": e_time,
                 "duration_s": float(dur_s),
                 "sample_count": int(sample_count),
+                "is_boundary_onset": is_boundary_onset,
+                "is_boundary_offset": is_boundary_offset,
             })
 
     # Optional gap merging (e.g., sensor dropout of <= 30s during single cycle)
@@ -92,11 +105,12 @@ def extract_events(
         merged = [dict(events[0])]
         for ev in events[1:]:
             prev = merged[-1]
-            gap = (ev["start"] - prev["end"]).total_seconds() - sample_interval_s
+            gap = (ev["start"] - prev["end"]).total_seconds()
             if gap <= max_gap_s:
                 prev["end"] = ev["end"]
-                prev["duration_s"] = float((ev["end"] - prev["start"]).total_seconds() + sample_interval_s)
+                prev["duration_s"] = float((ev["end"] - prev["start"]).total_seconds())
                 prev["sample_count"] += ev["sample_count"]
+                prev["is_boundary_offset"] = ev.get("is_boundary_offset", False)
             else:
                 merged.append(dict(ev))
         for i, m in enumerate(merged):
@@ -112,6 +126,8 @@ def match_events(
     tolerance_s: float = 60.0,
     test_duration_days: float = 6.616,
     require_onset_tolerance: bool = True,
+    exclude_boundary_onsets: bool = False,
+    valid_duration_days: Optional[float] = None,
 ) -> Dict[str, Any]:
     """
     Executes greedy one-to-one bipartite matching between ground-truth and predicted events.
@@ -163,7 +179,30 @@ def match_events(
             **empty_delays,
         }
 
+    # If exclude_boundary_onsets is enabled, filter out events that were already active at partition start
+    eval_gt_events = [g for g in gt_events if not g.get("is_boundary_onset", False)] if exclude_boundary_onsets else gt_events
+    eval_pred_events = [p for p in pred_events if not p.get("is_boundary_onset", False)] if exclude_boundary_onsets else pred_events
+
+    n_gt = len(eval_gt_events)
+    n_pred = len(eval_pred_events)
+
+    if n_gt == 0 and n_pred == 0:
+        return {
+            "gt_events_count": 0,
+            "pred_events_count": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "fp_per_day": 0.0,
+            "fn_per_day": 0.0,
+            **empty_delays,
+        }
+
     if n_gt == 0:
+        norm_days = valid_duration_days if valid_duration_days is not None else test_duration_days
         return {
             "gt_events_count": 0,
             "pred_events_count": n_pred,
@@ -173,12 +212,13 @@ def match_events(
             "precision": 0.0,
             "recall": 0.0,
             "f1_score": 0.0,
-            "fp_per_day": round(n_pred / max(test_duration_days, 1e-4), 3),
+            "fp_per_day": round(n_pred / max(norm_days, 1e-4), 3),
             "fn_per_day": 0.0,
             **empty_delays,
         }
 
     if n_pred == 0:
+        norm_days = valid_duration_days if valid_duration_days is not None else test_duration_days
         return {
             "gt_events_count": n_gt,
             "pred_events_count": 0,
@@ -189,14 +229,14 @@ def match_events(
             "recall": 0.0,
             "f1_score": 0.0,
             "fp_per_day": 0.0,
-            "fn_per_day": round(n_gt / max(test_duration_days, 1e-4), 3),
+            "fn_per_day": round(n_gt / max(norm_days, 1e-4), 3),
             **empty_delays,
         }
 
     # Generate candidate bipartite pairs
     candidates = []
-    for gi, g in enumerate(gt_events):
-        for pi, p in enumerate(pred_events):
+    for gi, g in enumerate(eval_gt_events):
+        for pi, p in enumerate(eval_pred_events):
             onset_diff = (p["start"] - g["start"]).total_seconds()
             abs_onset_diff = abs(onset_diff)
             has_overlap = not (p["end"] < g["start"] or p["start"] > g["end"])
@@ -223,10 +263,10 @@ def match_events(
             matched_gt.add(gi)
             matched_pred.add(pi)
             matches.append({
-                "gt_id": gt_events[gi]["event_id"],
-                "pred_id": pred_events[pi]["event_id"],
-                "gt_start": str(gt_events[gi]["start"]),
-                "pred_start": str(pred_events[pi]["start"]),
+                "gt_id": eval_gt_events[gi]["event_id"],
+                "pred_id": eval_pred_events[pi]["event_id"],
+                "gt_start": str(eval_gt_events[gi]["start"]),
+                "pred_start": str(eval_pred_events[pi]["start"]),
                 "delay_s": round(onset_diff, 2),
             })
 
@@ -245,8 +285,9 @@ def match_events(
     median_delay = float(np.median(delays)) if delays else 0.0
     std_delay = float(np.std(delays)) if delays else 0.0
 
-    fp_rate = float(fp / max(test_duration_days, 1e-4))
-    fn_rate = float(fn / max(test_duration_days, 1e-4))
+    norm_days = valid_duration_days if valid_duration_days is not None else test_duration_days
+    fp_rate = float(fp / max(norm_days, 1e-4))
+    fn_rate = float(fn / max(norm_days, 1e-4))
 
     return {
         "gt_events_count": n_gt,
