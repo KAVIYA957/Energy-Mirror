@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "dataset_name": "REFIT: Electrical Load Measurements (Cleaned)",
+    "source_repository": "University of Strathclyde Pure Repository",
+    "official_url": "https://pure.strath.ac.uk/ws/portalfiles/portal/62090184/CLEAN_REFIT_081116.7z",
+    "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "citation": "Murray, D., Stankovic, L., & Stankovic, V., Scientific Data 4, 160122 (2017). DOI: 10.1038/sdata.2016.122",
+    "house_id": "House 21",
+    "target_channel": "Appliance 9",
+    "channel_documented_identity": "Pond Pump, Unknown, Unknown",
+    "aggregate_channel": "Aggregate",
+    "file_name": "CLEAN_House21.csv",
+    "file_size_bytes": 316713466,
+    "file_size_mb": 302.04,
+    "file_sha256": "fc5471adf36c69fa65438270b4f95a51d2d7630b5461ca2db74652b41b15e10b",
+    "total_raw_samples": 5383993,
+    "valid_samples": 5176881,
+    "excluded_samples": 207112,
+    "start_time": "2014-03-07 16:20:20",
+    "end_time": "2015-07-10 11:56:35",
+    "sampling_interval_median_s": 7.0,
+    "sampling_interval_mean_s": 7.860371103751435,
+    "target_on_threshold_w": 20.0,
+    "target_mean_active_w": 44.45,
+    "target_median_active_w": 44.0
+  },
+  "split_metadata": {
+    "train_samples_total": 3230295,
+    "train_samples_valid": 3109864,
+    "train_active_prevalence_pct": 34.61,
+    "val_samples_total": 1076698,
+    "val_samples_valid": 1030446,
+    "val_active_prevalence_pct": 100.0,
+    "test_samples_total": 1076800,
+    "test_samples_valid": 1036371,
+    "test_active_prevalence_pct": 99.36,
+    "test_duration_days": 110.2,
+    "boundary_buffer_dropped_samples": 200,
+    "train_period": "2014-03-07 16:20:20 to 2014-12-12 14:09:11",
+    "val_period": "2014-12-12 14:20:40 to 2015-03-22 06:57:21",
+    "test_period": "2015-03-22 07:08:42 to 2015-07-10 11:56:35"
+  },
+  "models": {
+    "simple_threshold": {
+      "model_name": "Simple Aggregate Power Threshold",
+      "description": "Flags pump ON if aggregate power >= 100.0 W (tuned on Validation partition)",
+      "is_oracle": false,
+      "sample_metrics": {
+        "accuracy": 0.9934,
+        "precision": 0.9936,
+        "recall": 0.9998,
+        "f1_score": 0.9967,
+        "specificity": 0.0,
+        "true_positive": 1029574,
+        "false_positive": 6630,
+        "true_negative": 0,
+        "false_negative": 167
+      },
+      "event_metrics": {
+        "gt_events_count": 13,
+        "pred_events_count": 60,
+        "matched_tp_events": 1,
+        "false_positive_events": 59,
+        "missed_fn_events": 12,
+        "event_precision": 0.0167,
+        "event_recall": 0.0769,
+        "event_f1_score": 0.0274,
+        "false_alarms_per_day": 0.535,
+        "mean_signed_delay_s": 0.0,
+        "mean_absolute_delay_s": 0.0,
+        "tolerance_s": 120.0,
+        "require_onset_tolerance": true
+      },
+      "energy_metrics": {
+        "active_period_power_mae_w": 2.55,
+        "inactive_period_power_mae_w": 42.92,
+        "overall_power_mae_w": 2.81,
+        "relative_energy_error_pct": -4.89,
+        "assumed_active_power_w": 43.63
+      }
+    },
+    "differential_step": {
+      "model_name": "Differential Power Step Baseline",
+      "description": "Flags pump state if delta_P in [5.0, 35.0] W (tuned on Validation partition)",
+      "is_oracle": false,
+      "sample_metrics": {
+        "accuracy": 0.0917,
+        "precision": 0.9886,
+        "recall": 0.0869,
+        "f1_score": 0.1598,
+        "specificity": 0.8446,
+        "true_positive": 89486,
+        "false_positive": 1030,
+        "true_negative": 5600,
+        "false_negative": 940255
+      },
+      "event_metrics": {
+        "gt_events_count": 13,
+        "pred_events_count": 3071,
+        "matched_tp_events": 0,
+        "false_positive_events": 3071,
+        "missed_fn_events": 13,
+        "event_precision": 0.0,
+        "event_recall": 0.0,
+        "event_f1_score": 0.0,
+        "false_alarms_per_day": 27.868,
+        "mean_signed_delay_s": 0.0,
+        "mean_absolute_delay_s": 0.0,
+        "tolerance_s": 120.0,
+        "require_onset_tolerance": true
+      },
+      "energy_metrics": {
+        "active_period_power_mae_w": 42.37,
+        "inactive_period_power_mae_w": 7.26,
+        "overall_power_mae_w": 42.14,
+        "relative_energy_error_pct": -91.69,
+        "assumed_active_power_w": 43.63
+      }
+    },
+    "random_forest": {
+      "model_name": "Random Forest Classifier",
+      "description": "100 trees, max_depth=10, features: ['Aggregate', 'delta_p', 'rolling_mean_5', 'rolling_std_5', 'rolling_max_5', 'rolling_min_5'], decision threshold 0.10 tuned on Val",
+      "is_oracle": false,
+      "sample_metrics": {
+        "accuracy": 0.9866,
+        "precision": 0.9938,
+        "recall": 0.9928,
+        "f1_score": 0.9933,
+        "specificity": 0.0318,
+        "true_positive": 1022278,
+        "false_positive": 6419,
+        "true_negative": 211,
+        "false_negative": 7463
+      },
+      "event_metrics": {
+        "gt_events_count": 13,
+        "pred_events_count": 3710,
+        "matched_tp_events": 1,
+        "false_positive_events": 3709,
+        "missed_fn_events": 12,
+        "event_precision": 0.0003,
+        "event_recall": 0.0769,
+        "event_f1_score": 0.0005,
+        "false_alarms_per_day": 33.657,
+        "mean_signed_delay_s": 0.0,
+        "mean_absolute_delay_s": 0.0,
+        "tolerance_s": 120.0,
+        "require_onset_tolerance": true
+      },
+      "energy_metrics": {
+        "active_period_power_mae_w": 2.86,
+        "inactive_period_power_mae_w": 41.58,
+        "overall_power_mae_w": 3.11,
+        "relative_energy_error_pct": -5.58,
+        "assumed_active_power_w": 43.63
+      }
+    },
+    "persistence_oracle": {
+      "model_name": "Persistence Baseline (Oracle Reference)",
+      "description": "Non-deployable oracle baseline: predicts state at time t equals ground truth state at t-1",
+      "is_oracle": true,
+      "sample_metrics": {
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "specificity": 1.0,
+        "true_positive": 1029730,
+        "false_positive": 0,
+        "true_negative": 6630,
+        "false_negative": 11
+      },
+      "event_metrics": {
+        "gt_events_count": 13,
+        "pred_events_count": 13,
+        "matched_tp_events": 13,
+        "false_positive_events": 0,
+        "missed_fn_events": 0,
+        "event_precision": 1.0,
+        "event_recall": 1.0,
+        "event_f1_score": 1.0,
+        "false_alarms_per_day": 0.0,
+        "mean_signed_delay_s": 7.23,
+        "mean_absolute_delay_s": 7.23,
+        "tolerance_s": 120.0,
+        "require_onset_tolerance": true
+      },
+      "energy_metrics": {
+        "active_period_power_mae_w": 2.55,
+        "inactive_period_power_mae_w": 0.71,
+        "overall_power_mae_w": 2.54,
+        "relative_energy_error_pct": -5.49,
+        "assumed_active_power_w": 43.63
+      }
+    },
+    "majority_class": {
+      "model_name": "Majority Class Baseline",
+      "description": "Trivial baseline predicting the Train majority state (OFF)",
+      "is_oracle": false,
+      "sample_metrics": {
+        "accuracy": 0.0064,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "specificity": 1.0,
+        "true_positive": 0,
+        "false_positive": 0,
+        "true_negative": 6630,
+        "false_negative": 1029741
+      },
+      "event_metrics": {
+        "gt_events_count": 13,
+        "pred_events_count": 0,
+        "matched_tp_events": 0,
+        "false_positive_events": 0,
+        "missed_fn_events": 13,
+        "event_precision": 0.0,
+        "event_recall": 0.0,
+        "event_f1_score": 0.0,
+        "false_alarms_per_day": 0.0,
+        "mean_signed_delay_s": 0.0,
+        "mean_absolute_delay_s": 0.0,
+        "tolerance_s": 120.0,
+        "require_onset_tolerance": true
+      },
+      "energy_metrics": {
+        "active_period_power_mae_w": 46.16,
+        "inactive_period_power_mae_w": 0.71,
+        "overall_power_mae_w": 45.86,
+        "relative_energy_error_pct": -100.0,
+        "assumed_active_power_w": 43.63
+      }
+    }
+  },
+  "validation_status": {
+    "refit_pond_pump_status": "PARTIALLY_VALIDATED",
+    "energy_mirror_75w_pump_transfer": "PARTIALLY_VALIDATED",
+    "validation_rating_compatibility": "INCOMPATIBLE_RATING_NOTE: Measured REFIT pump active power is 44.4 W (median 44.0 W), which is lower than Energy Mirror's 75 W target specification.",
+    "scientific_rationale": "House 21 Appliance 9 is a genuine single-phase AC induction motor (~44 W active power). However, it operates in continuous filtration duty (running for days or weeks at a time), whereas Energy Mirror simulates domestic sump/overhead-tank water pumps operating in intermittent batch duty (15-45 minutes per cycle). Furthermore, its 44 W power draw is ~41% smaller than the 75 W target, meaning detection at mains level represents an even more difficult low-power signal-to-noise challenge.",
+    "limitations": [
+      "Pond pump continuous duty cycle (months ON) lacks frequent daily switching cycles of domestic sump pumps.",
+      "Aggregate mains fluctuations (P_agg mean ~647 W, std ~600 W) frequently mask the 44 W motor step.",
+      "Zero physical hardware validation: strictly software evaluation on historical public telemetry.",
+      "Does NOT validate 140 W water heater, 45 W ceiling fan, or 12 W LED bulb."
+    ]
+  }
+}

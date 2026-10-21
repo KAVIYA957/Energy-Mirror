@@ -1,0 +1,15 @@
+{
+  "total_rows": 5383993,
+  "date_start": "2014-03-07 16:20:20",
+  "date_end": "2015-07-10 11:56:35",
+  "duration_days": 489.82,
+  "median_cadence_s": 7.0,
+  "mean_cadence_s": 7.86,
+  "duplicates_count": 0,
+  "negative_aggregate": 0,
+  "negative_appliance9": 0,
+  "appliance9_median_active_w": 44.0,
+  "appliance9_mean_active_w": 44.40373036750683,
+  "valid_samples": 5176881,
+  "excluded_samples": 207112
+}
