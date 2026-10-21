@@ -63,3 +63,9 @@ build/
 *~
 .DS_Store
 Thumbs.db
+
+# ML Experiments
+backend/ml_experiments/.venv_ml/
+backend/ml_experiments/data/
+backend/ml_experiments/models/
+backend/ml_experiments/results/

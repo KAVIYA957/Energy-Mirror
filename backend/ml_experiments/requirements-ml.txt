@@ -1,0 +1,9 @@
+# Energy Mirror - Milestone 2A: Isolated ML Experimentation Requirements
+# Keep these dependencies isolated from the core production FastAPI backend environment.
+# Install into a dedicated virtual environment or experimental runner.
+
+numpy>=1.26.0,<2.2.0
+pandas>=2.1.0,<2.3.0
+scipy>=1.11.0,<1.15.0
+scikit-learn>=1.4.0,<1.6.0
+pyyaml>=6.0.1
