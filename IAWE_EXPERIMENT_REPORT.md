@@ -133,8 +133,8 @@ We evaluated five distinct classification approaches on the held-out test set (9
 
 | Model / Algorithm | Accuracy | Precision | Recall | F1-Score | Confusion Matrix (TP, FP, FN, TN) | Scientific Characterization |
 | :--- | :---: | :---: | :---: | :---: | :--- | :--- |
-| **Random Forest Classifier**<br>(100 trees, max depth 10) | **0.9997** | **0.6154** | **0.2353** | **0.3404** | **TP=8, FP=5, FN=26, TN=95,231** | **Best overall disaggregator.** Outperformed naive baselines by an order of magnitude on F1. |
-| **Persistence Baseline**<br>($y_t = y_{t-1}$) | 0.9998 | 0.7353 | 0.7353 | 0.7353 | TP=25, FP=9, FN=9, TN=95,227 | High run-length consistency once running, but blind to turn-on/turn-off edges. |
+| **Persistence Baseline**<br>($y_t = y_{t-1}$) | **0.9998** | **0.7353** | **0.7353** | **0.7353** | **TP=25, FP=9, FN=9, TN=95,227** | **Highest sample-level F1 (Oracle Reference).** Capitalizes on run-length autocorrelation of contiguous runs, but requires ground-truth submeter state $y_{t-1}$. |
+| **Random Forest Classifier**<br>(100 trees, max depth 10) | 0.9997 | 0.6154 | 0.2353 | 0.3404 | TP=8, FP=5, FN=26, TN=95,231 | **Strongest deployable ML classifier.** Rejects 99.99% of background domestic transients from aggregate mains alone. |
 | **Simple Power Threshold**<br>($P_{\text{agg}} \ge 4,814.2\text{ W}$) | 0.9996 | 0.0000 | 0.0000 | 0.0000 | TP=0, FP=4, FN=34, TN=95,232 | **Complete failure.** Whole-house power varies from 400 W to 8 kW; fixed threshold cannot detect 600 W pump. |
 | **Differential Step Baseline**<br>($\Delta P_{\text{agg}} \ge 220.4\text{ W}$) | 0.9930 | 0.0108 | 0.2059 | 0.0206 | TP=7, FP=640, FN=27, TN=94,596 | **Severe false alarms.** Naive step detector triggers on refrigerator and AC compressor cycles (+200–500W). |
 | **Majority Class Baseline**<br>(Predict all class 0 / OFF) | 0.9996 | 0.0000 | 0.0000 | 0.0000 | TP=0, FP=0, FN=34, TN=95,236 | **Exposes the accuracy fallacy.** 99.96% accuracy is trivially achieved by doing nothing. |
@@ -143,13 +143,18 @@ We evaluated five distinct classification approaches on the held-out test set (9
 
 ### Task 2: Power Disaggregation (Continuous Watts Disaggregation)
 
-Evaluated over the full 95,270 test intervals (cumulative ground truth motor energy consumption: **0.198 kWh**):
+Evaluated over the full 95,270 test intervals (cumulative ground truth motor energy consumption: **0.198 kWh**).
 
-| Model / Algorithm | MAE (W) | RMSE (W) | Ground Truth Energy | Predicted Energy | Relative Energy Total Error (RETE) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Random Forest Regressor** | 1.76 W | 15.46 W | 0.198 kWh | 0.115 kWh | **41.93%** |
-| **Mean Active Baseline** (629.2 W when RF ON) | 1.23 W | 14.96 W | 0.198 kWh | 0.013 kWh | 93.36% |
-| **Zero Baseline** (All 0 W) | 1.25 W | 15.70 W | 0.198 kWh | 0.000 kWh | 100.00% |
+> [!NOTE]
+> **Sub-Population Error Decomposition:** Overall sample MAE is heavily diluted by the 95,236 inactive samples ($99.964\%$ prevalence). The table below reports both overall error and active-only error to prevent misleading interpretations (detailed in `BENCHMARK_AUDIT_REPORT.md`).
+
+| Model / Algorithm | Overall MAE (All Samples) | Active-Only MAE (Motor ON, N=34) | Inactive-Only MAE (Motor OFF, N=95,236) | Ground Truth Energy | Predicted Energy | Relative Energy Total Error (RETE) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Random Forest Regressor** | **1.76 W** | **476.48 W** (Underestimates 66.55%) | **1.59 W** | 0.198 kWh | 0.115 kWh | **41.93%** |
+| **Mean Active Baseline** (606.6 W when RF ON) | 1.23 W | 573.21 W | 1.02 W | 0.198 kWh | 0.013 kWh | 93.36% |
+| **Zero Baseline** (All 0 W) | 1.25 W | 715.94 W | 0.99 W | 0.198 kWh | 0.000 kWh | 100.00% |
+
+*(For event-level disaggregation metrics and tolerance sensitivity analysis, refer to [`BENCHMARK_AUDIT_REPORT.md`](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/BENCHMARK_AUDIT_REPORT.md) and [`backend/ml_experiments/evaluate_events.py`](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/backend/ml_experiments/evaluate_events.py)).*
 
 ---
 

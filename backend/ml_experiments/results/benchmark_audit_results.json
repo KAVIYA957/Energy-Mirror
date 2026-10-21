@@ -1,0 +1,900 @@
+{
+  "metadata": {
+    "dataset": "iAWE (Indian Dataset for Ambient Water and Energy)",
+    "citation": "Batra et al., IIIT Delhi, BuildSys 2013 / Zenodo 13917372",
+    "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "file_size_bytes": 427836094,
+    "file_size_mb": 408.02,
+    "target_appliance": "Water Motor (Overhead Tank Lift Pump)",
+    "target_submeter": "/building1/elec/meter12",
+    "mains_submeters": [
+      "/building1/elec/meter1",
+      "/building1/elec/meter2"
+    ],
+    "resample_frequency": "6s",
+    "on_threshold_w": 200.0,
+    "raw_motor_readings": 447812,
+    "overflow_artifacts_filtered": 3,
+    "grid_outage_intervals_dropped": 43757,
+    "synchronized_samples": 476344,
+    "active_motor_samples": 662,
+    "positive_prevalence_pct": 0.139,
+    "mean_active_power_w": 629.17,
+    "median_active_power_w": 700.0,
+    "std_active_power_w": 158.1,
+    "start_timestamp": "2013-05-30 12:51:36+05:30",
+    "end_timestamp": "2013-07-05 15:41:42+05:30"
+  },
+  "split_audit": {
+    "train_samples": 285706,
+    "val_samples": 95168,
+    "test_samples": 95270,
+    "test_duration_days": 6.72,
+    "test_start": "2013-06-28 22:25:36+05:30",
+    "test_end": "2013-07-05 15:41:42+05:30",
+    "test_active_samples": 34,
+    "test_inactive_samples": 95236,
+    "test_positive_prevalence_pct": 0.0357,
+    "boundary_buffer_dropped_samples": 200,
+    "lookback_window_samples": 5,
+    "leakage_audit": "PASSED. 100-sample buffer drops strictly isolate rolling 5-sample lookbacks across splits."
+  },
+  "sample_level_classification_audit": {
+    "persistence": {
+      "model": "Persistence (t-1)",
+      "role": "Highest F1 baseline (oracle benchmark)",
+      "description": "Oracle submeter baseline (requires ground truth y_{t-1})",
+      "accuracy": 0.9998,
+      "precision": 0.7353,
+      "recall": 0.7353,
+      "f1_score": 0.7353,
+      "confusion_matrix": {
+        "true_negative": 95227,
+        "false_positive": 9,
+        "false_negative": 9,
+        "true_positive": 25
+      }
+    },
+    "random_forest": {
+      "model": "Random Forest Classifier",
+      "role": "Strongest deployable ML classifier",
+      "description": "Ensemble trained on P_agg, delta_P, and rolling window stats",
+      "accuracy": 0.9997,
+      "precision": 0.6154,
+      "recall": 0.2353,
+      "f1_score": 0.3404,
+      "confusion_matrix": {
+        "true_negative": 95231,
+        "false_positive": 5,
+        "false_negative": 26,
+        "true_positive": 8
+      }
+    },
+    "differential_step": {
+      "model": "Differential Step Baseline",
+      "role": "Rule-based edge detector baseline",
+      "description": "Tuned on validation set: delta_P >= 220.4 W",
+      "accuracy": 0.993,
+      "precision": 0.0108,
+      "recall": 0.2059,
+      "f1_score": 0.0206,
+      "confusion_matrix": {
+        "true_negative": 94596,
+        "false_positive": 640,
+        "false_negative": 27,
+        "true_positive": 7
+      }
+    },
+    "simple_threshold": {
+      "model": "Simple Power Threshold",
+      "role": "Static aggregate threshold baseline",
+      "description": "Tuned on validation set: P_agg >= 4814.2 W",
+      "accuracy": 0.9996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "confusion_matrix": {
+        "true_negative": 95232,
+        "false_positive": 4,
+        "false_negative": 34,
+        "true_positive": 0
+      }
+    },
+    "majority_class": {
+      "model": "Majority Class",
+      "role": "Zero-intelligence reference",
+      "description": "Trivial baseline predicting all-OFF (0)",
+      "accuracy": 0.9996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "confusion_matrix": {
+        "true_negative": 95236,
+        "false_positive": 0,
+        "false_negative": 34,
+        "true_positive": 0
+      }
+    }
+  },
+  "regression_audit": {
+    "random_forest_regressor": {
+      "model": "Random Forest Regressor",
+      "description": "Continuous active power regression trained on aggregate features",
+      "overall_all_samples": {
+        "sample_count": 95270,
+        "mae_w": 1.76,
+        "rmse_w": 15.46
+      },
+      "active_samples_only": {
+        "sample_count": 34,
+        "mae_w": 476.48,
+        "rmse_w": 497.38,
+        "mean_true_w": 715.94,
+        "mean_pred_w": 239.46,
+        "underestimation_pct": 66.55
+      },
+      "inactive_samples_only": {
+        "sample_count": 95236,
+        "mae_w": 1.59,
+        "rmse_w": 12.28
+      },
+      "energy_metrics": {
+        "true_energy_kwh": 0.198,
+        "pred_energy_kwh": 0.115,
+        "absolute_energy_error_kwh": 0.083,
+        "rete_error_pct": 41.93
+      }
+    },
+    "mean_active_baseline": {
+      "model": "Mean Active Power Baseline",
+      "description": "Assigns training mean (606.6 W) when RF classifier predicts ON",
+      "overall_all_samples": {
+        "sample_count": 95270,
+        "mae_w": 1.23,
+        "rmse_w": 14.96
+      },
+      "active_samples_only": {
+        "sample_count": 34,
+        "mae_w": 573.21,
+        "rmse_w": 628.95,
+        "mean_true_w": 715.94,
+        "mean_pred_w": 142.73,
+        "underestimation_pct": 80.06
+      },
+      "inactive_samples_only": {
+        "sample_count": 95236,
+        "mae_w": 1.02,
+        "rmse_w": 9.1
+      },
+      "energy_metrics": {
+        "true_energy_kwh": 0.198,
+        "pred_energy_kwh": 0.0131,
+        "absolute_energy_error_kwh": 0.1849,
+        "rete_error_pct": 93.36
+      }
+    },
+    "zero_baseline": {
+      "model": "Zero Baseline",
+      "description": "Trivial baseline predicting all-0 W",
+      "overall_all_samples": {
+        "sample_count": 95270,
+        "mae_w": 1.25,
+        "rmse_w": 15.7
+      },
+      "active_samples_only": {
+        "sample_count": 34,
+        "mae_w": 715.94,
+        "rmse_w": 716.36,
+        "mean_true_w": 715.94,
+        "mean_pred_w": 0.0,
+        "underestimation_pct": 100.0
+      },
+      "inactive_samples_only": {
+        "sample_count": 95236,
+        "mae_w": 0.99,
+        "rmse_w": 7.96
+      },
+      "energy_metrics": {
+        "true_energy_kwh": 0.198,
+        "pred_energy_kwh": 0.0,
+        "absolute_energy_error_kwh": 0.198,
+        "rete_error_pct": 100.0
+      }
+    }
+  },
+  "event_level_evaluation": {
+    "rationale": "Evaluates contiguous appliance activations with one-to-one temporal matching rather than independent sample accuracy.",
+    "primary_tolerance_seconds": 60.0,
+    "cycle_gap_merge_seconds": 30.0,
+    "ground_truth_raw_events_count": 9,
+    "ground_truth_merged_cycles_count": 6,
+    "raw_events_evaluation": {
+      "random_forest": {
+        "model_key": "random_forest",
+        "raw_predicted_events_count": 7,
+        "primary_evaluation": {
+          "gt_events_count": 9,
+          "pred_events_count": 7,
+          "tp": 4,
+          "fp": 3,
+          "fn": 5,
+          "precision": 0.5714,
+          "recall": 0.4444,
+          "f1_score": 0.5,
+          "fp_per_day": 0.446,
+          "fn_per_day": 0.744,
+          "delays_s": [
+            0.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "mean_delay_s": 9.0,
+          "median_delay_s": 12.0,
+          "std_delay_s": 5.2,
+          "tolerance_s": 60.0,
+          "matches": [
+            {
+              "gt_id": 4,
+              "pred_id": 4,
+              "gt_start": "2013-07-01 06:26:30+05:30",
+              "pred_start": "2013-07-01 06:26:30+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 3,
+              "pred_id": 2,
+              "gt_start": "2013-06-30 06:24:06+05:30",
+              "pred_start": "2013-06-30 06:24:18+05:30",
+              "delay_s": 12.0
+            },
+            {
+              "gt_id": 5,
+              "pred_id": 5,
+              "gt_start": "2013-07-03 06:33:42+05:30",
+              "pred_start": "2013-07-03 06:33:54+05:30",
+              "delay_s": 12.0
+            },
+            {
+              "gt_id": 8,
+              "pred_id": 6,
+              "gt_start": "2013-07-04 06:35:00+05:30",
+              "pred_start": "2013-07-04 06:35:12+05:30",
+              "delay_s": 12.0
+            }
+          ]
+        },
+        "tolerance_sensitivity": {
+          "tol_12s": {
+            "tp": 4,
+            "fp": 3,
+            "fn": 5,
+            "precision": 0.5714,
+            "recall": 0.4444,
+            "f1_score": 0.5,
+            "mean_delay_s": 9.0
+          },
+          "tol_30s": {
+            "tp": 4,
+            "fp": 3,
+            "fn": 5,
+            "precision": 0.5714,
+            "recall": 0.4444,
+            "f1_score": 0.5,
+            "mean_delay_s": 9.0
+          },
+          "tol_60s": {
+            "tp": 4,
+            "fp": 3,
+            "fn": 5,
+            "precision": 0.5714,
+            "recall": 0.4444,
+            "f1_score": 0.5,
+            "mean_delay_s": 9.0
+          },
+          "tol_120s": {
+            "tp": 4,
+            "fp": 3,
+            "fn": 5,
+            "precision": 0.5714,
+            "recall": 0.4444,
+            "f1_score": 0.5,
+            "mean_delay_s": 9.0
+          }
+        }
+      },
+      "persistence": {
+        "model_key": "persistence",
+        "raw_predicted_events_count": 9,
+        "primary_evaluation": {
+          "gt_events_count": 9,
+          "pred_events_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0,
+          "fp_per_day": 0.0,
+          "fn_per_day": 0.0,
+          "delays_s": [
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "mean_delay_s": 6.0,
+          "median_delay_s": 6.0,
+          "std_delay_s": 0.0,
+          "tolerance_s": 60.0,
+          "matches": [
+            {
+              "gt_id": 1,
+              "pred_id": 1,
+              "gt_start": "2013-06-29 06:35:42+05:30",
+              "pred_start": "2013-06-29 06:35:48+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 2,
+              "pred_id": 2,
+              "gt_start": "2013-06-29 06:36:06+05:30",
+              "pred_start": "2013-06-29 06:36:12+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 3,
+              "pred_id": 3,
+              "gt_start": "2013-06-30 06:24:06+05:30",
+              "pred_start": "2013-06-30 06:24:12+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 4,
+              "pred_id": 4,
+              "gt_start": "2013-07-01 06:26:30+05:30",
+              "pred_start": "2013-07-01 06:26:36+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 5,
+              "pred_id": 5,
+              "gt_start": "2013-07-03 06:33:42+05:30",
+              "pred_start": "2013-07-03 06:33:48+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 6,
+              "pred_id": 6,
+              "gt_start": "2013-07-03 06:34:12+05:30",
+              "pred_start": "2013-07-03 06:34:18+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 7,
+              "pred_id": 7,
+              "gt_start": "2013-07-03 06:34:36+05:30",
+              "pred_start": "2013-07-03 06:34:42+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 8,
+              "pred_id": 8,
+              "gt_start": "2013-07-04 06:35:00+05:30",
+              "pred_start": "2013-07-04 06:35:06+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 9,
+              "pred_id": 9,
+              "gt_start": "2013-07-05 12:38:36+05:30",
+              "pred_start": "2013-07-05 12:38:42+05:30",
+              "delay_s": 6.0
+            }
+          ]
+        },
+        "tolerance_sensitivity": {
+          "tol_12s": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "mean_delay_s": 6.0
+          },
+          "tol_30s": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "mean_delay_s": 6.0
+          },
+          "tol_60s": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "mean_delay_s": 6.0
+          },
+          "tol_120s": {
+            "tp": 9,
+            "fp": 0,
+            "fn": 0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "mean_delay_s": 6.0
+          }
+        }
+      },
+      "differential_step": {
+        "model_key": "differential_step",
+        "raw_predicted_events_count": 364,
+        "primary_evaluation": {
+          "gt_events_count": 9,
+          "pred_events_count": 364,
+          "tp": 5,
+          "fp": 359,
+          "fn": 4,
+          "precision": 0.0137,
+          "recall": 0.5556,
+          "f1_score": 0.0268,
+          "fp_per_day": 53.426,
+          "fn_per_day": 0.595,
+          "delays_s": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -12.0
+          ],
+          "mean_delay_s": -2.4,
+          "median_delay_s": 0.0,
+          "std_delay_s": 4.8,
+          "tolerance_s": 60.0,
+          "matches": [
+            {
+              "gt_id": 1,
+              "pred_id": 25,
+              "gt_start": "2013-06-29 06:35:42+05:30",
+              "pred_start": "2013-06-29 06:35:42+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 3,
+              "pred_id": 90,
+              "gt_start": "2013-06-30 06:24:06+05:30",
+              "pred_start": "2013-06-30 06:24:06+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 5,
+              "pred_id": 298,
+              "gt_start": "2013-07-03 06:33:42+05:30",
+              "pred_start": "2013-07-03 06:33:42+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 8,
+              "pred_id": 330,
+              "gt_start": "2013-07-04 06:35:00+05:30",
+              "pred_start": "2013-07-04 06:35:00+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 4,
+              "pred_id": 161,
+              "gt_start": "2013-07-01 06:26:30+05:30",
+              "pred_start": "2013-07-01 06:26:18+05:30",
+              "delay_s": -12.0
+            }
+          ]
+        },
+        "tolerance_sensitivity": {
+          "tol_12s": {
+            "tp": 5,
+            "fp": 359,
+            "fn": 4,
+            "precision": 0.0137,
+            "recall": 0.5556,
+            "f1_score": 0.0268,
+            "mean_delay_s": -2.4
+          },
+          "tol_30s": {
+            "tp": 5,
+            "fp": 359,
+            "fn": 4,
+            "precision": 0.0137,
+            "recall": 0.5556,
+            "f1_score": 0.0268,
+            "mean_delay_s": -2.4
+          },
+          "tol_60s": {
+            "tp": 5,
+            "fp": 359,
+            "fn": 4,
+            "precision": 0.0137,
+            "recall": 0.5556,
+            "f1_score": 0.0268,
+            "mean_delay_s": -2.4
+          },
+          "tol_120s": {
+            "tp": 5,
+            "fp": 359,
+            "fn": 4,
+            "precision": 0.0137,
+            "recall": 0.5556,
+            "f1_score": 0.0268,
+            "mean_delay_s": -2.4
+          }
+        }
+      },
+      "simple_threshold": {
+        "model_key": "simple_threshold",
+        "raw_predicted_events_count": 2,
+        "primary_evaluation": {
+          "gt_events_count": 9,
+          "pred_events_count": 2,
+          "tp": 0,
+          "fp": 2,
+          "fn": 9,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "fp_per_day": 0.298,
+          "fn_per_day": 1.339,
+          "delays_s": [],
+          "mean_delay_s": 0.0,
+          "median_delay_s": 0.0,
+          "std_delay_s": 0.0,
+          "tolerance_s": 60.0,
+          "matches": []
+        },
+        "tolerance_sensitivity": {
+          "tol_12s": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          },
+          "tol_30s": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          },
+          "tol_60s": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          },
+          "tol_120s": {
+            "tp": 0,
+            "fp": 2,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          }
+        }
+      },
+      "majority_class": {
+        "model_key": "majority_class",
+        "raw_predicted_events_count": 0,
+        "primary_evaluation": {
+          "gt_events_count": 9,
+          "pred_events_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 9,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "fp_per_day": 0.0,
+          "fn_per_day": 1.339,
+          "delays_s": [],
+          "mean_delay_s": 0.0,
+          "median_delay_s": 0.0,
+          "std_delay_s": 0.0,
+          "tolerance_s": 60.0
+        },
+        "tolerance_sensitivity": {
+          "tol_12s": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          },
+          "tol_30s": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          },
+          "tol_60s": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          },
+          "tol_120s": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "mean_delay_s": 0.0
+          }
+        }
+      }
+    },
+    "merged_cycles_evaluation": {
+      "random_forest": {
+        "model_key": "random_forest",
+        "cycle_predicted_events_count": 7,
+        "primary_evaluation": {
+          "gt_events_count": 6,
+          "pred_events_count": 7,
+          "tp": 4,
+          "fp": 3,
+          "fn": 2,
+          "precision": 0.5714,
+          "recall": 0.6667,
+          "f1_score": 0.6154,
+          "fp_per_day": 0.446,
+          "fn_per_day": 0.298,
+          "delays_s": [
+            0.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "mean_delay_s": 9.0,
+          "median_delay_s": 12.0,
+          "std_delay_s": 5.2,
+          "tolerance_s": 60.0,
+          "matches": [
+            {
+              "gt_id": 3,
+              "pred_id": 4,
+              "gt_start": "2013-07-01 06:26:30+05:30",
+              "pred_start": "2013-07-01 06:26:30+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 2,
+              "pred_id": 2,
+              "gt_start": "2013-06-30 06:24:06+05:30",
+              "pred_start": "2013-06-30 06:24:18+05:30",
+              "delay_s": 12.0
+            },
+            {
+              "gt_id": 4,
+              "pred_id": 5,
+              "gt_start": "2013-07-03 06:33:42+05:30",
+              "pred_start": "2013-07-03 06:33:54+05:30",
+              "delay_s": 12.0
+            },
+            {
+              "gt_id": 5,
+              "pred_id": 6,
+              "gt_start": "2013-07-04 06:35:00+05:30",
+              "pred_start": "2013-07-04 06:35:12+05:30",
+              "delay_s": 12.0
+            }
+          ]
+        }
+      },
+      "persistence": {
+        "model_key": "persistence",
+        "cycle_predicted_events_count": 9,
+        "primary_evaluation": {
+          "gt_events_count": 6,
+          "pred_events_count": 9,
+          "tp": 6,
+          "fp": 3,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1_score": 0.8,
+          "fp_per_day": 0.446,
+          "fn_per_day": 0.0,
+          "delays_s": [
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0
+          ],
+          "mean_delay_s": 6.0,
+          "median_delay_s": 6.0,
+          "std_delay_s": 0.0,
+          "tolerance_s": 60.0,
+          "matches": [
+            {
+              "gt_id": 1,
+              "pred_id": 1,
+              "gt_start": "2013-06-29 06:35:42+05:30",
+              "pred_start": "2013-06-29 06:35:48+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 2,
+              "pred_id": 3,
+              "gt_start": "2013-06-30 06:24:06+05:30",
+              "pred_start": "2013-06-30 06:24:12+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 3,
+              "pred_id": 4,
+              "gt_start": "2013-07-01 06:26:30+05:30",
+              "pred_start": "2013-07-01 06:26:36+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 4,
+              "pred_id": 5,
+              "gt_start": "2013-07-03 06:33:42+05:30",
+              "pred_start": "2013-07-03 06:33:48+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 5,
+              "pred_id": 8,
+              "gt_start": "2013-07-04 06:35:00+05:30",
+              "pred_start": "2013-07-04 06:35:06+05:30",
+              "delay_s": 6.0
+            },
+            {
+              "gt_id": 6,
+              "pred_id": 9,
+              "gt_start": "2013-07-05 12:38:36+05:30",
+              "pred_start": "2013-07-05 12:38:42+05:30",
+              "delay_s": 6.0
+            }
+          ]
+        }
+      },
+      "differential_step": {
+        "model_key": "differential_step",
+        "cycle_predicted_events_count": 364,
+        "primary_evaluation": {
+          "gt_events_count": 6,
+          "pred_events_count": 364,
+          "tp": 5,
+          "fp": 359,
+          "fn": 1,
+          "precision": 0.0137,
+          "recall": 0.8333,
+          "f1_score": 0.027,
+          "fp_per_day": 53.426,
+          "fn_per_day": 0.149,
+          "delays_s": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -12.0
+          ],
+          "mean_delay_s": -2.4,
+          "median_delay_s": 0.0,
+          "std_delay_s": 4.8,
+          "tolerance_s": 60.0,
+          "matches": [
+            {
+              "gt_id": 1,
+              "pred_id": 25,
+              "gt_start": "2013-06-29 06:35:42+05:30",
+              "pred_start": "2013-06-29 06:35:42+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 2,
+              "pred_id": 90,
+              "gt_start": "2013-06-30 06:24:06+05:30",
+              "pred_start": "2013-06-30 06:24:06+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 4,
+              "pred_id": 298,
+              "gt_start": "2013-07-03 06:33:42+05:30",
+              "pred_start": "2013-07-03 06:33:42+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 5,
+              "pred_id": 330,
+              "gt_start": "2013-07-04 06:35:00+05:30",
+              "pred_start": "2013-07-04 06:35:00+05:30",
+              "delay_s": 0.0
+            },
+            {
+              "gt_id": 3,
+              "pred_id": 161,
+              "gt_start": "2013-07-01 06:26:30+05:30",
+              "pred_start": "2013-07-01 06:26:18+05:30",
+              "delay_s": -12.0
+            }
+          ]
+        }
+      },
+      "simple_threshold": {
+        "model_key": "simple_threshold",
+        "cycle_predicted_events_count": 2,
+        "primary_evaluation": {
+          "gt_events_count": 6,
+          "pred_events_count": 2,
+          "tp": 0,
+          "fp": 2,
+          "fn": 6,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "fp_per_day": 0.298,
+          "fn_per_day": 0.893,
+          "delays_s": [],
+          "mean_delay_s": 0.0,
+          "median_delay_s": 0.0,
+          "std_delay_s": 0.0,
+          "tolerance_s": 60.0,
+          "matches": []
+        }
+      },
+      "majority_class": {
+        "model_key": "majority_class",
+        "cycle_predicted_events_count": 0,
+        "primary_evaluation": {
+          "gt_events_count": 6,
+          "pred_events_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 6,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1_score": 0.0,
+          "fp_per_day": 0.0,
+          "fn_per_day": 0.893,
+          "delays_s": [],
+          "mean_delay_s": 0.0,
+          "median_delay_s": 0.0,
+          "std_delay_s": 0.0,
+          "tolerance_s": 60.0
+        }
+      }
+    }
+  }
+}
