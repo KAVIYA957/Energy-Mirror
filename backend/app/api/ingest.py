@@ -1,3 +1,4 @@
+import secrets
 from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, Depends, Header, HTTPException, status
@@ -22,7 +23,8 @@ def ingest_telemetry(
     Ingest raw physical telemetry from ESP32 + PZEM-004T.
     
     Security:
-    If DEVICE_INGEST_TOKEN is configured in environment, X-Device-Token is verified.
+    If DEVICE_INGEST_TOKEN is configured in environment, X-Device-Token is verified
+    using constant-time comparison to prevent timing attacks.
     
     Staging Behavior:
     If ENABLE_HARDWARE_INGEST is false (default), telemetry is validated and acknowledged
@@ -30,7 +32,7 @@ def ingest_telemetry(
     """
     # 1. Token authentication
     if settings.DEVICE_INGEST_TOKEN:
-        if not x_device_token or x_device_token != settings.DEVICE_INGEST_TOKEN:
+        if not x_device_token or not secrets.compare_digest(x_device_token, settings.DEVICE_INGEST_TOKEN):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid or missing X-Device-Token authentication header.",

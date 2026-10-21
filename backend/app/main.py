@@ -12,9 +12,12 @@ from app.api import health, telemetry, ingest, simulator as sim_router, diagnost
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: create SQLite tables if they do not exist
+    # 0. Validate configuration to fail safely if unsafe or invalid
+    settings.validate_configuration()
+
+    # 1. Startup: create SQLite tables if they do not exist
     Base.metadata.create_all(bind=engine)
-    # Seed appliance registry and initial history if empty
+    # 2. Seed appliance registry and initial history if empty
     db = SessionLocal()
     try:
         appliance_registry.seed_defaults(db)

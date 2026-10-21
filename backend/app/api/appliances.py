@@ -21,6 +21,7 @@ from app.schemas.appliance import (
     ApplianceListResponse,
 )
 from app.services.appliance_registry import appliance_registry, PROTECTED_DEFAULT_IDS
+from app.core.security import verify_admin_access
 
 router = APIRouter(prefix="/appliances", tags=["Appliance Registry"])
 
@@ -32,7 +33,7 @@ def list_appliances(
 ):
     """
     List all appliance definitions currently stored in the registry.
-    Can be filtered by enabled status.
+    Can be filtered by enabled status. (Public read-only endpoint)
     """
     appliances = appliance_registry.get_all(db, enabled_only=enabled_only)
     schemas = [ApplianceDefinitionSchema.model_validate(app) for app in appliances]
@@ -45,7 +46,7 @@ def list_appliances(
 
 @router.get("/{appliance_id}", response_model=ApplianceDefinitionSchema)
 def get_appliance(appliance_id: str, db: Session = Depends(get_db)):
-    """Retrieve details for a specific appliance by its stable identifier."""
+    """Retrieve details for a specific appliance by its stable identifier. (Public read-only endpoint)"""
     record = appliance_registry.get_by_id(db, appliance_id)
     if not record:
         raise HTTPException(
@@ -56,9 +57,14 @@ def get_appliance(appliance_id: str, db: Session = Depends(get_db)):
 
 
 @router.post("", response_model=ApplianceDefinitionSchema, status_code=status.HTTP_201_CREATED)
-def register_appliance(request: ApplianceCreateRequest, db: Session = Depends(get_db)):
+def register_appliance(
+    request: ApplianceCreateRequest,
+    db: Session = Depends(get_db),
+    _admin: bool = Depends(verify_admin_access),
+):
     """
     Register a new appliance definition in the registry.
+    Protected administrative endpoint: Requires authentication or local loopback access.
 
     Validation rules:
     - Stable appliance_id must be unique.
@@ -87,8 +93,12 @@ def update_appliance(
     appliance_id: str,
     request: ApplianceUpdateRequest,
     db: Session = Depends(get_db),
+    _admin: bool = Depends(verify_admin_access),
 ):
-    """Update fields of an existing appliance definition and resync subsystems."""
+    """
+    Update fields of an existing appliance definition and resync subsystems.
+    Protected administrative endpoint: Requires authentication or local loopback access.
+    """
     try:
         updated = appliance_registry.update(db, appliance_id, request)
         return ApplianceDefinitionSchema.model_validate(updated)
@@ -105,10 +115,15 @@ def update_appliance(
 
 
 @router.delete("/{appliance_id}", status_code=status.HTTP_200_OK)
-def delete_appliance(appliance_id: str, db: Session = Depends(get_db)):
+def delete_appliance(
+    appliance_id: str,
+    db: Session = Depends(get_db),
+    _admin: bool = Depends(verify_admin_access),
+):
     """
     Remove an appliance definition from the registry.
     Default baseline simulator appliances are protected and cannot be deleted.
+    Protected administrative endpoint: Requires authentication or local loopback access.
     """
     try:
         appliance_registry.delete(db, appliance_id)
