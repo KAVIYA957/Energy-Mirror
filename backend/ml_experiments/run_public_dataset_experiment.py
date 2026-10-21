@@ -31,28 +31,108 @@ from evaluate import (
     print_evaluation_summary,
 )
 
+# Authoritative REFIT appliance mappings from official CLEAN_READ_ME_081116.txt
+REFIT_APPLIANCE_CATALOG = {
+    "House1": {"Appliance9": "Electric Heater (GLEN 2172)"},
+    "House2": {"Appliance9": "Overhead Fan"},
+    "House11": {
+        "Appliance1": "Fridge",
+        "Appliance2": "Fridge-Freezer",
+        "Appliance3": "Washing Machine",
+        "Appliance4": "Dishwasher",
+        "Appliance5": "Computer Site",
+        "Appliance6": "Microwave",
+        "Appliance7": "Kettle",
+        "Appliance8": "Router",
+        "Appliance9": "Hi-Fi",
+    },
+    "House12": {
+        "Appliance1": "Fridge-Freezer",
+        "Appliance4": "Computer Site",
+        "Appliance5": "Microwave",
+        "Appliance6": "Kettle",
+        "Appliance7": "Toaster (Nothing Recorded)",
+        "Appliance8": "Television (Nothing Recorded)",
+        "Appliance9": "Unknown (Nothing Recorded)",
+    },
+    "House21": {
+        "Appliance1": "Fridge-Freezer",
+        "Appliance2": "Tumble Dryer",
+        "Appliance3": "Washing Machine",
+        "Appliance4": "Dishwasher",
+        "Appliance5": "Food Mixer",
+        "Appliance6": "Television",
+        "Appliance7": "Kettle",
+        "Appliance8": "Vivarium",
+        "Appliance9": "Pond Pump",
+    },
+}
+
+def validate_refit_target(house_id: str, target_category: str) -> Tuple[bool, str, str]:
+    """
+    Validates whether the requested target appliance is genuinely instrumented
+    in the specified REFIT house according to authoritative metadata.
+    Returns: (is_valid, matched_column_name, appliance_description)
+    """
+    house_meta = REFIT_APPLIANCE_CATALOG.get(house_id, {})
+    if not house_meta:
+        return False, "", f"Unknown house identifier: {house_id}"
+
+    target_lower = target_category.lower()
+    for col, desc in house_meta.items():
+        desc_lower = desc.lower()
+        if "pump" in target_lower and "pump" in desc_lower:
+            return True, col, desc
+        if "fan" in target_lower and "fan" in desc_lower:
+            return True, col, desc
+        if "heater" in target_lower and "heater" in desc_lower:
+            return True, col, desc
+
+    return False, "", f"Target '{target_category}' NOT PRESENT in {house_id}."
+
 def load_refit_house(
     csv_path: str,
-    target_appliance_col: str = "Appliance8",
+    target_appliance_col: Optional[str] = None,
+    target_category: str = "water_pump",
     max_rows: Optional[int] = 100000,
-) -> pd.DataFrame:
+) -> Tuple[pd.DataFrame, str]:
     """
-    Loads and normalizes a REFIT house CSV file.
-    REFIT schema: Time, Unix, Aggregate, Appliance1...Appliance9
+    Loads and normalizes a REFIT house CSV file with strict ground-truth verification.
     """
     if not os.path.exists(csv_path):
         raise FileNotFoundError(f"REFIT file not found at: {csv_path}")
 
+    filename = os.path.basename(csv_path)
+    # Extract house id (e.g. CLEAN_House11.csv -> House11)
+    house_id = "House11"
+    for h in ["House1", "House2", "House11", "House12", "House21"]:
+        if h in filename:
+            house_id = h
+            break
+
+    # Validate ground truth against official schema
+    is_valid, col, desc = validate_refit_target(house_id, target_category)
+    if not is_valid:
+        raise ValueError(
+            f"GROUND-TRUTH MISMATCH ERROR: {desc} "
+            f"REFIT {house_id} does NOT contain a '{target_category}'. "
+            f"In {house_id}: Appliance8 is '{REFIT_APPLIANCE_CATALOG.get(house_id, {}).get('Appliance8')}', "
+            f"and Appliance9 is '{REFIT_APPLIANCE_CATALOG.get(house_id, {}).get('Appliance9')}'. "
+            f"The genuine Pond Pump in REFIT is located strictly in House21 (Appliance9)."
+        )
+
+    chosen_col = target_appliance_col or col
+    print(f"[Ground-Truth Verified] {house_id}: '{chosen_col}' mapped to '{desc}'.")
+
     df = pd.read_csv(csv_path, nrows=max_rows)
     df["timestamp"] = pd.to_datetime(df["Time"])
     
-    # Extract relevant columns
     result = pd.DataFrame({
         "timestamp": df["timestamp"],
         "aggregate_power_w": df["Aggregate"].astype(float),
-        "target_power_w": df[target_appliance_col].astype(float),
+        "target_power_w": df[chosen_col].astype(float),
     })
-    return result
+    return result, desc
 
 def load_ukdale_house(
     mains_path: str,
@@ -142,9 +222,10 @@ def run_public_dataset_experiment(
 
     print(f"[Data] Loading real training data from: {train_file}")
     if dataset_type == "refit":
-        df_train = load_refit_house(train_file, target_appliance_col="Appliance8")
+        df_train, train_desc = load_refit_house(train_file, target_category=target_appliance)
     else:
         df_train = pd.read_csv(train_file)
+        train_desc = "Custom CSV"
 
     config = PreprocessingConfig(
         window_size_samples=15,
@@ -175,10 +256,10 @@ def run_public_dataset_experiment(
     # Handle evaluation mode
     if test_file and os.path.exists(test_file):
         print(f"\n[Evaluation Mode] UNSEEN-BUILDING CROSS-RESIDENCE EVALUATION")
-        print(f"[Train Residence] {train_file}")
+        print(f"[Train Residence] {train_file} ({train_desc})")
         print(f"[Test Residence]  {test_file}")
         
-        df_test = load_refit_house(test_file, target_appliance_col="Appliance7" if "House12" in test_file else "Appliance8")
+        df_test, test_desc = load_refit_house(test_file, target_category=target_appliance)
         chunks_test = preprocessor.detect_contiguous_chunks(df_test, time_col="timestamp")
         active_test_chunk = chunks_test[0]
         p_agg_test = active_test_chunk["aggregate_power_w"].values
@@ -264,10 +345,10 @@ def run_public_dataset_experiment(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Real Public Dataset NILM Experiment")
-    parser.add_argument("--train-file", type=str, default="backend/ml_experiments/data/CLEAN_House11.csv")
-    parser.add_argument("--test-file", type=str, default=None)
+    parser.add_argument("--train-file", type=str, default="backend/ml_experiments/data/CLEAN_House21.csv", help="Primary training house CSV")
+    parser.add_argument("--test-file", type=str, default=None, help="Optional unseen test house CSV for cross-building evaluation")
     parser.add_argument("--dataset", type=str, default="refit", choices=["refit", "ukdale"])
-    parser.add_argument("--appliance", type=str, default="water_pump")
+    parser.add_argument("--appliance", type=str, default="water_pump", choices=["water_pump", "ceiling_fan", "water_heater"])
     args = parser.parse_args()
 
     run_public_dataset_experiment(
