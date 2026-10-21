@@ -245,6 +245,26 @@ A temporary test appliance (`acceptance_test_kettle`) was created, inspected, up
 4. **Flutter Test Suite:** `flutter test` in `mobile/` -> **38 passed** across all 11 suites.
 5. **Flutter Production Build:** `flutter build web --release` in `mobile/` -> **Successfully built** `build\web` in 62.1s.
 
+### H. Final Local Launch Smoke Test Verification
+Executed automated local launch smoke test using Microsoft Edge via Chrome DevTools Protocol against the active services:
+- **Verified URLs:**
+  - Frontend SPA: `http://localhost:5000` (HTTP 200, Flutter Web root, `title="Energy Mirror"`)
+  - Backend API: `http://localhost:8000/api/v1/health` (HTTP 200, `database_connected=true`)
+  - Diagnostics: `http://localhost:8000/api/v1/diagnostics/system` (HTTP 200, `database_type=SQLite`, `hardware_mode=STAGED_INACTIVE`)
+  - Proxied API: `http://localhost:5000/api/v1/telemetry/live` (HTTP 200, `data_source="SIMULATED"`, `active_power_w=284.0`)
+- **Smoke-Test Results (9/9 Checks Passed):**
+  1. **Dashboard Load:** Displays truthful `SIMULATED DATA` indicator and live story headline.
+  2. **Default Appliances:** All four default appliances (`bulb_01`, `fan_01`, `heater_01`, `pump_01`) present and intact.
+  3. **Multi-Screen Navigation:** Smooth hash routing to `#/simulator`, `#/history`, and `#/diagnostics`.
+  4. **Baseline Power:** Simulator reset strictly restores 284.0 W (272.0 W attributed + 12.0 W assumed residual).
+  5. **Heater OFF:** Aggregate load transitions to 144.0 W (delta -140.0 W, detector event `MATCHED`).
+  6. **Heater ON:** Aggregate load transitions back to 284.0 W (delta +140.0 W, detector event `MATCHED`).
+  7. **Persistence & Diagnostics:** Durable events (count $\ge 2$) and diagnostics accessible without degradation.
+  8. **Appliance Registry:** Registry loaded, display cards rendered, header refresh action verified.
+  9. **Console Stability:** 0 uncaught JavaScript errors, 0 runtime exceptions.
+- **Smoke Test Visual Evidence:** [`final_smoke_test_simulator.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_smoke_test_simulator.png) (123 KB)
+- **Appliance Integrity:** Zero extraneous appliances created; all 4 baseline appliances preserved.
+
 ---
 
 ## 7. Local Startup and Shutdown Instructions
