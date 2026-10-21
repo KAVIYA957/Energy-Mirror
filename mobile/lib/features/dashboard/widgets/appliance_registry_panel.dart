@@ -266,6 +266,15 @@ class _ApplianceRegistryPanelState extends ConsumerState<ApplianceRegistryPanel>
                   ],
                 ),
               ),
+              IconButton(
+                key: const Key('refresh_registry_button'),
+                icon: const Icon(Icons.refresh_rounded, size: 16, color: EnergyMirrorColors.textMuted),
+                tooltip: 'Refresh registry',
+                onPressed: () => ref.read(applianceRegistryProvider.notifier).loadAppliances(),
+                visualDensity: VisualDensity.compact,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
               const SizedBox(width: 8),
               ElevatedButton.icon(
                 key: const Key('add_appliance_button'),
@@ -685,7 +694,11 @@ class _ApplianceFormDialogState extends State<_ApplianceFormDialog> {
                     border: OutlineInputBorder(),
                   ),
                   style: GoogleFonts.inter(fontSize: 12.5),
-                  validator: (v) => v == null || v.trim().isEmpty ? 'Name is required' : null,
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return 'Name is required';
+                    if (v.trim().length < 2) return 'Name must be at least 2 characters';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 10),
 
@@ -722,7 +735,12 @@ class _ApplianceFormDialogState extends State<_ApplianceFormDialog> {
                           border: OutlineInputBorder(),
                         ),
                         style: GoogleFonts.inter(fontSize: 12.5),
-                        validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                        validator: (v) {
+                          if (v == null || v.trim().isEmpty) return 'Watts is required';
+                          final p = double.tryParse(v.trim());
+                          if (p == null || p <= 0) return 'Must be > 0';
+                          return null;
+                        },
                       ),
                     ),
                   ],
