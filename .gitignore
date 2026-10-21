@@ -68,4 +68,7 @@ Thumbs.db
 backend/ml_experiments/.venv_ml/
 backend/ml_experiments/data/
 backend/ml_experiments/models/
-backend/ml_experiments/results/
+backend/ml_experiments/results/*
+!backend/ml_experiments/results/*.json
+*.h5
+*.7z

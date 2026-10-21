@@ -1,0 +1,141 @@
+{
+  "metadata": {
+    "dataset": "iAWE (Indian Dataset for Ambient Water and Energy)",
+    "citation": "Batra et al., IIIT Delhi, BuildSys 2013 / Zenodo 13917372",
+    "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "file_size_bytes": 427836094,
+    "file_size_mb": 408.02,
+    "target_appliance": "Water Motor (Overhead Tank Lift Pump)",
+    "target_submeter": "/building1/elec/meter12",
+    "mains_submeters": [
+      "/building1/elec/meter1",
+      "/building1/elec/meter2"
+    ],
+    "resample_frequency": "6s",
+    "on_threshold_w": 200.0,
+    "raw_motor_readings": 447812,
+    "overflow_artifacts_filtered": 3,
+    "grid_outage_intervals_dropped": 43757,
+    "synchronized_samples": 476344,
+    "active_motor_samples": 662,
+    "positive_prevalence_pct": 0.139,
+    "mean_active_power_w": 629.17,
+    "median_active_power_w": 700.0,
+    "std_active_power_w": 158.1,
+    "start_timestamp": "2013-05-30 12:51:36+05:30",
+    "end_timestamp": "2013-07-05 15:41:42+05:30"
+  },
+  "split": {
+    "train_samples": 285706,
+    "train_active_samples": 535,
+    "train_prevalence_pct": 0.187,
+    "val_samples": 95168,
+    "val_active_samples": 93,
+    "val_prevalence_pct": 0.098,
+    "test_samples": 95270,
+    "test_active_samples": 34,
+    "test_prevalence_pct": 0.036,
+    "boundary_dropped_samples": 200
+  },
+  "classification_baselines": {
+    "random_forest": {
+      "model": "Random Forest Classifier",
+      "description": "Nonlinear ensemble trained on P_agg, delta_P, and rolling window stats",
+      "accuracy": 0.9997,
+      "precision": 0.6154,
+      "recall": 0.2353,
+      "f1_score": 0.3404,
+      "confusion_matrix": {
+        "true_negative": 95231,
+        "false_positive": 5,
+        "false_negative": 26,
+        "true_positive": 8
+      }
+    },
+    "simple_threshold": {
+      "model": "Simple Power Threshold",
+      "description": "Tuned on validation set: P_agg >= 4814.2 W",
+      "accuracy": 0.9996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "confusion_matrix": {
+        "true_negative": 95232,
+        "false_positive": 4,
+        "false_negative": 34,
+        "true_positive": 0
+      }
+    },
+    "differential_step": {
+      "model": "Differential Step Baseline",
+      "description": "Tuned on validation set: delta_P >= 220.4 W",
+      "accuracy": 0.993,
+      "precision": 0.0108,
+      "recall": 0.2059,
+      "f1_score": 0.0206,
+      "confusion_matrix": {
+        "true_negative": 94596,
+        "false_positive": 640,
+        "false_negative": 27,
+        "true_positive": 7
+      }
+    },
+    "persistence": {
+      "model": "Persistence (t-1)",
+      "description": "Predicts state at t is identical to state at t-1",
+      "accuracy": 0.9998,
+      "precision": 0.7353,
+      "recall": 0.7353,
+      "f1_score": 0.7353,
+      "confusion_matrix": {
+        "true_negative": 95227,
+        "false_positive": 9,
+        "false_negative": 9,
+        "true_positive": 25
+      }
+    },
+    "majority_class": {
+      "model": "Majority Class",
+      "description": "Trivial baseline predicting all-OFF state (class 0)",
+      "accuracy": 0.9996,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "confusion_matrix": {
+        "true_negative": 95236,
+        "false_positive": 0,
+        "false_negative": 34,
+        "true_positive": 0
+      }
+    }
+  },
+  "regression_baselines": {
+    "random_forest_regressor": {
+      "model": "Random Forest Regressor",
+      "description": "Continuous Watts regression from aggregate features",
+      "mae_w": 1.76,
+      "rmse_w": 15.46,
+      "total_energy_true_wh": 198.03,
+      "total_energy_pred_wh": 114.99,
+      "rete_error_pct": 41.93
+    },
+    "mean_active_baseline": {
+      "model": "Mean Active Power Baseline",
+      "description": "Assigns mean active power (606.6 W) when RF predicts ON",
+      "mae_w": 1.23,
+      "rmse_w": 14.96,
+      "total_energy_true_wh": 198.03,
+      "total_energy_pred_wh": 13.14,
+      "rete_error_pct": 93.36
+    },
+    "zero_baseline": {
+      "model": "Zero Baseline",
+      "description": "Trivial baseline assigning 0 W to all test samples",
+      "mae_w": 1.25,
+      "rmse_w": 15.7,
+      "total_energy_true_wh": 198.03,
+      "total_energy_pred_wh": 0.0,
+      "rete_error_pct": 100.0
+    }
+  }
+}

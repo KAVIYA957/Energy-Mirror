@@ -1,0 +1,196 @@
+{
+  "timestamp_utc": "2026-10-21T04:00:45.377376",
+  "target_appliance": "water_heater",
+  "nominal_power_w": 140.0,
+  "data_provenance": {
+    "source_type": "SYNTHETIC_SIMULATED_BENCHMARK",
+    "is_physical_hardware_measurement": false,
+    "is_real_public_dataset": false,
+    "description": "SYNTHETIC AC circuit vector simulation (6.0 hours @ 1 Hz, 21,600 samples)",
+    "generator_physics": "AC circuit vector summation: S = sqrt(P^2 + Q^2), PF = P / S",
+    "leakage_audit_status": "PASSED (Boundary buffer >= W dropped, zero label proxying)"
+  },
+  "preprocessing_config": {
+    "window_size_samples": 15,
+    "step_size_samples": 1,
+    "max_allowed_gap_s": 60.0,
+    "impute_short_gaps": false,
+    "on_power_threshold_w": 20.0,
+    "min_on_duration_samples": 3,
+    "train_ratio": 0.6,
+    "val_ratio": 0.2,
+    "test_ratio": 0.2,
+    "random_seed": 42
+  },
+  "split_indices": {
+    "train": [
+      0,
+      12951
+    ],
+    "val": [
+      12966,
+      17283
+    ],
+    "test": [
+      17298,
+      21586
+    ],
+    "buffer_dropped_per_boundary": 15,
+    "total_buffer_dropped": 30
+  },
+  "sample_counts": {
+    "total_raw_samples": 21600,
+    "train_samples": 12951,
+    "val_samples": 4317,
+    "test_samples": 4288,
+    "test_positive_support": 2160
+  },
+  "feature_names": [
+    "p_curr",
+    "p_mean",
+    "p_std",
+    "p_min",
+    "p_max",
+    "p_range",
+    "delta_instant",
+    "delta_window",
+    "pf_curr",
+    "pf_mean",
+    "pf_std",
+    "delta_pf_instant"
+  ],
+  "feature_importances": {
+    "p_curr": 0.2676,
+    "p_mean": 0.2194,
+    "p_max": 0.1734,
+    "p_min": 0.1425,
+    "pf_std": 0.0966,
+    "pf_mean": 0.0517,
+    "pf_curr": 0.0263,
+    "p_range": 0.0107,
+    "p_std": 0.0084,
+    "delta_window": 0.0033,
+    "delta_instant": 0.0,
+    "delta_pf_instant": 0.0
+  },
+  "ml_candidate_results": {
+    "classification": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "accuracy": 1.0,
+      "confusion_matrix": {
+        "tp": 2160,
+        "fp": 0,
+        "tn": 2128,
+        "fn": 0
+      },
+      "sample_count": 4288,
+      "positive_support": 2160
+    },
+    "power_estimation": {
+      "mae_w": 0.57,
+      "rmse_w": 1.02,
+      "energy_truth_wh": 84.027,
+      "energy_pred_wh": 84.054,
+      "reee_ratio": 0.0003
+    }
+  },
+  "baseline_results": {
+    "majority_class_baseline": {
+      "classification": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "accuracy": 0.4963,
+        "confusion_matrix": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 2128,
+          "fn": 2160
+        },
+        "sample_count": 4288,
+        "positive_support": 2160
+      },
+      "power_estimation": {
+        "mae_w": 70.54,
+        "rmse_w": 99.41,
+        "energy_truth_wh": 84.027,
+        "energy_pred_wh": 0.0,
+        "reee_ratio": 1.0
+      }
+    },
+    "simple_threshold_baseline": {
+      "threshold_w": 100.0,
+      "classification": {
+        "precision": 0.7692,
+        "recall": 1.0,
+        "f1_score": 0.8696,
+        "accuracy": 0.8489,
+        "confusion_matrix": {
+          "tp": 2160,
+          "fp": 648,
+          "tn": 1480,
+          "fn": 0
+        },
+        "sample_count": 4288,
+        "positive_support": 2160
+      },
+      "power_estimation": {
+        "mae_w": 21.96,
+        "rmse_w": 54.44,
+        "energy_truth_wh": 84.027,
+        "energy_pred_wh": 109.2,
+        "reee_ratio": 0.2996
+      }
+    },
+    "power_change_threshold_baseline": {
+      "step_threshold_w": 60.0,
+      "classification": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "accuracy": 1.0,
+        "confusion_matrix": {
+          "tp": 2160,
+          "fp": 0,
+          "tn": 2128,
+          "fn": 0
+        },
+        "sample_count": 4288,
+        "positive_support": 2160
+      },
+      "power_estimation": {
+        "mae_w": 0.8,
+        "rmse_w": 1.43,
+        "energy_truth_wh": 84.027,
+        "energy_pred_wh": 84.0,
+        "reee_ratio": 0.0003
+      }
+    },
+    "persistence_baseline": {
+      "classification": {
+        "precision": 0.9991,
+        "recall": 0.9991,
+        "f1_score": 0.9991,
+        "accuracy": 0.9991,
+        "confusion_matrix": {
+          "tp": 2158,
+          "fp": 2,
+          "tn": 2126,
+          "fn": 2
+        },
+        "sample_count": 4288,
+        "positive_support": 2160
+      },
+      "power_estimation": {
+        "mae_w": 1.27,
+        "rmse_w": 4.73,
+        "energy_truth_wh": 84.027,
+        "energy_pred_wh": 84.027,
+        "reee_ratio": 0.0
+      }
+    }
+  },
+  "verification_status": "EXPERIMENT_VALIDATED_SYNTHETIC_BENCHMARK_ONLY"
+}
