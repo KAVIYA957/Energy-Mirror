@@ -1,90 +1,175 @@
-# Energy Mirror: Live Demonstration & Presentation Guide
+# Energy Mirror: Live Demonstration & Reproduction Guide
 
 **Project Path:** `C:\Users\Kaviya\Downloads\Energy Mirror`  
 **Design Identity:** Luminous Clarity (Light-First, WCAG AAA Accessible, High Legibility)  
-**Milestone State:** Jury-Ready Demonstration Prototype  
-**Data Integrity:** All telemetry is **SIMULATED**; all disaggregation is **RULE-BASED ESTIMATE**. Hardware ingestion is **STAGED / INACTIVE** (`ENABLE_HARDWARE_INGEST=false`).
+**Milestone State:** Milestone 2C.17 (Demo Polish & Reproducibility)  
+**Data Integrity:** All telemetry is **`SIMULATED`**; all disaggregation is **`RULE-BASED ESTIMATE`**. Hardware ingestion is **`STAGED_INACTIVE`** (`ENABLE_HARDWARE_INGEST=false`).
 
 ---
 
-## 1. Quick Startup Commands
+## 1. Quick Startup Instructions
 
-To start the complete application for a live demonstration, open two terminal windows:
+For the smoothest demonstration experience without CORS configuration or IP routing issues, use the **Unified Web & Proxy Server** on port 5000.
 
-### Terminal 1: Backend API Gateway (FastAPI)
+### Automated Diagnostic Check (Optional but Recommended)
+Before starting, run the automated dependency and port conflict assistant in PowerShell:
 ```powershell
-cd "C:\Users\Kaviya\Downloads\Energy Mirror\backend"
-& ".\.venv\Scripts\Activate.ps1"
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+cd "C:\Users\Kaviya\Downloads\Energy Mirror"
+powershell -ExecutionPolicy Bypass -File .\start_demo.ps1
+```
+This script checks the Python virtualenv, Flutter web bundle, SQLite database, and port availability without modifying any database or configuration.
+
+---
+
+### Standard Two-Terminal Startup
+
+#### Terminal 1: Backend API Gateway (FastAPI)
+```powershell
+cd "C:\Users\Kaviya\Downloads\Energy Mirror"
+& ".\backend\.venv\Scripts\python.exe" -m uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000 --reload
 ```
 * **API Health Check:** [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
 * **Interactive Swagger Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs)
 * **System Diagnostics Endpoint:** [http://localhost:8000/api/v1/diagnostics/system](http://localhost:8000/api/v1/diagnostics/system)
-* **Persistent Event History Endpoint:** [http://localhost:8000/api/v1/telemetry/events](http://localhost:8000/api/v1/telemetry/events)
+* **Dynamic Appliance Registry:** [http://localhost:8000/api/v1/appliances](http://localhost:8000/api/v1/appliances)
+* **Persistent Event History:** [http://localhost:8000/api/v1/telemetry/events](http://localhost:8000/api/v1/telemetry/events)
 
-### Terminal 2: Frontend Web Application (Flutter Web)
+#### Terminal 2: Unified Web & API Proxy (Recommended)
 ```powershell
 cd "C:\Users\Kaviya\Downloads\Energy Mirror"
-& ".\backend\.venv\Scripts\python.exe" -m http.server 8080 --bind 0.0.0.0 --directory ".\mobile\build\web"
+& ".\backend\.venv\Scripts\python.exe" unified_server.py
 ```
-* **PC Desktop Browser:** [http://localhost:8080](http://localhost:8080) *(or [http://127.0.0.1:8080](http://127.0.0.1:8080))*
-* **Mobile Device on Local Wi-Fi:** `http://<YOUR_PC_IP>:8080` (e.g., `http://192.168.29.166:8080`)
+* **Primary Web URL:** [http://localhost:5000](http://localhost:5000) *(or [http://127.0.0.1:5000](http://127.0.0.1:5000))*
+* **Mobile Browser on Wi-Fi:** `http://<YOUR_PC_IP>:5000` (e.g., `http://192.168.29.166:5000`)
+* **Active Cloudflare Tunnel (External Access):** `https://nations-assistance-highway-roof.trycloudflare.com`
+
+*(Alternative: If you prefer standalone static hosting on port 8080, run `& ".\backend\.venv\Scripts\python.exe" serve_web.py 8080`)*
+
+---
+
+### Safe Process Shutdown
+To stop the services safely:
+1. In each active terminal window, press **`Ctrl + C`**.
+2. If any background Python process continues holding ports 8000 or 5000, stop it in PowerShell:
+   ```powershell
+   Get-Process python | Where-Object { $_.Path -like "*Energy Mirror*" } | Stop-Process -Force
+   ```
 
 ---
 
 ## 2. Baseline Simulator Values & Physical Accounting Invariant
 
-When the simulator is initialized or reset via the **"Reset Simulator"** control, it deterministically restores this exact baseline:
+When the simulator is initialized or reset via **"Reset Simulator"**, it deterministically restores this exact baseline:
 
-| Appliance / Component | Power | Power Factor | Status | Visual Asset | Attributed Load |
-| :--- | :---: | :---: | :---: | :--- | :---: |
-| **Water Heater** | 140.0 W | 0.99 (Resistive) | ON | `assets/images/appliances/water_heater.png` | 140.0 W |
-| **Water Pump** | 75.0 W | 0.78 (Inductive) | ON | `assets/images/appliances/water_pump.png` | 75.0 W |
-| **Ceiling Fan** | 45.0 W | 0.91 (Motor) | ON | `assets/images/appliances/ceiling_fan.png` | 45.0 W |
-| **LED Bulb** | 12.0 W | 0.85 (Lighting) | ON | `assets/images/appliances/led_bulb.png` | 12.0 W |
-| **Total Attributed Load** | — | — | — | — | **272.0 W** |
-| **Simulated Background Load** | **12.0 W** | 0.90 (Baseline Floor) | Always Active | Fixed Residual Floor | **12.0 W** |
-| **Total Aggregate Power** | — | — | — | — | **284.0 W** |
+| Appliance / Component | Nominal Power | Power Factor | Default Status | Attributed Load | Detection Capability |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Water Heater** | **140.0 W** | 0.99 (Resistive) | ON | 140.0 W | `PRODUCTION_RULE_MATCHED` ($\pm 12$ W) |
+| **Water Pump** | **75.0 W** | 0.78 (Inductive) | ON | 75.0 W | `PRODUCTION_RULE_MATCHED` ($\pm 9$ W) |
+| **Ceiling Fan** | **45.0 W** | 0.91 (Motor) | ON | 45.0 W | `PRODUCTION_RULE_MATCHED` ($\pm 7$ W) |
+| **LED Bulb** | **12.0 W** | 0.85 (Lighting) | ON | 12.0 W | `PRODUCTION_RULE_MATCHED` ($\pm 4$ W) |
+| **Total Attributed Load** | — | — | — | **272.0 W** | — |
+| **Simulated Background Load** | **12.0 W** | 0.90 (Baseline Floor) | Always Active | **12.0 W** | Assumed Baseline Model Floor |
+| **Total Aggregate Power** | — | — | — | **284.0 W** | — |
 
 ### Mandatory Physical Accounting Invariant
-$$\text{Aggregate Power } (W) = \sum \text{Attributed Appliances } (W) + \text{Simulated Background Load } (12.0\text{ W})$$
+$$P_{\text{aggregate}} (W) \equiv \sum P_{\text{attributed}} (W) + \text{Simulated Background Load } (12.0\text{ W})$$
 
 > [!NOTE]
 > **Methodological Note on Background Load:**  
-> The 12.0 W background load is a **simulated baseline assumption** within the deterministic simulator model. It represents a continuous baseline floor. It is **not** a physically measured vampire load or a detected physical appliance. Notice that the LED bulb's 12.0 W is strictly separate: when only the LED bulb is active, aggregate power is $12\text{ W} + 12\text{ W} = 24.0\text{ W}$.
+> The 12.0 W background load is an assumed constant floor within our simulation model to account for continuous household standby electronics. It is **not** a physically measured vampire load. Notice that the LED bulb's 12.0 W is strictly separate: when only the LED bulb is active, aggregate power is $12\text{ W} + 12\text{ W} = 24.0\text{ W}$.
 
 ---
 
-## 3. Five-Minute Live Jury Demonstration Script
+## 3. Step-by-Step 9-Stage Demonstration Sequence
 
-| Timing | Screen | Action | Talking Points & What to Highlight |
-| :---: | :--- | :--- | :--- |
-| **0:00 – 1:00** | **Dashboard** (`/`) | Open `http://localhost:8080` in browser | • Introduce **Energy Mirror**: A non-intrusive energy intelligence platform that identifies appliance activity from single-point electrical measurements without sub-metering every plug.<br>• Highlight the **Luminous Clarity** visual identity: Soft, daylight-inspired canvas (`#F7F8F4`), crisp cards (`#FFFFFF`), high-contrast ink typography (`#17243B`), and vibrant cobalt interactions (`#3159C9`).<br>• Show the aggregate power hero card at **284 W** and the explicit **`SIMULATED`** badge. Emphasize complete data honesty: hardware ingestion is staged/inactive. |
-| **1:00 – 1:45** | **Dashboard** (`/`) | Scroll down to the Appliance Grid & Residual Bar | • Point out the 4 recognized appliance cards with consistent 3D visual renders: Water Heater (140W), Pump (75W), Fan (45W), Bulb (12W).<br>• Tap the **Water Pump** card to open the interactive **Inference Evidence & Reasoning** modal: shows the inductive motor inrush signature and 0.78 PF classification.<br>• Inspect the **Load Reconciliation bar**: 272 W attributed (95.8%), 12 W simulated background residual floor (4.2%). Badges clearly state **`RULE-BASED ESTIMATE`**. |
-| **1:45 – 2:45** | **Appliance Simulator** (`/simulator`) | Click "Simulator" in Nav. Toggle **Water Heater OFF** | • In Simulator Lab, toggle Water Heater from ON to OFF.<br>• Observe live aggregate power drop: $284\text{ W} \rightarrow 144\text{ W}$ ($\Delta P = -140\text{ W}$).<br>• Show the event feed: **`MATCHED: Water Heater OFF (-140 W)`**.<br>• **Key Technical Point:** The detector was **never informed** which switch was flipped. It observed the mathematical step derivative ($\Delta P = -140\text{ W}$) in aggregate telemetry and matched it against its calibrated tolerance envelope ($140 \pm 12\text{ W}$). |
-| **2:45 – 3:30** | **Appliance Simulator** (`/simulator`) | Toggle all 4 appliances OFF, then click **Reset** | • Switch off all remaining appliances.<br>• Point out the live accounting bar: Attributed is 0 W, aggregate is **12.0 W** ($100\%$ unattributed floor). The baseline floor never drops to zero.<br>• Click **"Reset Simulator"**: Instantly restores the baseline 284 W aggregate and 272 W attributed load with all 4 appliances running. |
-| **3:30 – 4:15** | **History & Analytics** (`/history`) | Click "History" in Nav. Toggle 15m $\rightarrow$ 6h | • Show the interactive FL Chart with smooth power curve and solar amber event markers.<br>• Toggle the interval selector: 15m, 1h, 6h, 24h. Point out the **honest range banner**: *"Showing available data of requested window (no artificial gap interpolation)"*.<br>• Scroll to the **Durable Detected Events** archive: shows persistent SQLite records surviving backend restarts. |
-| **4:15 – 4:45** | **System Diagnostics** (`/diagnostics`) | Click "Diagnostics" in Nav | • Show API Connectivity: **`HEALTHY`** with active database connection.<br>• Point out **Hardware Ingestion Status**: **`STAGED / INACTIVE`**, `ENABLE_HARDWARE_INGEST = false`.<br>• Verify the security audit: Zero device tokens, passwords, or internal server paths are exposed. |
-| **4:45 – 5:00** | **Wrap-Up** | Conclude presentation | • Summarize: Responsive multi-screen Flutter architecture, consistent 3D appliance visual library, transparent rule-based NILM event detection, and strict physical accounting are 100% verified.<br>• State the next milestone: Supervised physical bench testing with ESP32 and PZEM-004T under laboratory electrical safety protocols. |
+Follow this exact sequence during presentations and technical reviews:
+
+```
+[1. Dashboard Overview] -> [2. Four Appliances] -> [3. 284W Baseline]
+         |
+         v
+[4. Toggle Heater OFF]  -> [5. Verify 144W & Event] -> [6. Reset Baseline]
+         |
+         v
+[7. History & Diag]     -> [8. Unsupported Reg]     -> [9. Data Transparency]
+```
+
+### Stage 1: Dashboard Overview & Simulation Mode
+* **Screen:** Dashboard (`/`) at `http://localhost:5000`
+* **Action:** Point out the top hero card displaying **284 W** and the explicit **`SIMULATED DATA`** badge.
+* **Explanation:** Clarify that this is an end-to-end prototype running on simulated 1 Hz telemetry; no live hardware is attached.
+
+### Stage 2: Four Recognized Default Appliances
+* **Screen:** Dashboard (`/`) - scroll to the Recognized Appliances Grid.
+* **Action:** Point out the 4 recognized cards with 3D isometric visual renders:
+  1. Water Heater: 140 W
+  2. Water Pump: 75 W
+  3. Ceiling Fan: 45 W
+  4. LED Bulb: 12 W
+* **Action:** Tap the **Water Pump** card to open the **Inference Evidence & Reasoning** modal: show inductive motor signature notes and calibrated power factor envelope (PF ~ 0.78).
+
+### Stage 3: Baseline Power Reconciliation (284 W)
+* **Screen:** Dashboard (`/`) - inspect the Load Reconciliation bar.
+* **Action:** Highlight that the attributed load is 272.0 W (95.8%) and the unattributed background floor is 12.0 W (4.2%).
+* **Verification:** $272.0\text{ W} + 12.0\text{ W} = 284.0\text{ W}$.
+
+### Stage 4 & 5: Toggle Water Heater OFF & Observe Event
+* **Screen:** Appliance Simulator (`/simulator`)
+* **Action:** Toggle the **Water Heater** switch from ON to OFF.
+* **Observation:**
+  - Live aggregate power drops immediately from $284.0\text{ W} \rightarrow \mathbf{144.0\text{ W}}$.
+  - The live event feed registers: **`MATCHED: Water Heater OFF (-140.0 W)`**.
+* **Key Talking Point:** The event detector was **never informed** which switch the user flipped. It independently observed the mathematical step derivative ($\Delta P = -140.0\text{ W}$) in aggregate telemetry and matched it against its calibrated tolerance bounds ($140.0 \pm 12.0\text{ W}$).
+
+### Stage 6: Restore Simulator Baseline
+* **Screen:** Appliance Simulator (`/simulator`)
+* **Action:** Click **"Reset Simulator"**.
+* **Observation:** The simulator deterministically restores all 4 appliances to ON and returns aggregate power to **284.0 W**.
+
+### Stage 7: History & System Diagnostics
+* **Screen:** History & Analytics (`/history`)
+  - Show the interactive FL Chart with smooth power curve and solar amber event markers.
+  - Scroll down to the **Durable Detected Events** archive: point out that these records are persisted in SQLite and survive server restarts.
+* **Screen:** System Diagnostics (`/diagnostics`)
+  - Show API connectivity: **`HEALTHY`** with active database connection.
+  - Highlight Hardware Ingestion Status: **`STAGED / INACTIVE`**, `ENABLE_HARDWARE_INGEST = false`.
+  - Point out that database engine is dynamically reported as `SQLite`.
+
+### Stage 8: Dynamic Registry & Unsupported Appliance Honesty
+* **Concept:** Show that new appliances can be added without fabricating recognition capability.
+* **Action:** In a terminal, register a new appliance (e.g. an Electric Kettle, 1800 W) with uncalibrated status:
+  ```powershell
+  Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/v1/appliances" -Method Post -Body '{"appliance_id":"kettle_01","name":"Electric Kettle","category":"Heating","nominal_power_w":1800.0,"detection_capability":"UNSUPPORTED"}' -ContentType "application/json"
+  ```
+* **Explanation:** Point out that `detection_capability` is honestly recorded as `UNSUPPORTED`. The system acknowledges the definition exists in inventory, but refuses to claim that the NILM detector can recognize it without empirical calibration.
+* **Cleanup:** Delete the temporary appliance:
+  ```powershell
+  Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/v1/appliances/kettle_01" -Method Delete
+  ```
+
+### Stage 9: Confirm UI Data Transparency
+* **Action:** Review the badging across all four screens:
+  - Dashboard: `SIMULATED DATA`, `RULE-BASED ESTIMATE`
+  - History: Range disclaimer banner: *"Showing available data of requested window (no artificial gap interpolation)"*
+  - Simulator: `SIMULATION MODE`, `METHODOLOGICAL ARCHITECTURE`
+  - Diagnostics: `STAGED_INACTIVE`, zero secrets or internal credentials exposed.
 
 ---
 
-## 4. Expected Appliance Toggle Outcomes
-
-Use this table as a reference during live questions from judges or evaluators:
+## 4. Expected Appliance Toggle Reference Table
 
 | Appliance Toggled | Action | Power Delta ($\Delta P$) | Resulting Aggregate Load | Event Status | Event Detector Description |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Water Heater** | OFF | **-140.0 W** | **144.0 W** | `MATCHED` | Rule-based match: Water Heater OFF (matches 140 W in [128, 152] W envelope) |
-| **Water Heater** | ON | **+140.0 W** | **284.0 W** | `MATCHED` | Rule-based match: Water Heater ON (matches 140 W in [128, 152] W envelope) |
-| **Water Pump** | OFF | **-75.0 W** | **209.0 W** | `MATCHED` | Rule-based match: Water Pump OFF (matches 75 W in [66, 84] W envelope) |
-| **Water Pump** | ON | **+75.0 W** | **284.0 W** | `MATCHED` | Rule-based match: Water Pump ON (matches 75 W in [66, 84] W envelope) |
-| **Ceiling Fan** | OFF | **-45.0 W** | **239.0 W** | `MATCHED` | Rule-based match: Ceiling Fan OFF (matches 45 W in [38, 52] W envelope) |
-| **Ceiling Fan** | ON | **+45.0 W** | **284.0 W** | `MATCHED` | Rule-based match: Ceiling Fan ON (matches 45 W in [38, 52] W envelope) |
-| **LED Bulb** | OFF | **-12.0 W** | **272.0 W** | `MATCHED` | Rule-based match: LED Bulb OFF (matches 12 W in [8, 16] W envelope) |
-| **LED Bulb** | ON | **+12.0 W** | **284.0 W** | `MATCHED` | Rule-based match: LED Bulb ON (matches 12 W in [8, 16] W envelope) |
-| **All Appliances** | ALL OFF | **-272.0 W** | **12.0 W** | `AMBIGUOUS` | Step of -272.0 W does not match any single signature (multi-load step) |
-| **Reset Button** | RESET | **Restores** | **284.0 W** | Baseline | Restores all 4 appliances ON (272 W attributed + 12 W floor) |
+| **Water Heater** | OFF | **-140.0 W** | **144.0 W** | `MATCHED` | Rule match: Water Heater OFF ($140 \pm 12$ W) |
+| **Water Heater** | ON | **+140.0 W** | **284.0 W** | `MATCHED` | Rule match: Water Heater ON ($140 \pm 12$ W) |
+| **Water Pump** | OFF | **-75.0 W** | **209.0 W** | `MATCHED` | Rule match: Water Pump OFF ($75 \pm 9$ W) |
+| **Water Pump** | ON | **+75.0 W** | **284.0 W** | `MATCHED` | Rule match: Water Pump ON ($75 \pm 9$ W) |
+| **Ceiling Fan** | OFF | **-45.0 W** | **239.0 W** | `MATCHED` | Rule match: Ceiling Fan OFF ($45 \pm 7$ W) |
+| **Ceiling Fan** | ON | **+45.0 W** | **284.0 W** | `MATCHED` | Rule match: Ceiling Fan ON ($45 \pm 7$ W) |
+| **LED Bulb** | OFF | **-12.0 W** | **272.0 W** | `MATCHED` | Rule match: LED Bulb OFF ($12 \pm 4$ W) |
+| **LED Bulb** | ON | **+12.0 W** | **284.0 W** | `MATCHED` | Rule match: LED Bulb ON ($12 \pm 4$ W) |
+| **All Appliances** | ALL OFF | **-272.0 W** | **12.0 W** | `AMBIGUOUS` | Step of -272.0 W does not match any single signature |
+| **Reset Button** | RESET | **Restores** | **284.0 W** | Baseline | Restores all 4 appliances ON (272 W + 12 W floor) |
 
 ---
 
@@ -92,31 +177,8 @@ Use this table as a reference during live questions from judges or evaluators:
 
 | Symptom | Cause | Solution |
 | :--- | :--- | :--- |
-| **"ERR_CONNECTION_REFUSED" on phone** | Phone cannot resolve `localhost` or PC Wi-Fi IP changed. | Open the Wi-Fi IP address on your phone: `http://<YOUR_PC_IP>:8080`. Ensure PC and phone are on the same Wi-Fi network. |
-| **"Backend Offline" banner in UI** | FastAPI backend daemon is stopped. | Run `uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload` in `backend/`. Tap the **Retry** button on the UI banner. |
-| **Web page does not refresh after build** | Browser caching old JavaScript bundle. | Hard refresh the browser: **`Ctrl + F5`** (or `Cmd + Shift + R` on Mac). |
-| **Port 8080 or 8000 already in use** | A prior Python process is holding the port. | In PowerShell: `Get-Process python \| Stop-Process -Force`, then restart the two commands in Section 1. |
-
-### 5.1 Manual Real Browser Verification Checklist
-
-Since headless automated browser drivers are unavailable in this environment, use this manual procedure in Microsoft Edge, Google Chrome, or a mobile browser:
-
-1. **Desktop Viewport Verification (1440 × 900):**
-   - Open [http://localhost:8080](http://localhost:8080) in full screen.
-   - Verify the left **NavigationRail** renders with 4 icons: Dashboard, History, Simulator, Diagnostics.
-   - Verify the top aggregate load hero card displays **284 W** in high-contrast ink typography.
-   - Tap through `/history`, `/simulator`, `/diagnostics`; verify no layout overflow or visual glitches.
-   - Press **F5** on `/simulator`; verify the shell restores and stays on the Simulator screen.
-2. **Mobile Viewport Verification (393 × 852):**
-   - Open Chrome DevTools (`F12`), toggle Device Toolbar (`Ctrl + Shift + M`), and select iPhone 15 / 16 (393 × 852).
-   - Alternatively, open `http://<YOUR_PC_IP>:8080` directly on your smartphone connected to Wi-Fi.
-   - Verify the bottom **NavigationBar** renders with 4 destinations.
-   - Verify cards stack cleanly without horizontal scrollbars or overflow yellow bars.
-3. **Interactive Simulator & Reset Flow:**
-   - On `/simulator`, toggle **Water Heater** switch to OFF. Verify aggregate drops from 284 W to 144 W.
-   - Click **Reset Simulator** button; verify aggregate returns to 284 W immediately.
-4. **Offline Error & Recovery Flow:**
-   - In terminal, stop Uvicorn (`Ctrl + C`).
-   - In browser, wait 4 seconds; verify amber offline banner appears: *"Backend unreachable. Displaying cached data (Stale)."*
-   - In terminal, restart Uvicorn.
-   - Tap **Retry** on the UI banner; verify data restores and banner disappears.
+| **Port 5000 or 8000 in use** | A previous Python session is still active. | Run `Get-Process python \| Stop-Process -Force` in PowerShell, then re-run `.\start_demo.ps1`. |
+| **"Backend Offline" banner in UI** | FastAPI backend stopped or crashed. | Run `& ".\backend\.venv\Scripts\python.exe" -m uvicorn app.main:app --app-dir backend --port 8000`. Tap **Retry** on the UI banner. |
+| **External devices cannot connect** | Local Wi-Fi router blocks device-to-device traffic. | Use the active Cloudflare Tunnel: `https://nations-assistance-highway-roof.trycloudflare.com`. |
+| **Web browser displays blank page** | Old cached JavaScript bundle in browser. | Hard refresh the browser: **`Ctrl + F5`** (or `Cmd + Shift + R` on Mac). |
+| **Database missing tables** | Database was deleted or empty. | Run Alembic migrations: `& ".\backend\.venv\Scripts\alembic.exe" -c backend/alembic.ini upgrade head`. |
