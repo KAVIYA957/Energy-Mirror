@@ -1,0 +1,187 @@
+{
+  "milestone": "2C.12",
+  "title": "Full-Stack Completion and Integration Audit",
+  "audit_timestamp": "2026-10-21T19:47:00Z",
+  "git_commit_baseline": "b4453bb",
+  "overall_system_status": "FUNCTIONAL_DEMO_READY",
+  "domains": {
+    "frontend": {
+      "status": "IMPLEMENTED_AND_VERIFIED",
+      "framework": "Flutter 3.x (Web & Mobile)",
+      "state_management": "Flutter Riverpod (StateNotifier)",
+      "routing": "GoRouter (4 Primary Routes: /, /history, /simulator, /diagnostics)",
+      "client_networking": "Dio (with base URL resolver and timeout bounds)",
+      "resilience": {
+        "loading_states": "IMPLEMENTED_AND_VERIFIED",
+        "empty_states": "IMPLEMENTED_AND_VERIFIED",
+        "offline_banner": "IMPLEMENTED_AND_VERIFIED",
+        "stale_caching": "IMPLEMENTED_AND_VERIFIED"
+      },
+      "appliance_rendering": {
+        "dynamic_card_grid": "IMPLEMENTED_AND_VERIFIED",
+        "visual_asset_fallback": "IMPLEMENTED_AND_VERIFIED",
+        "hardcoded_nominal_wattage_switch": "PARTIALLY_IMPLEMENTED"
+      },
+      "verification": {
+        "flutter_test_passed": 29,
+        "flutter_test_failed": 0,
+        "flutter_analyze_issues": 0
+      }
+    },
+    "backend": {
+      "status": "IMPLEMENTED_AND_VERIFIED",
+      "framework": "FastAPI (Python 3.11)",
+      "server": "Uvicorn (Asynchronous ASGI)",
+      "routes_count": 8,
+      "validation_library": "Pydantic v2 (Strict extra=forbid on Ingest & Simulator toggles)",
+      "nilm_engine": "RuleBasedEventDetector (Transparent edge detector with physical envelopes)",
+      "cors_policy": "DEVELOPMENT_PERMISSIVE",
+      "verification": {
+        "pytest_passed": 48,
+        "pytest_failed": 0,
+        "warnings": 1
+      }
+    },
+    "database": {
+      "status": "IMPLEMENTED_AND_VERIFIED",
+      "active_engine": "SQLite (energy_mirror.db via SQLAlchemy ORM)",
+      "postgresql_status": "PLANNED",
+      "tables": [
+        "telemetry_records",
+        "appliance_estimates",
+        "detected_events"
+      ],
+      "persistence_verified": true,
+      "deduplication": "Fingerprint-based unique constraint on detected_events",
+      "migrations_status": "MISSING",
+      "migration_tool": "None (relies on Base.metadata.create_all)"
+    },
+    "api_integrations": {
+      "status": "IMPLEMENTED_AND_VERIFIED",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/api/v1/health",
+          "caller": "ApiService.checkHealth()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_health.py"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/telemetry/live",
+          "caller": "DashboardNotifier.refresh() via ApiService.fetchLiveTelemetry()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_telemetry.py"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/nilm/live-disaggregation",
+          "caller": "DashboardNotifier.refresh() via ApiService.fetchLiveDisaggregation()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_nilm.py"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/telemetry/history",
+          "caller": "HistoryNotifier.fetchHistory() via ApiService.fetchHistoryWithMetadata()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_history.py"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/telemetry/events",
+          "caller": "ApiService.fetchPersistedEvents()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_persistent_events.py"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/simulator/state",
+          "caller": "DashboardNotifier.refresh() via ApiService.fetchSimulatorState()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_simulator.py"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/simulator/toggle-appliance",
+          "caller": "DashboardNotifier.toggleAppliance() via ApiService.toggleSimulatorAppliance()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_simulator_dynamic.py"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/simulator/reset",
+          "caller": "DashboardNotifier.resetSimulator() via ApiService.resetSimulator()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_simulator_dynamic.py"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/diagnostics/system",
+          "caller": "DiagnosticsNotifier.checkDiagnostics() via ApiService.fetchSystemDiagnostics()",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_diagnostics.py"
+        },
+        {
+          "method": "POST",
+          "path": "/api/v1/telemetry/ingest",
+          "caller": "External Hardware Staging (ESP32 PZEM-004T v3.0)",
+          "status": "IMPLEMENTED_AND_VERIFIED",
+          "test_coverage": "test_ingest.py",
+          "mode": "STAGED_INACTIVE"
+        }
+      ]
+    },
+    "secrets_and_api_keys": {
+      "status": "IMPLEMENTED_AND_VERIFIED",
+      "external_paid_apis": "NONE",
+      "client_to_backend_auth": "NOT_APPLICABLE",
+      "hardware_device_token": "CONFIGURED_SAFE",
+      "committed_secrets_detected": 0,
+      "env_file_status": ".env gitignored, .env.example documented"
+    },
+    "security_and_reliability": {
+      "status": "PARTIALLY_IMPLEMENTED",
+      "cors_setting": "Wildcard (allow_origins=['*']) - Dev only",
+      "sql_injection_defense": "SQLAlchemy ORM parameterized queries (Safe)",
+      "pydantic_validation": "Enforced with range limits and physical consistency validators",
+      "rate_limiting": "MISSING",
+      "user_authentication": "MISSING",
+      "network_timeouts": "Enforced in Dio (4s connect, 4s receive)"
+    },
+    "appliance_scalability": {
+      "status": "PARTIALLY_IMPLEMENTED",
+      "database_schema": "DYNAMIC (Unbounded string IDs and categories)",
+      "frontend_rendering": "DYNAMIC (GridView.builder, asset fallback)",
+      "simulator_service": "HARDCODED (4 predefined appliances: 140W, 75W, 45W, 12W)",
+      "event_detector": "HARDCODED (4 predefined tolerance envelopes)",
+      "recommended_action": "Decouple simulator and detector into dynamic registry"
+    },
+    "ml_readiness": {
+      "status": "PARTIALLY_VALIDATED",
+      "production_detector": "RuleBasedEventDetector (Deterministic, zero ML hallucination)",
+      "experimental_models": "Isolated in backend/ml_experiments/ (Random Forest, Logistic Regression, HGB)",
+      "iawe_water_motor_scope": "Validated for ~700 W motor disaggregation (Event F1: 0.6154, FP/day: 0.45)",
+      "low_power_targets_scope": "UNPROVEN / NOT VALIDATED (140W heater, 75W pump, 45W fan, 12W bulb)",
+      "noise_floor_gap": "Household mains noise (+-50W to +-150W) completely submerges <= 75W active power steps"
+    },
+    "hardware_readiness": {
+      "status": "PARTIALLY_IMPLEMENTED",
+      "purchased_hardware": "NONE",
+      "connected_circuits": "NONE",
+      "enable_hardware_ingest_flag": false,
+      "staged_endpoint": "IMPLEMENTED_AND_VERIFIED (Rejects invalid physics, scales multi-turn CTs, preserves simulator DB)"
+    }
+  },
+  "top_three_demo_blockers": [
+    "Unified Port 5000 Proxy Dependency: Web clients accessing the demo must route through the unified reverse proxy (port 5000) or specify custom API_URL if accessing the Flutter dev server directly on port 3000 to avoid browser mixed-content or CORS issues.",
+    "Browser Polling Timer Drift: In web browsers, inactive background tabs throttle Dart's Timer.periodic to once per minute, causing the live dashboard to appear frozen until the tab is refocused.",
+    "Static 4-Appliance Simulator: Toggling is restricted to the 4 predefined appliances; attempting to inject arbitrary third-party devices in the UI is unsupported by the current simulator lab."
+  ],
+  "next_three_production_priorities": [
+    "Alembic Database Migration Pipeline: Introduce Alembic migrations and PostgreSQL connection pooling to replace Base.metadata.create_all for durable multi-instance deployments.",
+    "CORS Hardening and Ingestion Authentication: Restrict CORS origins from wildcard to specific origins, and require mutual TLS or cryptographically signed HMAC headers for hardware ingestion.",
+    "Dynamic Appliance Registry Service: Decouple TelemetrySimulator and RuleBasedEventDetector from hardcoded Python dictionaries into dynamic database-backed signatures."
+  ],
+  "dynamic_appliance_scalability_conclusion": "The database schema and Flutter UI already dynamically support arbitrary appliance records. However, the simulator engine and event detector require a minor architectural decoupling from static dictionaries to dynamic database-backed appliance signatures before new devices can be simulated."
+}
