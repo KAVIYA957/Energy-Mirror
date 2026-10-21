@@ -60,5 +60,12 @@ This document transparently records the architectural boundaries, algorithmic sc
 
 ## 8. Automated Browser Testing Tool Limitations
 * **Driver Download Failure:** In this execution environment, automated browser drivers (such as Playwright Chromium) could not be initialized due to upstream driver archive availability (HTTP 404 from CDN). Edge in headless agent sessions on Windows requires interactive GUI display permissions.
-* **Verification Scope:** UI layout, component rendering, responsiveness, and state management are verified through Flutter widget tests (27 passing tests), API integration tests, and manual visual inspection via installed browsers (Microsoft Edge / Google Chrome / Mobile Safari/Chrome via LAN IP `http://192.168.29.166:8080`). Automated browser driver checks are strictly categorized as **NOT VERIFIED**.
+* **Verification Scope:** UI layout, component rendering, responsiveness, and state management are verified through Flutter widget tests (34 passing tests), API integration tests, and manual visual inspection via installed browsers (Microsoft Edge / Google Chrome / Mobile Safari/Chrome via LAN IP `http://192.168.29.166:8080`). Automated browser driver checks are strictly categorized as **NOT VERIFIED**.
+
+---
+
+## 9. Database Support & PostgreSQL Runtime Verification Status
+* **Active Default Database:** SQLite (`sqlite:///./energy_mirror.db`) remains the active default database engine for all local development, simulation, and demonstration workflows.
+* **PostgreSQL Architecture:** The codebase includes production-grade PostgreSQL compatibility, including SQLAlchemy connection URL normalization (`postgres://` / `postgresql://` $\rightarrow$ `postgresql+psycopg2://`), connection pooling (`pool_pre_ping=True`, `pool_size=10`, `max_overflow=20`), and Alembic schema migrations (`alembic upgrade head`).
+* **Runtime Verification Status (Truth in Reporting):** In this development environment, no PostgreSQL daemon was listening on port 5432. Therefore, live PostgreSQL runtime integration testing is classified as **NOT PERFORMED / UNVERIFIED AT RUNTIME**. SQLite migrations, schema creation, downgrade/re-upgrade cycles, and URL normalization were 100% verified via automated tests, but passing SQLite tests must not be claimed as verification of live PostgreSQL runtime behavior.
 
