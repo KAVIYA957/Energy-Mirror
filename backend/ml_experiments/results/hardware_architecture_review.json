@@ -1,0 +1,215 @@
+{
+  "metadata": {
+    "document_title": "Energy Mirror Hardware Architecture and Technical Design Review",
+    "milestone": "2C.6",
+    "base_checkpoint": "508dd44",
+    "date": "October 2026",
+    "status": "Verified Technical Design Review (Non-Energized / Zero Hardware Connected)"
+  },
+  "verified_component_specifications": {
+    "Analog_Devices_ADE9153A": {
+      "component_name": "Analog Devices ADE9153A",
+      "device_classification": "Integrated Energy Metering IC with mSure Autocalibration",
+      "manufacturer": "Analog Devices, Inc. (Wilmington, MA, USA)",
+      "primary_datasheet_url": "https://www.analog.com/media/en/technical-documentation/data-sheets/ade9153a.pdf",
+      "user_guide_url": "https://www.analog.com/media/en/technical-documentation/user-guides/eval-ade9153ashieldz-ug-1253.pdf",
+      "technical_reference_manual_url": "https://www.analog.com/media/en/technical-documentation/user-guides/ade9153a-ug-1247.pdf",
+      "verification_status": "VERIFIED_PRIMARY_SOURCE",
+      "quantities_measured": [
+        "Active Power (W, signed direction)",
+        "Reactive Power (VAR, signed inductive/capacitive)",
+        "Apparent Power (VA)",
+        "RMS Voltage (V)",
+        "RMS Current (A)",
+        "Power Factor (signed)",
+        "Line Frequency (Hz)",
+        "Half-Cycle RMS (10 ms updates)",
+        "Phase Angle (degrees)",
+        "Voltage Dip and Current Swell"
+      ],
+      "accuracy_specifications": "Class 1.0 and Class 2.0 active energy standards compliance (IEC 62053-21, ANSI C12.20); typical 0.1% active energy error over 3000:1 dynamic range with shunt resistor and mSure autocalibration",
+      "low_current_limitations": "Current Channel A supports full-scale input down to 26.04 mV peak (18.4 mV RMS at 16x gain). With a 1 mOhm shunt, full scale is 18.4 A RMS, resolving currents below 5 mA (~1.1 W at 230 V). With external CT on Channel B, phase shift at < 100 mA degrades without calibration",
+      "sampling_and_update_behavior": "Three 24-bit Sigma-Delta ADCs operating at 88 dB SNR. High-speed DSP accumulates half-cycle RMS every 10 ms (at 50 Hz). Continuous register streaming or 1.0s periodic polling",
+      "digital_interface": "SPI slave mode (up to 10 MHz clock rate, 4-wire) with CRC-16 register validation and interrupt pin (IRQ)",
+      "calibration_requirements": "mSure autocalibration directly measures sensor stability and signal path gain using on-chip precision test current injection; eliminates external reference calibration rig for shunt drift",
+      "isolation_and_safety_limitations": "CRITICAL: IC ground is tied directly to AC mains line/neutral shunt potential. Non-isolated. REQUIRES external galvanic digital isolator (e.g. TI ISO7741 or ADI ADuM1401 rated >= 2.5 kV RMS) between ADE9153A and host microcontroller. Evaluation board EV-ADE9153ASHIELDZ does NOT include onboard isolation (UG-1253 Section 1)",
+      "approximate_cost_usd": "IC alone: $4.50 - $7.00 USD (DigiKey/Mouser in single units); Official Evaluation Shield (EV-ADE9153ASHIELDZ): $75.00 - $95.00 USD"
+    },
+    "Shanghai_Belling_BL0942": {
+      "component_name": "Shanghai Belling BL0942",
+      "device_classification": "Calibration-Free Single-Phase Energy Metering SoC",
+      "manufacturer": "Shanghai Belling Co., Ltd. (Shanghai, China)",
+      "primary_datasheet_url": "https://www.belling.com.cn/media/file_object/bel_product/BL0942/BL0942_V1.06_en.pdf",
+      "verification_status": "VERIFIED_PRIMARY_SOURCE",
+      "quantities_measured": [
+        "Active Power (W)",
+        "RMS Voltage (V)",
+        "RMS Current (A)",
+        "Reactive Power (VAR, internal register)",
+        "Power Factor (derived)",
+        "Line Frequency (Hz)",
+        "Raw Waveform Samples"
+      ],
+      "accuracy_specifications": "Less than 0.1% active energy error over 4000:1 dynamic range; batch factory gain error < 1%, enabling calibration-free designs with high-precision shunts",
+      "low_current_limitations": "Current channel input range: 10 mA to 30 A RMS with 1 mOhm shunt. Anti-creep threshold automatically forces output to zero when current falls below no-load threshold",
+      "sampling_and_update_behavior": "Two 24-bit Sigma-Delta ADCs. Internal registers refresh every ~200 ms",
+      "digital_interface": "Pin-selectable UART (4800 to 38400 baud, 8N1) or SPI (up to 900 kHz clock, 24-bit frame length)",
+      "calibration_requirements": "Factory pre-calibrated gain allows calibration-free operation for Class 1.0 meters if precision external 1 mOhm shunt (0.5% tolerance) and divider resistors (0.1% tolerance) are used",
+      "isolation_and_safety_limitations": "Non-isolated ground plane referenced to AC mains. REQUIRES external optocouplers for host UART connection if host is not fully isolated or battery powered",
+      "approximate_cost_usd": "IC alone: $0.60 - $1.20 USD (LCSC); Pre-assembled smart plugs containing BL0942: $9.00 - $15.00 USD"
+    },
+    "Peacefair_PZEM_004T_v3": {
+      "component_name": "Peacefair PZEM-004T v3.0",
+      "device_classification": "Complete Enclosed AC Power/Energy Metering Module with Split-Core CT",
+      "manufacturer": "Ningbo Peacefair Electronic Co., Ltd. (Zhejiang, China)",
+      "primary_datasheet_url": "https://innovatorsguru.com/wp-content/uploads/2019/04/PZEM-004T-V3.0-Datasheet-User-Manual.pdf",
+      "verification_status": "VERIFIED_PRIMARY_SOURCE",
+      "quantities_measured": [
+        "Active Power (W, 0.1 W resolution, 0 to 23 kW)",
+        "RMS Voltage (V, 0.1 V resolution, 80 to 260 VAC)",
+        "RMS Current (A, 0.001 A resolution, 0 to 100 A with external CT)",
+        "Active Energy (kWh, 1 Wh resolution below 10 kWh)",
+        "Line Frequency (Hz, 0.1 Hz resolution, 45 to 65 Hz)",
+        "Power Factor (magnitude 0.00 to 1.00, 0.01 resolution)"
+      ],
+      "accuracy_specifications": "Headline +/- 0.5% for Voltage, Current, Active Power, and Energy; +/- 1.0% for Power Factor under standard resistive calibration conditions (220 VAC, 50 Hz, 10A)",
+      "low_current_limitations": "Current starting threshold: 0.02 A (~4.6 W at 230 V). Below 0.02 A, current register reads exactly 0.000 A. Power starts measuring at 0.4 W. Severe phase shift error (+/- 0.08 in PF) at currents below 0.2 A due to split-core CT core permeability degradation",
+      "sampling_and_update_behavior": "Internal metering core (SD3004 / V9881) samples continuously and updates internal Modbus registers every 200 ms to 500 ms. Master polling should occur at 1.0s to 2.0s. Polling faster than 200 ms yields cached duplicate values",
+      "digital_interface": "TTL UART (9600 bps, 8 data bits, 1 stop bit, no parity) implementing a subset of Modbus-RTU protocol (Function code 0x04 Read Input Registers)",
+      "calibration_requirements": "Factory calibrated by Peacefair with paired CT. No user gain/phase calibration registers available over Modbus protocol",
+      "isolation_and_safety_limitations": "BUILT-IN optocoupler isolation (PC817 optocouplers) isolates TTL UART pins from high-voltage mains circuitry. Safe to interface directly to 3.3V/5V microcontroller UART. However, the AC screw terminals (live and neutral) and auxiliary power supply operate at mains line potential and require non-conductive protective enclosure",
+      "approximate_cost_usd": "$9.00 - $14.00 USD complete with 100A split-core CT"
+    },
+    "Espressif_ESP32_WROOM_32E": {
+      "component_name": "Espressif ESP32-WROOM-32E",
+      "device_classification": "Wi-Fi & Bluetooth Host Microcontroller Module",
+      "manufacturer": "Espressif Systems (Shanghai) Co., Ltd.",
+      "primary_datasheet_url": "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.pdf",
+      "verification_status": "VERIFIED_PRIMARY_SOURCE",
+      "role_in_energy_mirror": "Digital Communications Controller & Telemetry Edge Gateway (REST Ingest Client, SNTP Timestamp Synchronizer, SPI/UART Master)",
+      "operating_conditions": "Supply voltage: 3.0 V to 3.6 V (3.3 V nominal); Operating current: typ 80 mA (peaks to 500 mA during RF transmission); Ambient temperature: -40 C to +85 C",
+      "adc_performance_and_limitations": "CRITICAL FINDING: Onboard 12-bit SAR ADC exhibits severe Differential Non-Linearity (DNL: -7 to +7 LSB) and Integral Non-Linearity (INL: -12 to +12 LSB). Highly non-linear below 100 mV and above 2450 mV. MUST NEVER be used for direct analog current/voltage sensing for NILM. Dedicated external 24-bit metering IC is mandatory",
+      "digital_interfaces_used": "Hardware SPI (VSPI/HSPI) up to 10 MHz for ADE9153A; Hardware UART (UART1/UART2) at 9600 bps for PZEM-004T; Wi-Fi 802.11 b/g/n (2.4 GHz) for TLS/HTTP POST to FastAPI backend",
+      "time_synchronization_capabilities": "Hardware SNTP client synchronizes UTC epoch time with millisecond precision over local network NTP server; drifts < 50 ms between periodic resynchronization pings",
+      "approximate_cost_usd": "$2.80 - $4.50 USD (module alone); DevKit board (ESP32-DevKitC-32E): $5.00 - $8.00 USD"
+    }
+  },
+  "the_12w_low_power_measurement_budget": {
+    "evaluation_context": "Investigating whether a 12 W LED bulb transition can be detected from whole-house aggregate mains measurements",
+    "uncertainty_budget_components": {
+      "nominal_bulb_power_w": 12.0,
+      "nominal_bulb_current_a_rms": 0.0614,
+      "household_background_load_w": 800.0,
+      "full_scale_mains_capacity_w": 23000.0,
+      "full_scale_ct_rating_a": 100.0,
+      "instrument_total_power_accuracy_budget": {
+        "headline_meter_accuracy_pct": 0.5,
+        "absolute_power_uncertainty_at_800w_w": 4.0,
+        "absolute_power_uncertainty_at_2000w_w": 10.0,
+        "analysis": "Even an instrument operating at 0.5% Class accuracy incurs a +/- 4.0 W to +/- 10.0 W uncertainty band on typical background loads, which constitutes 33% to 83% of the 12 W signal itself."
+      },
+      "grid_voltage_sag_sensitivity": {
+        "grid_voltage_variation_pct": 1.0,
+        "background_load_dependence": "Resistive/thermal baseline obeys P = V^2 / R",
+        "apparent_power_change_from_1pct_sag_w": 16.0,
+        "analysis": "A minor 1.0% grid voltage sag on an 800 W household load produces a 16.0 W drop, which is 133% of the entire 12 W bulb signal. Without cycle-synchronous voltage compensation, aggregate active power cannot differentiate an LED turn-on from grid voltage recovery."
+      },
+      "ct_magnetizing_knee_distortion": {
+        "current_as_percentage_of_full_scale_pct": 0.0614,
+        "core_material": "Standard silicon-steel split-core",
+        "low_current_phase_error_deg": "+/- 3.0 to +/- 6.0 degrees",
+        "analysis": "At 61.4 mA, split-core CTs operate below their linear excitation threshold. Magnetizing current causes severe phase displacement, corrupting active vs reactive power separation."
+      },
+      "ambient_electronic_noise_floor_w": {
+        "realistic_residential_sigma_w": 6.0,
+        "signal_to_noise_ratio": 2.0,
+        "false_alarm_rate_per_hour": 36.88,
+        "analysis": "An SNR of 2.0 in Gaussian noise guarantees that random baseline fluctuations repeatedly breach the [8, 16] W envelope, generating over 36 false alarms per hour."
+      }
+    },
+    "three_part_scientific_distinction": {
+      "question_1_total_power_accuracy": {
+        "can_instrument_measure_total_power_accurately": "YES",
+        "evidence": "Modern 24-bit metering ICs (ADE9153A, BL0942) easily measure total aggregate household power with Class 1.0 (< 1.0% error) accuracy."
+      },
+      "question_2_resolve_small_power_change": {
+        "can_instrument_resolve_small_change": "YES_IN_LABORATORY_ONLY",
+        "evidence": "With 0.1 W register resolution and low noise, a 12 W step is clearly visible on a quiet, voltage-regulated laboratory bench with a resistive baseline."
+      },
+      "question_3_unique_appliance_attribution": {
+        "can_change_be_uniquely_attributed_to_appliance": "NO_FROM_AGGREGATE_ACTIVE_POWER",
+        "evidence": "On real AC distribution mains with voltage fluctuations, competing switch-mode power supplies (laptop chargers, TVs), and thermal baseline drift, a 12 W change is fundamentally ambiguous and cannot be uniquely attributed to an LED bulb without harmonic distortion metrology or dedicated submetering."
+      }
+    }
+  },
+  "architecture_tradeoff_comparison": {
+    "Architecture_A_Integrated_IC_ADE9153A": {
+      "architecture_summary": "Analog Devices ADE9153A with custom isolated SPI front-end and ESP32 host",
+      "measurement_capabilities": "Complete: Active, Reactive (signed), Apparent, V_RMS, I_RMS, PF, Line Freq, Half-cycle RMS, Phase Angle",
+      "low_power_suitability": "High: 24-bit ADCs, programmable gain down to 18.4 mV RMS, and mSure autocalibration resolve sub-watt shunt signals",
+      "calibration_and_uncertainty": "Minimal: mSure autocalibration measures shunt aging and temperature drift in-situ without external reference calibrators",
+      "firmware_complexity": "High: Requires SPI driver with CRC-16 validation, mSure initialization state machine, and FreeRTOS tasks on ESP32",
+      "safety_and_isolation_requirements": "Complex: Requires discrete galvanic digital isolators (ISO7741) and isolated DC-DC converter (2.5 kV RMS) on custom PCB",
+      "ground_truth_suitability": "Excessive for simple submetering; ideal for primary aggregate mains bench front-end",
+      "approximate_bom_cost_usd": "$45.00 - $65.00 USD (custom board with IC, isolators, DC-DC, ESP32, and shunt/CT)",
+      "verdict": "PREFERRED ARCHITECTURE FOR RESEARCH TEST BENCH AGGREGATE SENSING"
+    },
+    "Architecture_B_Prebuilt_Module_PZEM_004T": {
+      "architecture_summary": "Peacefair PZEM-004T v3.0 pre-assembled module with onboard optocouplers and split-core CT",
+      "measurement_capabilities": "Incomplete for Research: Active Power, V_RMS, I_RMS, Energy, Frequency, Power Factor magnitude. CRITICAL DEFECT: NO REACTIVE POWER (Q) REGISTER",
+      "low_power_suitability": "Poor: 100A CT starting threshold is 0.02 A (~4.6 W); significant phase error below 0.2 A",
+      "calibration_and_uncertainty": "Fixed factory calibration. Cannot correct split-core CT phase shift or calibrate zero-current offset",
+      "firmware_complexity": "Low: Standard Modbus-RTU over 9600 bps UART using existing open-source libraries",
+      "safety_and_isolation_requirements": "Simple: Built-in PC817 optocouplers provide safe isolation to TTL UART pins; requires only protective external enclosure",
+      "ground_truth_suitability": "HIGH: Excellent, cost-effective isolated submeter for dedicated appliance circuits (using 10A model)",
+      "approximate_bom_cost_usd": "$15.00 - $22.00 USD (PZEM module + CT + ESP32 DevKit)",
+      "verdict": "PREFERRED ARCHITECTURE FOR APPLIANCE-LEVEL GROUND TRUTH SUBMETERING"
+    }
+  },
+  "go_no_go_decision_table": {
+    "bulb_01_12w_led": {
+      "appliance_name": "12 W LED Bulb",
+      "current_evidence": "Milestone 2C.4 synthetic tests prove catastrophic failure (36.9 FA/hr, F1=0.018) in realistic noise",
+      "supported_by_simulation_only": "Detectability under ideal laboratory conditions (sigma=1.5 W, F1=0.933)",
+      "what_proposed_instrument_could_measure": "Active power step (+12 W), non-linear harmonic current distortion (if high-frequency front-end deployed)",
+      "what_remains_unproven": "Whether whole-house aggregate active power can ever isolate a 12 W step amid normal residential voltage sags",
+      "experiment_to_resolve_uncertainty": "Phase 2 & 4 bench metrology test using ADE9153A comparing P/V^2 normalization with and without 50W laptop charger distractors",
+      "decision_status": "NO_GO_FOR_AGGREGATE_ACTIVE_ONLY; REQUIRES_HARMONIC_OR_CIRCUIT_SUBMETERING"
+    },
+    "fan_01_45w_ceiling_fan": {
+      "appliance_name": "45 W Ceiling Fan",
+      "current_evidence": "Milestone 2C.4 tests show F1=0.857 in residential noise, but collapse to F1=0.216 under concurrent switching",
+      "supported_by_simulation_only": "Robust separation in the absence of competing 45-65 W laptop chargers",
+      "what_proposed_instrument_could_measure": "Active power step (+45 W), slight inductive phase lag (PF ~ 0.91)",
+      "what_remains_unproven": "Rejection of USB-C Power Delivery laptop charger step transitions (which step 45 W to 65 W)",
+      "experiment_to_resolve_uncertainty": "Phase 4 distractor test running laptop charging cycles while toggling fan speeds",
+      "decision_status": "CONDITIONAL_GO_PENDING_DISTRACTOR_DISCRIMINATION_STUDY"
+    },
+    "pump_01_75w_water_pump": {
+      "appliance_name": "75 W Water Pump",
+      "current_evidence": "Milestone 2C.4 proved reactive power (Q ~ 60 VAR, PF ~ 0.78) elevates RF Event F1 from 0.087 to 0.750",
+      "supported_by_simulation_only": "Linear phasor reactive power separation against synthetic residential background",
+      "what_proposed_instrument_could_measure": "Active step (+75 W), inductive reactive surge (+60 VAR), motor startup inrush envelope",
+      "what_remains_unproven": "Accuracy of reactive power sign under non-sinusoidal voltage distortion on real Indian distribution grids",
+      "experiment_to_resolve_uncertainty": "Phase 2 & 3 bench validation with ADE9153A measuring actual motor inrush and running Q against true RMS reference DMM",
+      "decision_status": "GO_FOR_HARDWARE_METROLOGY_BENCH_TESTING"
+    },
+    "heater_01_140w_water_heater": {
+      "appliance_name": "140 W Water Heater",
+      "current_evidence": "Proven detectable in simulation (F1 > 0.95); large resistive step (+140 W, PF = 0.99)",
+      "supported_by_simulation_only": "Clean rectangular active power pulse without thermal resistance drift",
+      "what_proposed_instrument_could_measure": "Large active step (+140 W), zero reactive displacement (Q ~ 0 VAR, PF ~ 1.00)",
+      "what_remains_unproven": "Resistance change of heating element as nichrome wire heats up from room temperature to 80 C (+/- 5 W drift)",
+      "experiment_to_resolve_uncertainty": "Phase 2 continuous 30-minute heating cycle logging active power drift over temperature",
+      "decision_status": "GO_FOR_HARDWARE_METROLOGY_BENCH_TESTING"
+    }
+  },
+  "safety_and_deployment_constraints": {
+    "non_energized_mandate": "Zero mains voltage connections. Planning and design review milestone only. Hardware purchase and live connection strictly deferred",
+    "software_gate": "ENABLE_HARDWARE_INGEST remains FALSE in backend configuration",
+    "galvanic_isolation": "Minimum 2.5 kV RMS isolation required across digital communication boundary",
+    "fuse_protection": "250 mA 250V fast-acting ceramic fuse required on all voltage sensing taps",
+    "enclosure_rating": "IP30 minimum, non-conductive, UL94-V0 flame-retardant housing",
+    "qualified_supervision": "All panel-level connections must be performed exclusively by a licensed electrician under OSHA / NFPA 70E Lockout/Tagout (LOTO) protocols"
+  }
+}
