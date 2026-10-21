@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import '../models/telemetry_model.dart';
 import '../models/simulator_model.dart';
 import '../models/diagnostics_model.dart';
+import '../models/appliance_definition_model.dart';
 
 class ApiService {
   final Dio _dio;
@@ -93,7 +94,6 @@ class ApiService {
     throw Exception('Failed to load persisted events (status: ${response.statusCode})');
   }
 
-
   Future<SimulatorState> fetchSimulatorState() async {
     final response = await _dio.get('/simulator/state');
     if (response.statusCode == 200) {
@@ -136,4 +136,84 @@ class ApiService {
     }
     throw Exception('Failed to load system diagnostics (status: ${response.statusCode})');
   }
+
+  // --- Appliance Registry API Endpoints ---
+
+  Future<List<ApplianceDefinition>> fetchAppliances({bool? enabledOnly}) async {
+    final query = <String, dynamic>{};
+    if (enabledOnly != null) {
+      query['enabled_only'] = enabledOnly;
+    }
+    final response = await _dio.get('/appliances', queryParameters: query);
+    if (response.statusCode == 200) {
+      final data = response.data as Map<String, dynamic>;
+      final rawList = data['appliances'] as List<dynamic>? ?? [];
+      return rawList.map((a) => ApplianceDefinition.fromJson(a as Map<String, dynamic>)).toList();
+    }
+    throw Exception('Failed to load appliances (status: ${response.statusCode})');
+  }
+
+  Future<ApplianceDefinition> fetchApplianceById(String applianceId) async {
+    final response = await _dio.get('/appliances/$applianceId');
+    if (response.statusCode == 200) {
+      return ApplianceDefinition.fromJson(response.data as Map<String, dynamic>);
+    }
+    throw Exception('Failed to load appliance $applianceId (status: ${response.statusCode})');
+  }
+
+  Future<ApplianceDefinition> createAppliance(
+    Map<String, dynamic> payload, {
+    String? adminKey,
+  }) async {
+    try {
+      final options = Options(
+        headers: adminKey != null && adminKey.isNotEmpty ? {'X-Admin-Key': adminKey} : null,
+      );
+      final response = await _dio.post('/appliances', data: payload, options: options);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return ApplianceDefinition.fromJson(response.data as Map<String, dynamic>);
+      }
+      throw Exception('Failed to create appliance (status: ${response.statusCode})');
+    } on DioException catch (e) {
+      final detail = e.response?.data is Map ? e.response?.data['detail'] : null;
+      throw Exception(detail ?? e.message ?? 'Network error creating appliance');
+    }
+  }
+
+  Future<ApplianceDefinition> updateAppliance(
+    String applianceId,
+    Map<String, dynamic> payload, {
+    String? adminKey,
+  }) async {
+    try {
+      final options = Options(
+        headers: adminKey != null && adminKey.isNotEmpty ? {'X-Admin-Key': adminKey} : null,
+      );
+      final response = await _dio.patch('/appliances/$applianceId', data: payload, options: options);
+      if (response.statusCode == 200) {
+        return ApplianceDefinition.fromJson(response.data as Map<String, dynamic>);
+      }
+      throw Exception('Failed to update appliance $applianceId (status: ${response.statusCode})');
+    } on DioException catch (e) {
+      final detail = e.response?.data is Map ? e.response?.data['detail'] : null;
+      throw Exception(detail ?? e.message ?? 'Network error updating appliance');
+    }
+  }
+
+  Future<bool> deleteAppliance(
+    String applianceId, {
+    String? adminKey,
+  }) async {
+    try {
+      final options = Options(
+        headers: adminKey != null && adminKey.isNotEmpty ? {'X-Admin-Key': adminKey} : null,
+      );
+      final response = await _dio.delete('/appliances/$applianceId', options: options);
+      return response.statusCode == 200 || response.statusCode == 204;
+    } on DioException catch (e) {
+      final detail = e.response?.data is Map ? e.response?.data['detail'] : null;
+      throw Exception(detail ?? e.message ?? 'Network error deleting appliance');
+    }
+  }
 }
+

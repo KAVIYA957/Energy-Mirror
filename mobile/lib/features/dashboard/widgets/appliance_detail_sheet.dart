@@ -209,6 +209,19 @@ class ApplianceDetailSheet extends StatelessWidget {
                 ],
                 _buildRow('Appliance Identifier', appliance.applianceId),
                 const SizedBox(height: 6),
+                _buildRow('Category', appliance.category),
+                const SizedBox(height: 6),
+                _buildRow('Nominal Rating', appliance.nominalPowerW != null ? '${appliance.nominalPowerW!.toInt()} W' : 'Unrated'),
+                const SizedBox(height: 6),
+                _buildRow(
+                  'Detection Capability',
+                  appliance.detectionCapability == 'PRODUCTION_RULE_MATCHED'
+                      ? 'PRODUCTION_RULE_MATCHED (Calibrated)'
+                      : (appliance.detectionCapability == 'UNSUPPORTED'
+                          ? 'UNSUPPORTED (Simulated Only)'
+                          : 'EXPERIMENTAL_ONLY'),
+                ),
+                const SizedBox(height: 6),
                 _buildRow(
                   'Detection Method',
                   appliance.detectionCapability == 'UNSUPPORTED'

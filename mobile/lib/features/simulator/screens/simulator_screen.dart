@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../app/theme.dart';
 import '../../dashboard/providers/dashboard_provider.dart';
 import '../../dashboard/widgets/simulator_lab_panel.dart';
+import '../../dashboard/widgets/appliance_registry_panel.dart';
 
 class SimulatorScreen extends ConsumerWidget {
   const SimulatorScreen({super.key});
@@ -76,6 +77,11 @@ class SimulatorScreen extends ConsumerWidget {
 
                 // Main Interactive Simulator Lab Panel
                 const SimulatorLabPanel(),
+                const SizedBox(height: 12),
+
+                // Database-Backed Dynamic Appliance Registry Panel
+                const ApplianceRegistryPanel(),
+                const SizedBox(height: 12),
 
                 // Methodological Truth-in-Reporting Guidance Card
                 Container(
