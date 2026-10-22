@@ -1,55 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Luminous Clarity Design Tokens & Color Architecture
-/// WCAG AAA-compliant light-first aesthetic for Energy Mirror.
+/// Electrum Slate (Luminous Energy Intelligence) Design System
+/// WCAG AAA-compliant analytical aesthetic with tabular figures,
+/// calm slate surfaces, and calibrated electrical signal accents.
 class EnergyMirrorColors {
-  // Canvas & Surfaces (Warm Mineral & Pure White)
-  static const Color canvas = Color(0xFFF7F8F4);
-  static const Color surface = Color(0xFFFFFFFF);
+  // Canvas & Surfaces (Calm Slate Architecture)
+  static const Color canvas = Color(0xFFF8FAFC);         // Slate 50
+  static const Color surface = Color(0xFFFFFFFF);        // Pure White
   static const Color surfaceElevated = Color(0xFFFFFFFF);
   static const Color surfaceCard = Color(0xFFFFFFFF);
-  static const Color surfaceSubtle = Color(0xFFF1F5F9);
-  static const Color surfaceBorder = Color(0xFFE0E6EE);
-  static const Color surfaceHighlight = Color(0xFFE5F1FF);
+  static const Color surfaceSubtle = Color(0xFFF1F5F9);   // Slate 100
+  static const Color surfaceBorder = Color(0xFFE2E8F0);   // Slate 200 Hairline
+  static const Color surfaceBorderHover = Color(0xFFCBD5E1); // Slate 300
+  static const Color surfaceHighlight = Color(0xFFEFF6FF); // Blue 50
+  static const Color panelDark = Color(0xFF0F172A);       // Slate 900 for dark telemetry chips
 
   // Backward compatibility alias for canvas
   static const Color obsidianCanvas = canvas;
 
   // Luminous Brand & State Accents
-  static const Color primaryBlue = Color(0xFF3159C9);
-  static const Color primaryInteraction = primaryBlue;
-  static const Color softSky = Color(0xFFE5F1FF);
-  
+  static const Color electricBlue = Color(0xFF2563EB);    // Blue 600 - High Contrast Primary
+  static const Color primaryBlue = electricBlue;
+  static const Color primaryInteraction = electricBlue;
+  static const Color softSky = Color(0xFFEFF6FF);        // Blue 50
+  static const Color softBlue = softSky;
+
   // Backward compatibility aliases for primary interaction
   static const Color livingCurrentCyan = primaryBlue;
-  static const Color cyanFilament = Color(0x333159C9);
+  static const Color cyanFilament = Color(0x332563EB);
 
-  // Mint / Eco / Active
-  static const Color mintAccent = Color(0xFF168765);
-  static const Color softMint = Color(0xFFDDF7ED);
+  // Mint / Eco / Active Load Flow
+  static const Color mintAccent = Color(0xFF059669);      // Emerald 600
+  static const Color softMint = Color(0xFFECFDF5);        // Emerald 50
   static const Color ecoEmerald = mintAccent;
 
   // Amber / Warning / Simulation Badge
-  static const Color amberAccent = Color(0xFFB96A0B);
-  static const Color softAmber = Color(0xFFFFF4E5);
+  static const Color amberAccent = Color(0xFFD97706);     // Amber 600
+  static const Color softAmber = Color(0xFFFFFBEB);       // Amber 50
   static const Color solarAmber = amberAccent;
   static const Color amberBadgeBg = softAmber;
 
   // Coral / Alert / Disconnect
-  static const Color alertCoral = Color(0xFFD32F2F);
-  static const Color softCoral = Color(0xFFFFEBEE);
+  static const Color alertCoral = Color(0xFFDC2626);      // Red 600
+  static const Color softCoral = Color(0xFFFEF2F2);       // Red 50
 
-  // Lavender / Estimated Disaggregation
-  static const Color lavenderAccent = Color(0xFF6B46C1);
-  static const Color softLavender = Color(0xFFEAE6FF);
+  // Purple / Lavender / Residual Floor & Unattributed Load
+  static const Color residualPurple = Color(0xFF7C3AED);  // Violet 600
+  static const Color softPurple = Color(0xFFF5F3FF);      // Violet 50
+  static const Color lavenderAccent = residualPurple;
+  static const Color softLavender = softPurple;
 
   // Typography (Slate Ink Hierarchy)
-  static const Color textPrimary = Color(0xFF17243B);    // Contrast on #F7F8F4: 13.8:1 (AAA)
-  static const Color textSecondary = Color(0xFF52627A);  // Contrast on #F7F8F4: 6.2:1 (AA)
-  static const Color textMuted = Color(0xFF7E8B9F);      // Contrast on #F7F8F4: 4.5:1 (AA)
+  static const Color textPrimary = Color(0xFF0F172A);     // Slate 900 - Contrast 16.2:1 (AAA)
+  static const Color textSecondary = Color(0xFF475569);   // Slate 600 - Contrast 7.1:1 (AAA)
+  static const Color textMuted = Color(0xFF64748B);       // Slate 500 - Contrast 4.6:1 (AA)
   static const Color textAccent = primaryBlue;
   static const Color textInverse = Colors.white;
+
+  /// High-legibility Tabular Figures helper for numerical measurements (Watts, Volts, Amps, %)
+  /// Eliminates digit jitter during 1-second live telemetry polling.
+  static TextStyle tabularFigures({
+    double fontSize = 14,
+    FontWeight fontWeight = FontWeight.w700,
+    Color? color,
+    double? letterSpacing,
+    double? height,
+  }) {
+    return GoogleFonts.inter(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color ?? textPrimary,
+      letterSpacing: letterSpacing,
+      height: height,
+      fontFeatures: const [FontFeature.tabularFigures()],
+    );
+  }
 }
 
 class EnergyMirrorTheme {
@@ -113,7 +139,7 @@ class EnergyMirrorTheme {
           side: const BorderSide(color: EnergyMirrorColors.surfaceBorder, width: 1),
           borderRadius: BorderRadius.circular(14),
         ),
-        shadowColor: const Color(0x0A0F1728),
+        shadowColor: const Color(0x080F1728),
       ),
       dividerTheme: const DividerThemeData(
         color: EnergyMirrorColors.surfaceBorder,
@@ -172,6 +198,6 @@ class EnergyMirrorTheme {
     );
   }
 
-  // Alias darkTheme to lightTheme to enforce Luminous Clarity design system
+  // Alias darkTheme to lightTheme to enforce Electrum Slate design system
   static ThemeData get darkTheme => lightTheme;
 }

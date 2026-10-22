@@ -99,7 +99,7 @@ class _EnergyPulseWidgetState extends State<EnergyPulseWidget>
                 children: [
                   Text(
                     widget.isStale ? '--' : widget.activePowerW.toInt().toString(),
-                    style: GoogleFonts.inter(
+                    style: EnergyMirrorColors.tabularFigures(
                       color: EnergyMirrorColors.textPrimary,
                       fontSize: widget.size < 220 ? 38 : 48,
                       fontWeight: FontWeight.w800,

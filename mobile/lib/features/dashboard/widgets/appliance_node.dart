@@ -118,7 +118,7 @@ class ApplianceNode extends StatelessWidget {
                 Flexible(
                   child: Text(
                     isOff ? '0 W' : '$powerW W',
-                    style: GoogleFonts.inter(
+                    style: EnergyMirrorColors.tabularFigures(
                       color: isOff ? EnergyMirrorColors.textMuted : EnergyMirrorColors.primaryBlue,
                       fontSize: 14,
                       fontWeight: FontWeight.w800,

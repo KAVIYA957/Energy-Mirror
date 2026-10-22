@@ -124,7 +124,7 @@ class UnattributedLoadBar extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${applianceTotalW.toInt()} W (${appliancePct.toStringAsFixed(1)}%)',
-                      style: GoogleFonts.inter(
+                      style: EnergyMirrorColors.tabularFigures(
                         color: EnergyMirrorColors.textPrimary,
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
@@ -167,7 +167,7 @@ class UnattributedLoadBar extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${unattributedPowerW.toInt()} W (${residualPct.toStringAsFixed(1)}%)',
-                      style: GoogleFonts.inter(
+                      style: EnergyMirrorColors.tabularFigures(
                         color: EnergyMirrorColors.amberAccent,
                         fontSize: 14,
                         fontWeight: FontWeight.w800,

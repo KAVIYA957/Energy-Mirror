@@ -36,7 +36,9 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _calculateSelectedIndex(context);
-    final isWide = MediaQuery.of(context).size.width >= 720;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth >= 720;
+    final isDesktop = screenWidth >= 1080;
 
     if (isWide) {
       return Scaffold(
@@ -48,21 +50,30 @@ class AppShell extends StatelessWidget {
               backgroundColor: EnergyMirrorColors.surface,
               selectedIndex: selectedIndex,
               onDestinationSelected: (idx) => _onItemTapped(context, idx),
-              labelType: NavigationRailLabelType.all,
+              labelType: isDesktop ? NavigationRailLabelType.all : NavigationRailLabelType.all,
               indicatorColor: EnergyMirrorColors.softSky,
+              minWidth: isDesktop ? 84 : 72,
               leading: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Column(
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 42,
+                      height: 42,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: EnergyMirrorColors.softSky,
                         border: Border.all(
-                          color: EnergyMirrorColors.primaryBlue.withValues(alpha: 0.3),
+                          color: EnergyMirrorColors.primaryBlue.withValues(alpha: 0.35),
+                          width: 1.5,
                         ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x0C2563EB),
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: const Center(
                         child: Icon(
@@ -79,14 +90,46 @@ class AppShell extends StatelessWidget {
                         color: EnergyMirrorColors.primaryBlue,
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
-                        letterSpacing: 1.2,
+                        letterSpacing: 1.4,
                       ),
                     ),
                   ],
                 ),
               ),
-              selectedIconTheme: const IconThemeData(color: EnergyMirrorColors.primaryBlue),
-              unselectedIconTheme: const IconThemeData(color: EnergyMirrorColors.textMuted),
+              trailing: isDesktop
+                  ? Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: EnergyMirrorColors.mintAccent,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'v1.0',
+                                style: GoogleFonts.inter(
+                                  color: EnergyMirrorColors.textMuted,
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : null,
+              selectedIconTheme: const IconThemeData(color: EnergyMirrorColors.primaryBlue, size: 24),
+              unselectedIconTheme: const IconThemeData(color: EnergyMirrorColors.textMuted, size: 22),
               selectedLabelTextStyle: GoogleFonts.inter(
                 color: EnergyMirrorColors.primaryBlue,
                 fontSize: 11,
@@ -139,9 +182,17 @@ class AppShell extends StatelessWidget {
         top: false,
         child: Container(
           decoration: const BoxDecoration(
+            color: EnergyMirrorColors.surface,
             border: Border(
               top: BorderSide(color: EnergyMirrorColors.surfaceBorder, width: 1.0),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x060F1728),
+                blurRadius: 8,
+                offset: Offset(0, -2),
+              ),
+            ],
           ),
           child: NavigationBar(
             backgroundColor: EnergyMirrorColors.surface,

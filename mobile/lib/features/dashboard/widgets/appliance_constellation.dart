@@ -5,7 +5,7 @@ import '../../../core/models/telemetry_model.dart';
 import 'appliance_node.dart';
 import 'appliance_detail_sheet.dart';
 
-class ApplianceConstellation extends StatelessWidget {
+class ApplianceConstellation extends StatefulWidget {
   final List<ApplianceEstimate> appliances;
   final double aggregatePowerW;
 
@@ -14,6 +14,13 @@ class ApplianceConstellation extends StatelessWidget {
     required this.appliances,
     required this.aggregatePowerW,
   });
+
+  @override
+  State<ApplianceConstellation> createState() => _ApplianceConstellationState();
+}
+
+class _ApplianceConstellationState extends State<ApplianceConstellation> {
+  String _selectedCategory = 'ALL';
 
   void _showDetail(BuildContext context, ApplianceEstimate appliance) {
     showModalBottomSheet(
@@ -26,7 +33,7 @@ class ApplianceConstellation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (appliances.isEmpty) {
+    if (widget.appliances.isEmpty) {
       return Container(
         height: 100,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -45,7 +52,19 @@ class ApplianceConstellation extends StatelessWidget {
       );
     }
 
-    final totalAttributedW = appliances.fold<double>(0.0, (sum, a) => sum + a.estimatedPowerW).toInt();
+    final totalAttributedW = widget.appliances
+        .fold<double>(0.0, (sum, a) => sum + a.estimatedPowerW)
+        .toInt();
+
+    // Extract categories
+    final rawCategories = widget.appliances.map((a) => a.category.toUpperCase()).toSet().toList();
+    final categories = ['ALL', ...rawCategories];
+
+    final filteredAppliances = _selectedCategory == 'ALL'
+        ? widget.appliances
+        : widget.appliances
+            .where((a) => a.category.toUpperCase() == _selectedCategory)
+            .toList();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -96,7 +115,53 @@ class ApplianceConstellation extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
+
+          // Category filter pills if more than 1 category
+          if (categories.length > 2)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: categories.map((cat) {
+                    final isSelected = _selectedCategory == cat;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 6.0),
+                      child: InkWell(
+                        onTap: () => setState(() => _selectedCategory = cat),
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? EnergyMirrorColors.primaryBlue
+                                : EnergyMirrorColors.surfaceSubtle,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: isSelected
+                                  ? EnergyMirrorColors.primaryBlue
+                                  : EnergyMirrorColors.surfaceBorder,
+                            ),
+                          ),
+                          child: Text(
+                            cat,
+                            style: GoogleFonts.inter(
+                              color: isSelected ? Colors.white : EnergyMirrorColors.textSecondary,
+                              fontSize: 10,
+                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+
+          const SizedBox(height: 4),
+
           // Responsive grid layout (2-column on mobile, 4-column on tablet/desktop)
           LayoutBuilder(
             builder: (context, constraints) {
@@ -105,18 +170,18 @@ class ApplianceConstellation extends StatelessWidget {
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: appliances.length,
+                itemCount: filteredAppliances.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio: isNarrow ? 1.15 : 1.25,
+                  childAspectRatio: isNarrow ? 1.05 : 1.22,
                 ),
                 itemBuilder: (context, index) {
-                  final app = appliances[index];
+                  final app = filteredAppliances[index];
                   return ApplianceNode(
                     appliance: app,
-                    aggregatePowerW: aggregatePowerW,
+                    aggregatePowerW: widget.aggregatePowerW,
                     onTap: () => _showDetail(context, app),
                   );
                 },

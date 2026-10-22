@@ -270,14 +270,14 @@ class SimulatorLabPanel extends ConsumerWidget {
                       children: [
                         Text(
                           isAppOn ? '${app.nominalPowerW.toInt()} W' : '0 W',
-                          style: GoogleFonts.inter(
+                          style: EnergyMirrorColors.tabularFigures(
                             color: isAppOn ? EnergyMirrorColors.primaryBlue : EnergyMirrorColors.textMuted,
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                           decoration: BoxDecoration(
                             color: isAppOn ? EnergyMirrorColors.softMint : EnergyMirrorColors.surfaceSubtle,
                             borderRadius: BorderRadius.circular(4),
@@ -438,7 +438,7 @@ class SimulatorLabPanel extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Text(
                         '${ev.deltaPowerW > 0 ? "+" : ""}${ev.deltaPowerW.toInt()} W',
-                        style: GoogleFonts.inter(
+                        style: EnergyMirrorColors.tabularFigures(
                           color: ev.deltaPowerW > 0
                               ? EnergyMirrorColors.primaryBlue
                               : EnergyMirrorColors.alertCoral,
@@ -479,7 +479,7 @@ class SimulatorLabPanel extends ConsumerWidget {
           const SizedBox(height: 2),
           Text(
             value,
-            style: GoogleFonts.inter(
+            style: EnergyMirrorColors.tabularFigures(
               color: color,
               fontSize: 14,
               fontWeight: FontWeight.w800,

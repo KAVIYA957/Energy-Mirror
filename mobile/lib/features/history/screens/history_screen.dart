@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../app/theme.dart';
 import '../../../core/models/telemetry_model.dart';
 import '../providers/history_provider.dart';
@@ -668,7 +669,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                                     ),
                                     Text(
                                       '${pt.activePowerW.toInt()} W',
-                                      style: const TextStyle(
+                                      style: EnergyMirrorColors.tabularFigures(
                                         color: EnergyMirrorColors.livingCurrentCyan,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
@@ -999,7 +1000,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                 Expanded(
                   child: Text(
                     label,
-                    style: const TextStyle(
+                    style: GoogleFonts.inter(
                       color: EnergyMirrorColors.textMuted,
                       fontSize: 9.5,
                       fontWeight: FontWeight.w700,
@@ -1013,7 +1014,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             const SizedBox(height: 6),
             Text(
               value,
-              style: TextStyle(
+              style: EnergyMirrorColors.tabularFigures(
                 color: color,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,

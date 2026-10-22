@@ -404,7 +404,7 @@ class _ApplianceRegistryPanelState extends ConsumerState<ApplianceRegistryPanel>
                             children: [
                               Text(
                                 '${app.nominalPowerW.toInt()} W',
-                                style: GoogleFonts.inter(
+                                style: EnergyMirrorColors.tabularFigures(
                                   color: EnergyMirrorColors.primaryBlue,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,

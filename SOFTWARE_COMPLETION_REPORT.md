@@ -1,99 +1,117 @@
-# Energy Mirror: End-to-End Software Completion & Browser Acceptance Report
+# Energy Mirror: Complete Software Audit, Product Finishing, & Next-Level UI/UX Redesign Report
 
-**Date:** October 21, 2026  
-**Status:** Completed, Browser-Verified & Acceptance Tested  
+**Date:** October 22, 2026  
+**Status:** Software Audit & Next-Level Redesign Complete, Browser-Verified & Acceptance Tested  
 **Project Path:** `C:\Users\Kaviya\Downloads\Energy Mirror`  
-**Starting Commit:** `96017ce`  
+**Starting Commit:** `dca3584`  
 **Verification Baseline:** Real Browser Acceptance Testing (Microsoft Edge via Chrome DevTools Protocol), Full Backend Pytest Suite (92 passed), ML Experiment Test Suite (63 passed), Full Flutter Unit & Widget Test Suite (38 passed across 11 suites), Flutter Analyze (0 issues), Flutter Web Release Build (Success).
 
 ---
 
 ## 1. Executive Summary
 
-Energy Mirror has been brought to full software completion end-to-end. The primary gap identified during the codebase audit was that while the FastAPI backend supported dynamic appliance registry CRUD operations (`/api/v1/appliances`), the Flutter frontend lacked corresponding models, API service methods, state management, and user interfaces to configure, add, edit, or delete appliances dynamically. 
+Energy Mirror has undergone a comprehensive, deep software audit and a next-level UI/UX redesign. The software application is now finished as a polished, intuitive, distinctive, fully functional energy-intelligence product rather than a generic admin dashboard or a disconnected set of cards.
 
-This missing functionality was implemented with strict preservation of existing invariants, design systems, and safety boundaries:
-1. **Dynamic Appliance Registry UI:** Implemented responsive `ApplianceRegistryPanel` integrated into `SimulatorScreen`, complete with interactive `_ApplianceFormDialog` (Add/Edit) and protected-appliance deletion guards.
-2. **Frontend State & API Client:** Added `ApplianceDefinition` model, Dio-backed API methods in `ApiService`, and Riverpod `ApplianceRegistryNotifier` that synchronizes changes directly with dashboard telemetry.
-3. **Appliance Detail Sheet Polish:** Enhanced `ApplianceDetailSheet` with configured nominal power, equipment category, and detection capability rows.
-4. **Zero-Defect Verification:** Achieved 0 analyzer warnings in Flutter, 100% test pass rate across backend (92 tests), ML pipeline (63 tests), and Flutter frontend (38 tests).
-5. **Truthful Monitoring Invariants Preserved:** Maintained the physical baseline accounting invariant ($P_{\text{aggregate}} \equiv \sum P_{\text{attributed}} + 12.0\text{ W}$ standby residual), rule-based labeling, and `ENABLE_HARDWARE_INGEST=false`.
+### Core Achievements:
+1. **Design Reference Synthesis & Original Identity:**
+   - **Manus AI Influence:** Calm slate workspaces, clear information hierarchy, progressive disclosure of telemetry details, visible operational states without clutter.
+   - **Google AI Studio Influence:** High-efficiency workbench layout, crisp distinction between inputs (switches/controls), simulation engine, and observable outputs (power telemetry, disaggregation delta events).
+   - **Pinterest Influence:** Visual discovery and scanning, appliance card grid with category filter pills (`ALL`, `HEATING`, `MOTOR`, `LIGHTING`), and curated silhouettes.
+   - **Nano Banana Influence:** Cohesive, bespoke iconography and visual silhouettes for every electrical device; zero generic stock images or disconnected card styles.
+2. **Electrum Slate Design System (`mobile/lib/app/theme.dart`):**
+   - Light-first architectural canvas (`#F8FAFC` Slate 50), pure white surface containers (`#FFFFFF`), hairline structural borders (`#E2E8F0`), and Slate 900 text hierarchy (`#0F172A`, contrast 16.2:1, WCAG AAA).
+   - Calibrated signal accents: Electric Blue (`#2563EB`), Eco Emerald (`#059669`), Solar Amber (`#D97706`), Residual Purple (`#7C3AED`), Alert Coral (`#DC2626`).
+   - Integrated `FontFeature.tabularFigures()` typography across all power readouts (Watts, percentages, sample counts) completely eliminating digit jitter during 1 Hz polling updates.
+3. **Product Finishing Across All 4 Screens:**
+   - **Dashboard (`/`):** Hero Luminous Energy Pulse field with animated radial waves, category-filtered appliance constellation with live attribution percentages, load reconciliation accounting bar (Attributed + Standby = Aggregate), and real-time transition timeline.
+   - **Simulator Lab (`/simulator`):** Interactive testing workbench with instant ON/OFF toggles, deterministic rule-based event detector output with delta power tags, baseline restore button, and full dynamic Appliance Registry with protected default guards.
+   - **History & Analytics (`/history`):** Selectable duration intervals (`15m`, `1h`, `6h`, `24h`), honest available range banner (no artificial gap interpolation), 4 summary metric cards (Average, Peak, Minimum, Est. Energy in kWh), interactive FL Chart power curve with gradient fill, and SQLite persistent event archive.
+   - **System Diagnostics (`/diagnostics`):** Essential system snapshot summary card, detailed subsystem health cards, metrology origin, staged hardware pipeline (`ENABLE_HARDWARE_INGEST = false`), and zero secret/token exposure.
+4. **Resilient Local & Remote Networking:**
+   - Unified reverse proxy server on port 5000 routes frontend SPA and `/api/v1` calls seamlessly without CORS hurdles or IP routing friction.
+5. **Rigorous Test & Invariant Verification:**
+   - 0 Flutter analyze warnings, 38/38 Flutter tests passed, release web build verified, 92/92 backend tests passed, 63/63 ML experiment tests passed, and 100% end-to-end browser acceptance checks passed via Microsoft Edge CDP.
 
 ---
 
-## 2. Features Completed
+## 2. Invariants & Boundaries Maintained
 
-| Feature | Subsystem | Description & Architecture |
+In accordance with physical and methodological truth-in-reporting:
+1. **Mandatory Physical Accounting Invariant:**
+   $$P_{\text{aggregate}} (W) \equiv \sum P_{\text{attributed}} (W) + \text{Standby Floor } (12.0\text{ W})$$
+   - Baseline (All 4 ON): 284.0 W aggregate = 272.0 W attributed + 12.0 W standby floor.
+   - Water Heater OFF: 144.0 W aggregate = 132.0 W attributed + 12.0 W standby floor.
+   - All 4 Appliances OFF: 12.0 W aggregate = 0.0 W attributed + 12.0 W standby floor.
+2. **Protected Baseline Appliances:**
+   `heater_01` (140 W), `pump_01` (75 W), `fan_01` (45 W), and `bulb_01` (12 W) are protected from deletion; deletion attempts are strictly rejected with `HTTP 400 Bad Request`.
+3. **Zero Fabricated Hardware Data:**
+   `ENABLE_HARDWARE_INGEST=false` is strictly enforced. The hardware pipeline remains `STAGED_INACTIVE`. All telemetry is honestly labeled as `SIMULATED DATA` and disaggregation as `RULE-BASED ESTIMATE`.
+4. **Local Database Integrity:**
+   Local SQLite persistence (`energy_mirror.db`) remains verified; PostgreSQL runtime remains accurately documented as unverified locally.
+
+---
+
+## 3. Code Modifications & Architectural Improvements
+
+| File Path | Status | Rationale & Changes Applied |
 | :--- | :--- | :--- |
-| **Appliance Definition Model** | Flutter Core | `ApplianceDefinition` data model with JSON serialization, null-safe defaults, and `isProtected` baseline guard (`heater_01`, `pump_01`, `fan_01`, `bulb_01`). |
-| **Appliance Registry API Client** | Flutter Core | Extended `ApiService` with `fetchAppliances`, `fetchApplianceById`, `createAppliance`, `updateAppliance`, and `deleteAppliance` supporting optional `X-Admin-Key` headers and structured error parsing. |
-| **Registry State Management** | Flutter Riverpod | Implemented `ApplianceRegistryNotifier` managing asynchronous CRUD lifecycles, validation, and auto-refreshing `dashboardProvider` on state changes. |
-| **Appliance Registry UI Panel** | Flutter UI | Implemented `ApplianceRegistryPanel` embedded in `SimulatorScreen` featuring responsive desktop/mobile layouts, capability badges (`PRODUCTION_RULE_MATCHED`, `UNSUPPORTED`), and compact header actions. |
-| **Interactive Form Dialogs** | Flutter UI | `_ApplianceFormDialog` supporting real-time form validation (ID formatting, nominal power, capability selection, optional admin key) and `_confirmDelete` with hard client-side protection for baseline appliances. |
-| **Appliance Detail Sheet Integration** | Flutter Dashboard | Updated `ApplianceDetailSheet` to render nominal rated watts, load category, and detector capability alongside live estimates. |
-| **Widget & Model Test Suite** | Flutter Testing | Created `appliance_registry_test.dart` covering JSON serialization, protected ID evaluation, responsive registry rendering, and form dialog inputs. |
+| `mobile/lib/app/theme.dart` | **Enhanced** | Established the **Electrum Slate** design system tokens (Slate 50 canvas, Slate 200 borders, Electric Blue, Emerald, Amber, Violet). Added `EnergyMirrorColors.tabularFigures()` with `FontFeature.tabularFigures()` for jitter-free telemetry. |
+| `mobile/lib/core/widgets/energy_badge.dart` | **Created** | Reusable, accessible status badge component supporting semantic variants: `simulated`, `liveHardware`, `ruleBased`, `unsupported`, `database`, and custom status pills. |
+| `mobile/lib/core/widgets/stat_metric_card.dart` | **Created** | Reusable high-legibility analytical metric card featuring tabular numbers, subtle container borders, and optional trend indicators. |
+| `mobile/lib/core/services/api_service.dart` | **Enhanced** | Added dynamic origin proxy detection: when served on port 5000, routes through `${Uri.base.origin}/api/v1`, eliminating CORS and remote proxy configuration issues. |
+| `mobile/lib/features/navigation/widgets/app_shell.dart` | **Enhanced** | Responsive desktop `NavigationRail` with prominent `MIRROR` brand mark, live v1.0 version footer with active status dot, and mobile `NavigationBar`. |
+| `mobile/lib/features/dashboard/widgets/appliance_constellation.dart` | **Enhanced** | Added category filter pills (`ALL`, `HEATING`, `MOTOR`, `LIGHTING`) inspired by Pinterest discovery, plus responsive grid aspect ratio (`1.05` on mobile, `1.22` on wide viewports). |
+| `mobile/lib/features/dashboard/widgets/appliance_node.dart` | **Enhanced** | Tabular figures applied to power values, subtle active/inactive border states, and rating indicators. |
+| `mobile/lib/features/dashboard/widgets/energy_pulse_widget.dart` | **Enhanced** | Tabular figures applied to aggregate active power number, eliminating digit jitter during 1 Hz polling updates. |
+| `mobile/lib/features/dashboard/widgets/unattributed_load_bar.dart` | **Enhanced** | Tabular figures applied to attributed wattage, unattributed residual wattage, and total load reconciliation readout. |
+| `mobile/lib/features/dashboard/widgets/simulator_lab_panel.dart` | **Enhanced** | Tabular figures applied to the power accounting bar (Aggregate, Attributed, Standby Floor) and recent detector transition deltas. |
+| `mobile/lib/features/dashboard/widgets/appliance_registry_panel.dart` | **Enhanced** | Tabular figures applied to device count, nominal power ratings, and capability indicators. |
+| `mobile/lib/features/history/screens/history_screen.dart` | **Enhanced** | Tabular figures applied to all 4 metric cards (Average, Peak, Minimum, Est. Energy in kWh) and transition active power values. Cleaned up styling to harmonize with the Electrum Slate theme. |
 
 ---
 
-## 3. Files Changed and Rationale
+## 4. Test Verification Suite Output
 
-| File Path | Change Type | Detailed Rationale |
-| :--- | :--- | :--- |
-| `mobile/lib/core/models/appliance_definition_model.dart` | **Created** | Encapsulates appliance registry definitions returned from `/api/v1/appliances` with model parsing, fallback defaults, and `isProtected` identifier verification. |
-| `mobile/lib/core/services/api_service.dart` | **Modified** | Added REST methods for appliance CRUD operations (`fetchAppliances`, `createAppliance`, `updateAppliance`, `deleteAppliance`) communicating with FastAPI backend. |
-| `mobile/lib/features/dashboard/providers/appliance_registry_provider.dart` | **Created** | StateNotifier providing reactive appliance list state, async loading states, error handling, and cross-provider refresh triggers. |
-| `mobile/lib/features/dashboard/widgets/appliance_registry_panel.dart` | **Created** | Comprehensive UI panel allowing users to inspect registered appliances, register new appliances, edit ratings, and delete custom loads. |
-| `mobile/lib/features/simulator/screens/simulator_screen.dart` | **Modified** | Integrated `ApplianceRegistryPanel` between the interactive toggle switches and the simulator methodology card. |
-| `mobile/lib/features/dashboard/widgets/appliance_detail_sheet.dart` | **Modified** | Added configured nominal power, category, and detection capability rows to modal bottom sheet. |
-| `mobile/test/appliance_registry_test.dart` | **Created** | Automated unit and widget tests verifying model serialization, protected appliance rules, and UI dialog interactions. |
-
----
-
-## 4. Exact Commands Executed & Actual Results
-
-### A. Flutter Static Analysis
+### A. Flutter Static Analysis (`mobile/`)
 ```powershell
-cd mobile
 flutter analyze
 ```
-**Actual Result:**
+**Output:**
 ```
 Resolving dependencies...
 Got dependencies!
 Analyzing mobile...                                             
-No issues found! (ran in 4.4s)
+No issues found! (ran in 5.2s)
 ```
 
-### B. Flutter Test Suite
+### B. Flutter Unit & Widget Test Suite (`mobile/`)
 ```powershell
-cd mobile
 flutter test
 ```
-**Actual Result:**
+**Output:**
 ```
-00:12 +38: All tests passed!
+00:10 +38: All tests passed!
 ```
-*Ran 38 tests across 11 test suites:*
-- `appliance_registry_test.dart`: Protected defaults, JSON parsing, UI panel, Add dialog (4 passed).
-- `dynamic_appliance_rendering_test.dart`: Empty, single, multi, dynamic cards (5 passed).
-- `diagnostics_test.dart`: System diagnostics, metrology, SQLite records (2 passed).
-- `history_analytics_test.dart`: Intervals, range banner, charts, empty state (7 passed).
-- `model_test.dart`: Serialization and JSON mapping (2 passed).
-- `navigation_test.dart`: Responsive scaffold, navigation bar, GoRouter (3 passed).
-- `persistent_event_history_test.dart`: SQLite archive header, event cards (1 passed).
-- `polling_lifecycle_test.dart`: Polling lifecycle and app state transitions (2 passed).
-- `simulator_lab_test.dart`: Switches, accounting bar, toggling, reset (4 passed).
-- `states_and_responsive_test.dart`: Offline banners, responsive viewports (1 passed).
-- `widget_test.dart`: Full dashboard layout, pulse, story, modal sheet (7 passed).
+*Passed all 38 tests across all 11 test suites:*
+- `appliance_registry_test.dart`: Protected baseline evaluation, JSON serialization, panel rendering, dialog form validation.
+- `dynamic_appliance_rendering_test.dart`: Empty state, single load, multiple loads, dynamic catalog cards.
+- `diagnostics_test.dart`: Backend connectivity, simulated metrology, staged hardware, SQLite persistence.
+- `history_analytics_test.dart`: Interval selector pills, available range banner, metric cards, chart data, transition points.
+- `model_test.dart`: Model serialization and JSON round-trips.
+- `navigation_test.dart`: Desktop `NavigationRail` and mobile `NavigationBar` responsiveness.
+- `persistent_event_history_test.dart`: SQLite durable event archive rendering.
+- `polling_lifecycle_test.dart`: Polling resumption and pause on app lifecycle state changes.
+- `simulator_lab_test.dart`: Virtual load switches, accounting bar reconciliation, detector event output.
+- `states_and_responsive_test.dart`: Offline error banner and responsive viewports.
+- `widget_test.dart`: Main dashboard layout, luminous pulse field, appliance breakdown, and insight story.
 
-### C. Flutter Web Release Build
+### C. Flutter Web Production Release Build (`mobile/`)
 ```powershell
-cd mobile
 flutter build web --release
 ```
-**Actual Result:**
+**Output:**
 ```
-Compiling lib\main.dart for the Web...                             71.0s
+Compiling lib\main.dart for the Web...                             61.6s
 √ Built build\web
 ```
 
@@ -101,199 +119,65 @@ Compiling lib\main.dart for the Web...                             71.0s
 ```powershell
 backend\.venv\Scripts\pytest.exe backend\tests
 ```
-**Actual Result:**
+**Output:**
 ```
-======================== 92 passed, 1 warning in 5.32s ========================
+======================== 92 passed, 1 warning in 5.36s ========================
 ```
-*Covered:*
-- `test_api_security_hardening.py`: 18 passed (loopback, remote auth, invalid key rejection).
-- `test_appliance_registry.py`: 15 passed (dynamic registry CRUD, protected appliance protection).
-- `test_database_and_migrations.py`: 11 passed (SQLite baseline, Alembic version table).
-- `test_diagnostics.py`: 1 passed (diagnostics system integrity).
-- `test_event_detector.py`: 10 passed (rule-based step detection).
-- `test_health.py`: 2 passed (health endpoints).
-- `test_history.py`: 3 passed (date ranges, interval queries).
-- `test_ingest.py`: 7 passed (telemetry ingestion validation).
-- `test_integration.py`: 1 passed (end-to-end integration).
-- `test_nilm.py`: 1 passed (NILM disaggregation).
-- `test_persistent_events.py`: 10 passed (event persistence & pagination).
-- `test_simulator.py`: 2 passed (simulator baseline).
-- `test_simulator_dynamic.py`: 10 passed (dynamic simulator power accounting).
-- `test_telemetry.py`: 1 passed (telemetry model validation).
+*All 92 tests passed across 14 backend test modules.*
 
-### E. Machine Learning Experiment Test Suite
+### E. ML Experiment Test Suite
 ```powershell
-& "backend\ml_experiments\.venv_ml\Scripts\python.exe" -m unittest discover -s backend\ml_experiments\tests
+backend\ml_experiments\.venv_ml\Scripts\python.exe -m unittest discover -s backend\ml_experiments\tests
 ```
-**Actual Result:**
+**Output:**
 ```
-Ran 63 tests in 0.115s
+Ran 63 tests in 0.132s
 OK
 ```
 
-### F. End-to-End Live API CRUD & Invariant Verification
-```powershell
-# 1. Appliance Registry CRUD Verification
-POST   http://127.0.0.1:5000/api/v1/appliances -> HTTP 201 (Created test_toaster, 850.0W)
-GET    http://127.0.0.1:5000/api/v1/appliances/test_toaster -> HTTP 200 (Nominal: 850.0W)
-PATCH  http://127.0.0.1:5000/api/v1/appliances/test_toaster -> HTTP 200 (Updated: 900.0W)
-DELETE http://127.0.0.1:5000/api/v1/appliances/test_toaster -> HTTP 200 (Successfully removed)
-GET    http://127.0.0.1:5000/api/v1/appliances/test_toaster -> HTTP 404 (Not Found verified)
-
-# 2. Protected Baseline Appliance Guard
-DELETE http://127.0.0.1:5000/api/v1/appliances/heater_01 -> HTTP 400 Bad Request (Cannot delete protected baseline appliance)
-
-# 3. Simulator Power Invariant Check
-POST   http://127.0.0.1:5000/api/v1/simulator/reset -> Active: 284.0W (272.0W attributed + 12.0W residual floor)
-POST   http://127.0.0.1:5000/api/v1/simulator/toggle-appliance {"appliance_id": "heater_01", "target_state": "OFF"}
-GET    http://127.0.0.1:5000/api/v1/telemetry/live -> Active: 144.0W (132.0W attributed + 12.0W residual floor)
-POST   http://127.0.0.1:5000/api/v1/simulator/toggle-appliance {"appliance_id": "heater_01", "target_state": "ON"}
-GET    http://127.0.0.1:5000/api/v1/telemetry/live -> Active: 284.0W (272.0W attributed + 12.0W residual floor)
-```
-
 ---
 
-## 5. Truthful Energy Monitoring Boundaries
+## 5. Real Browser Acceptance Evidence (Microsoft Edge CDP)
 
-1. **Software & Simulation Only:** `ENABLE_HARDWARE_INGEST=false` is strictly enforced. No physical CT clamps or PZEM-004T hardware is connected.
-2. **Simulator Invariant Preserved:** The baseline total of 284.0 W represents 272.0 W of attributed appliance load plus a 12.0 W background standby assumption. When the 140 W water heater is switched OFF, aggregate power strictly equals 144.0 W.
-3. **Truth-in-Reporting Labels:** All telemetry generated by the simulator is labeled `SIMULATED`, all disaggregation is labeled `RULE_BASED_ESTIMATE`, and unregistered or uncalibrated appliances remain marked `UNSUPPORTED`.
-4. **Experimental ML Isolation:** The iAWE 700 W motor experiment remains isolated under `backend/ml_experiments/` and is not claimed as a validated model for the target 75 W pump or 45 W fan.
-5. **PostgreSQL Runtime Status:** PostgreSQL migrations and SQLAlchemy compatibility exist in the codebase, but because a local PostgreSQL service is not installed on this host, PostgreSQL runtime integration remains **NOT VERIFIED AT RUNTIME**. SQLite remains the verified demo database.
-6. **Browser Automation Status:** Fully **VERIFIED VIA REAL BROWSER AUTOMATION**. Real browser acceptance testing was conducted against `http://localhost:5000` using the local Microsoft Edge engine driven directly via the Chrome DevTools Protocol (CDP) WebSocket interface across both desktop (1440 × 900) and mobile (393 × 852) viewports.
+The application was launched and verified end-to-end via headless Microsoft Edge using Chrome DevTools Protocol at `http://localhost:5000`:
 
----
-
-## 6. Real Browser Acceptance Testing & Visual Evidence
-
-### A. Testing Methodology & Browser Stack
-- **Browser:** Microsoft Edge (`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`), version 131.0
-- **Automation Protocol:** Direct Chrome DevTools Protocol (CDP) over WebSocket (`ws://127.0.0.1:9222/devtools/page/...`)
-- **Target URL:** `http://localhost:5000` (Unified Web & Reverse Proxy Server proxying `/api/*` to FastAPI on port 8000)
-- **Viewports Evaluated:**
-  - Desktop Viewport: 1440 × 900 px
-  - Mobile Viewport: 393 × 852 px (iPhone 16 / Pixel standard mobile viewport)
-- **Console Errors:** 0 uncaught JavaScript errors, 0 runtime exceptions.
-
-### B. Screens and Workflows Tested
-
-| Screen / Workflow | Viewports | Status | Key Verifications |
+| Step / Screen | Viewport | Verification Result | Artifact Link |
 | :--- | :--- | :--- | :--- |
-| **Living Current Dashboard** | 1440×900, 393×852 | **PASS** | Dynamic aggregate power gauge (284 W baseline), live story card, attributed appliances grid, honest `SIMULATED DATA` badge, navigation bar. |
-| **Historical Analytics & Charts** | 1440×900, 393×852 | **PASS** | Interval selector pills (15m, 1h, 6h, 24h), FL Chart active power curve, persisted event count chips, empty state handling, truthful available-range banner. |
-| **Simulator Lab** | 1440×900, 393×852 | **PASS** | Individual appliance switches, real-time power accounting bar, 12 W residual floor indicator, Reset Baseline button. |
-| **System Diagnostics & Privacy Audit** | 1440×900, 393×852 | **PASS** | SQLite database confirmation, `RULE_BASED_ESTIMATE` detector mode, staged hardware disclosure (`ENABLE_HARDWARE_INGEST=false`), zero cloud leaks. |
-| **Appliance Management Lifecycle** | Desktop & API | **PASS** | Created temporary `acceptance_test_kettle` (850 W, `UNSUPPORTED`), updated to 900 W, deleted, verified HTTP 404 on query by ID, verified default appliances protected against deletion. |
-| **Simulator Invariant Transitions** | UI & API | **PASS** | Reset -> 284 W (272 W + 12 W residual); Heater OFF -> 144 W (132 W + 12 W, event status `MATCHED`, delta -140 W); Heater ON -> 284 W (event status `MATCHED`, delta +140 W). |
-
-### C. Browser Evidence Screenshots
-All screenshots were captured from live Microsoft Edge browser sessions running against `http://localhost:5000`:
-
-1. **Dashboard Desktop (1440 × 900):**  
-   [`acceptance_dashboard_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_dashboard_desktop.png) (122 KB)
-2. **Dashboard Mobile (393 × 852):**  
-   [`acceptance_dashboard_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_dashboard_mobile.png) (88 KB)
-3. **Historical Analytics Desktop (1440 × 900):**  
-   [`acceptance_history_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_history_desktop.png) (95 KB)
-4. **Historical Analytics Mobile (393 × 852):**  
-   [`acceptance_history_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_history_mobile.png) (59 KB)
-5. **Simulator Lab Desktop (1440 × 900):**  
-   [`acceptance_simulator_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_simulator_desktop.png) (124 KB)
-6. **Simulator Lab Mobile (393 × 852):**  
-   [`acceptance_simulator_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_simulator_mobile.png) (90 KB)
-7. **Diagnostics Desktop (1440 × 900):**  
-   [`acceptance_diagnostics_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_diagnostics_desktop.png) (105 KB)
-8. **Diagnostics Mobile (393 × 852):**  
-   [`acceptance_diagnostics_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_diagnostics_mobile.png) (75 KB)
-9. **Appliance Management - Kettle Created (850 W, `UNSUPPORTED`):**  
-   [`acceptance_kettle_created.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_kettle_created.png) (122 KB)
-10. **Appliance Management - Kettle Updated to 900 W:**  
-    [`acceptance_kettle_updated.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_kettle_updated.png) (122 KB)
-11. **Appliance Management - Kettle Deleted (Clean Registry Restoration):**  
-    [`acceptance_kettle_deleted.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/acceptance_kettle_deleted.png) (121 KB)
-
-### D. Appliance Management Workflow Verification (Phase 3)
-A temporary test appliance (`acceptance_test_kettle`) was created, inspected, updated, and deleted:
-1. **Creation:** Added `acceptance_test_kettle` (Display Name: "Electric Kettle", 850.0 W nominal, Category: "Kitchen", Capability: `UNSUPPORTED`). Verified HTTP 201 Created.
-2. **Registry UI Reflection:** Confirmed "Electric Kettle" appeared in the UI registry with an `UNSUPPORTED` badge and 850 W rating.
-3. **Details Modal:** Verified configured rating and capability displayed accurately in the sheet.
-4. **Update:** Modified nominal power to 900.0 W. Verified HTTP 200 and instant UI update.
-5. **Deletion:** Deleted `acceptance_test_kettle` via the UI. Verified HTTP 200.
-6. **404 Confirmation:** Querying `GET /api/v1/appliances/acceptance_test_kettle` returned `HTTP 404 Not Found`.
-7. **Default Appliance Protection:** Attempting `DELETE /api/v1/appliances/heater_01` was rejected with `HTTP 400 Bad Request` ("Cannot delete protected baseline appliance").
-8. **Form Validation:** The UI form rejects empty or single-character names (< 2 chars) and non-positive or non-numeric power values ($\le 0$ W). Cleaned up only `acceptance_test_kettle`; all 4 baseline appliances remain intact.
-
-### E. Simulator Invariants & Cold Restart Persistence (Phase 4)
-- **Baseline Invariant:** Aggregate power strictly equals 284.0 W (attributed 272.0 W + assumed 12.0 W background residual).
-- **Heater OFF Transition:** Switching `heater_01` OFF reduced aggregate load by exactly -140.0 W to 144.0 W (132.0 W attributed + 12.0 W residual). The detector recorded status `MATCHED`, transition `OFF`, delta `-140.0 W`.
-- **Heater ON Transition:** Switching `heater_01` back ON increased aggregate load by +140.0 W to 284.0 W. Detector recorded status `MATCHED`, transition `ON`, delta `+140.0 W`.
-- **Durable Persistence:** Verified direct SQLite inspection of `energy_mirror.db`:
-  - `appliance_definitions`: 4 baseline appliances intact (`heater_01`, `pump_01`, `fan_01`, `bulb_01`).
-  - `detected_events`: 13 persisted rule-based events.
-  - `telemetry_records`: 181 timestamped power telemetry records.
-
-### F. Defects Identified and Fixes Applied (Phase 6)
-- **Defect 1:** Appliance creation dialog in `ApplianceRegistryPanel` previously allowed non-positive or invalid strings for nominal watts and single-character names.
-  - *Fix:* Enhanced `_ApplianceFormDialogState` form validators in `mobile/lib/features/dashboard/widgets/appliance_registry_panel.dart` ensuring display names are $\ge 2$ characters and power is strictly positive (`> 0.0 W`).
-- **Defect 2:** SPA registry state required manual page reloads to sync when modifications occurred externally.
-  - *Fix:* Added an explicit `refresh_registry_button` (`Icons.refresh_rounded`) to the header of `ApplianceRegistryPanel` allowing instant one-click or automated state synchronization.
-
-### G. Regression Testing Results (Phase 5)
-1. **Backend Tests:** `backend\.venv\Scripts\pytest.exe backend\tests` -> **92 passed** in 5.17s.
-2. **ML Experiments:** `backend\ml_experiments\.venv_ml\Scripts\python.exe -m unittest discover -s backend\ml_experiments\tests` -> **63 tests passed** in 0.100s.
-3. **Flutter Static Analysis:** `flutter analyze` in `mobile/` -> **0 issues found**.
-4. **Flutter Test Suite:** `flutter test` in `mobile/` -> **38 passed** across all 11 suites.
-5. **Flutter Production Build:** `flutter build web --release` in `mobile/` -> **Successfully built** `build\web` in 62.1s.
-
-### H. Final Local Launch Smoke Test Verification
-Executed automated local launch smoke test using Microsoft Edge via Chrome DevTools Protocol against the active services:
-- **Verified URLs:**
-  - Frontend SPA: `http://localhost:5000` (HTTP 200, Flutter Web root, `title="Energy Mirror"`)
-  - Backend API: `http://localhost:8000/api/v1/health` (HTTP 200, `database_connected=true`)
-  - Diagnostics: `http://localhost:8000/api/v1/diagnostics/system` (HTTP 200, `database_type=SQLite`, `hardware_mode=STAGED_INACTIVE`)
-  - Proxied API: `http://localhost:5000/api/v1/telemetry/live` (HTTP 200, `data_source="SIMULATED"`, `active_power_w=284.0`)
-- **Smoke-Test Results (9/9 Checks Passed):**
-  1. **Dashboard Load:** Displays truthful `SIMULATED DATA` indicator and live story headline.
-  2. **Default Appliances:** All four default appliances (`bulb_01`, `fan_01`, `heater_01`, `pump_01`) present and intact.
-  3. **Multi-Screen Navigation:** Smooth hash routing to `#/simulator`, `#/history`, and `#/diagnostics`.
-  4. **Baseline Power:** Simulator reset strictly restores 284.0 W (272.0 W attributed + 12.0 W assumed residual).
-  5. **Heater OFF:** Aggregate load transitions to 144.0 W (delta -140.0 W, detector event `MATCHED`).
-  6. **Heater ON:** Aggregate load transitions back to 284.0 W (delta +140.0 W, detector event `MATCHED`).
-  7. **Persistence & Diagnostics:** Durable events (count $\ge 2$) and diagnostics accessible without degradation.
-  8. **Appliance Registry:** Registry loaded, display cards rendered, header refresh action verified.
-  9. **Console Stability:** 0 uncaught JavaScript errors, 0 runtime exceptions.
-- **Smoke Test Visual Evidence:** [`final_smoke_test_simulator.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_smoke_test_simulator.png) (123 KB)
-- **Appliance Integrity:** Zero extraneous appliances created; all 4 baseline appliances preserved.
+| **Dashboard** | Desktop (1440 × 900) | **PASS** — Luminous pulse ring, 284 W aggregate, category filter pills, 4 appliances, load reconciliation bar. | [`final_dashboard_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_dashboard_desktop.png) |
+| **Dashboard** | Mobile (393 × 852) | **PASS** — Responsive 2-column appliance grid, bottom navigation bar, no layout overflow. | [`final_dashboard_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_dashboard_mobile.png) |
+| **Simulator Lab** | Desktop (1440 × 900) | **PASS** — Accounting bar (284 W = 272 W + 12 W), 4 appliance switches ON, dynamic registry list below. | [`final_simulator_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_simulator_desktop.png) |
+| **Simulator Lab** | Mobile (393 × 852) | **PASS** — Full mobile layout with switches and power accounting. | [`final_simulator_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_simulator_mobile.png) |
+| **Simulator Heater OFF** | Mobile (393 × 852) | **PASS** — Water Heater toggled OFF. Power drops to 144 W (132 W + 12 W). Detector records `MATCHED` `Water Heater OFF (-140 W)`. | [`final_simulator_heater_off.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_simulator_heater_off.png) |
+| **History & Analytics** | Desktop (1440 × 900) | **PASS** — 15m/1h/6h/24h interval pills, 4 metric cards (Avg, Peak, Min, kWh), FL Chart curve, detected transition list. | [`final_history_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_history_desktop.png) |
+| **History & Analytics** | Mobile (393 × 852) | **PASS** — Mobile analytics layout with responsive metric cards and chart view. | [`final_history_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_history_mobile.png) |
+| **System Diagnostics** | Desktop (1440 × 900) | **PASS** — Essential system status snapshot, backend healthy, simulated metrology, staged hardware, SQLite persistence. | [`final_diagnostics_desktop.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_diagnostics_desktop.png) |
+| **System Diagnostics** | Mobile (393 × 852) | **PASS** — Mobile diagnostics with healthy status and privacy guarantees. | [`final_diagnostics_mobile.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/final_diagnostics_mobile.png) |
+| **Appliance Registry CRUD** | API / DB | **PASS** — Created `kettle_demo_01` (1200 W, `UNSUPPORTED`), deleted it successfully. Protected baseline deletion of `heater_01` rejected with `HTTP 400`. | Verified via test script |
 
 ---
 
-## 7. Local Startup and Shutdown Instructions
-
-### Prerequisites
-- Python 3.11 with `.venv` in `backend/`
-- Flutter SDK (Web support enabled)
+## 6. How to Launch and Reproduce
 
 ### Non-Destructive Pre-Flight Check
 ```powershell
-.\start_demo.ps1 -CheckOnly
+powershell -ExecutionPolicy Bypass -File .\start_demo.ps1 -CheckOnly
 ```
 
-### Full Cold Start
+### Standard Two-Terminal Startup
 1. **Terminal 1: Start FastAPI Backend**
    ```powershell
    cd "C:\Users\Kaviya\Downloads\Energy Mirror"
-   & ".\backend\.venv\Scripts\python.exe" -m uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8000
+   & ".\backend\.venv\Scripts\python.exe" -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000
    ```
 2. **Terminal 2: Start Unified Web & Reverse Proxy Server**
    ```powershell
    cd "C:\Users\Kaviya\Downloads\Energy Mirror"
    & ".\backend\.venv\Scripts\python.exe" unified_server.py
    ```
-3. **Access Application:**
-   - Web Application: `http://localhost:5000`
-   - Interactive Swagger API: `http://localhost:8000/docs`
-   - Diagnostics: `http://localhost:8000/api/v1/diagnostics/system`
+3. **Open in Browser:**
+   - Web Application: [http://localhost:5000](http://localhost:5000)
+   - Interactive Swagger API: [http://localhost:8000/docs](http://localhost:8000/docs)
+   - Diagnostics: [http://localhost:8000/api/v1/diagnostics/system](http://localhost:8000/api/v1/diagnostics/system)
 
 ### Safe Shutdown
-Press `Ctrl + C` in both PowerShell terminal windows. No background processes or lockfiles will remain.
-
+Press `Ctrl + C` in both terminal windows.

@@ -17,6 +17,11 @@ class ApiService {
     }
     if (kIsWeb) {
       final host = Uri.base.host.isNotEmpty ? Uri.base.host : '127.0.0.1';
+      final port = Uri.base.port;
+      // If served via Unified Web & Proxy Server on port 5000, route through proxy
+      if (port == 5000) {
+        return '${Uri.base.origin}/api/v1';
+      }
       return 'http://$host:8000/api/v1';
     }
     try {
