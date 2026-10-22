@@ -171,7 +171,7 @@ class SimulatorLabPanel extends ConsumerWidget {
                 ),
                 Container(width: 1, height: 24, color: EnergyMirrorColors.surfaceBorder),
                 _buildAccountingItem(
-                  label: 'STANDBY FLOOR',
+                  label: 'ASSUMED RESIDUAL',
                   value: '${unattributedW.toInt()} W',
                   color: EnergyMirrorColors.amberAccent,
                 ),

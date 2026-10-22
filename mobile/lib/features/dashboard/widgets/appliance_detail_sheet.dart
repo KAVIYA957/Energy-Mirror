@@ -216,7 +216,7 @@ class ApplianceDetailSheet extends StatelessWidget {
                 _buildRow(
                   'Detection Capability',
                   appliance.detectionCapability == 'PRODUCTION_RULE_MATCHED'
-                      ? 'PRODUCTION_RULE_MATCHED (Calibrated)'
+                      ? 'PRODUCTION_RULE_MATCHED (Rule Envelope)'
                       : (appliance.detectionCapability == 'UNSUPPORTED'
                           ? 'UNSUPPORTED (Simulated Only)'
                           : 'EXPERIMENTAL_ONLY'),
@@ -225,13 +225,13 @@ class ApplianceDetailSheet extends StatelessWidget {
                 _buildRow(
                   'Detection Method',
                   appliance.detectionCapability == 'UNSUPPORTED'
-                      ? 'Simulated Only (No Calibrated NILM Envelope)'
+                      ? 'Simulated Only (No Rule Envelope)'
                       : 'Rule-Based Step Classifier',
                 ),
                 const SizedBox(height: 6),
                 _buildRow('Telemetry Source', 'Simulated Virtual Environment'),
                 const SizedBox(height: 6),
-                _buildRow('Sub-Meter Hardware', 'None (Calculated from Aggregate)'),
+                _buildRow('Sub-Meter Hardware', 'None (Estimated from Simulated Aggregate)'),
               ],
             ),
           ),

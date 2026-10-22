@@ -92,7 +92,7 @@ class _ApplianceRegistryPanelState extends ConsumerState<ApplianceRegistryPanel>
           ),
           content: Text(
             'Cannot delete protected default baseline appliance "${appliance.name}" (${appliance.applianceId}).\n\n'
-            'This appliance is required for physical baseline accounting in the simulator. You can edit its ratings or disable it instead.',
+            'This appliance is required for simulator baseline accounting. You can edit its ratings or disable it instead.',
             style: GoogleFonts.inter(fontSize: 13, color: EnergyMirrorColors.textSecondary),
           ),
           actions: [
@@ -202,94 +202,94 @@ class _ApplianceRegistryPanelState extends ConsumerState<ApplianceRegistryPanel>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header: Title, Count Badge, and Add Appliance Button
-          Row(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: const BoxDecoration(
-                  color: EnergyMirrorColors.softSky,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.app_registration_rounded,
-                  size: 16,
-                  color: EnergyMirrorColors.primaryBlue,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            'APPLIANCE REGISTRY',
-                            style: GoogleFonts.inter(
-                              color: EnergyMirrorColors.textPrimary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.6,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: EnergyMirrorColors.softSky,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            '${appliances.length} Devices',
-                            style: GoogleFonts.inter(
-                              color: EnergyMirrorColors.primaryBlue,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ],
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: EnergyMirrorColors.softSky,
+                      shape: BoxShape.circle,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Dynamic definitions & NILM calibration gating',
+                    child: const Icon(
+                      Icons.app_registration_rounded,
+                      size: 16,
+                      color: EnergyMirrorColors.primaryBlue,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'APPLIANCE REGISTRY',
+                      style: GoogleFonts.inter(
+                        color: EnergyMirrorColors.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.6,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    key: const Key('refresh_registry_button'),
+                    icon: const Icon(Icons.refresh_rounded, size: 16, color: EnergyMirrorColors.textMuted),
+                    tooltip: 'Refresh registry',
+                    onPressed: () => ref.read(applianceRegistryProvider.notifier).loadAppliances(),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton.icon(
+                    key: const Key('add_appliance_button'),
+                    onPressed: _showAddDialog,
+                    icon: const Icon(Icons.add_rounded, size: 14),
+                    label: const Text('Add'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: EnergyMirrorColors.primaryBlue,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      textStyle: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      elevation: 0,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: EnergyMirrorColors.softSky,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      '${appliances.length} Devices',
+                      style: GoogleFonts.inter(
+                        color: EnergyMirrorColors.primaryBlue,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Dynamic definitions & NILM rule envelope gating',
                       style: GoogleFonts.inter(
                         color: EnergyMirrorColors.textMuted,
                         fontSize: 10.5,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
-              ),
-              IconButton(
-                key: const Key('refresh_registry_button'),
-                icon: const Icon(Icons.refresh_rounded, size: 16, color: EnergyMirrorColors.textMuted),
-                tooltip: 'Refresh registry',
-                onPressed: () => ref.read(applianceRegistryProvider.notifier).loadAppliances(),
-                visualDensity: VisualDensity.compact,
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              const SizedBox(width: 8),
-              ElevatedButton.icon(
-                key: const Key('add_appliance_button'),
-                onPressed: _showAddDialog,
-                icon: const Icon(Icons.add_rounded, size: 14),
-                label: const Text('Add'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: EnergyMirrorColors.primaryBlue,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  textStyle: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  elevation: 0,
-                  visualDensity: VisualDensity.compact,
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -428,7 +428,7 @@ class _ApplianceRegistryPanelState extends ConsumerState<ApplianceRegistryPanel>
                                 ),
                                 child: Text(
                                   isCalibrated
-                                      ? 'CALIBRATED (±${app.toleranceW?.toInt() ?? 0}W)'
+                                      ? 'RULE ENVELOPE (±${app.toleranceW?.toInt() ?? 0}W)'
                                       : (isUnsupported ? 'UNSUPPORTED' : 'EXPERIMENTAL'),
                                   style: GoogleFonts.inter(
                                     color: isCalibrated
@@ -793,7 +793,7 @@ class _ApplianceFormDialogState extends State<_ApplianceFormDialog> {
                             value: c,
                             child: Text(
                               c == 'UNSUPPORTED'
-                                  ? 'UNSUPPORTED (Uncalibrated)'
+                                  ? 'UNSUPPORTED (No Rule Envelope)'
                                   : (c == 'PRODUCTION_RULE_MATCHED'
                                       ? 'PRODUCTION_RULE_MATCHED'
                                       : 'EXPERIMENTAL_ONLY'),
@@ -810,7 +810,7 @@ class _ApplianceFormDialogState extends State<_ApplianceFormDialog> {
                 Text(
                   _capability == 'UNSUPPORTED'
                       ? '• Registers appliance without falsely claiming NILM recognition.'
-                      : '• Calibrated rule detector will match transitions within the tolerance window.',
+                      : '• Rule detector matches transitions within the configured tolerance envelope.',
                   style: GoogleFonts.inter(color: EnergyMirrorColors.textMuted, fontSize: 10.5),
                 ),
                 const SizedBox(height: 10),

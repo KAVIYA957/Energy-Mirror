@@ -86,7 +86,7 @@ void main() {
       expect(find.text('SIMULATOR & NILM SUBSYSTEM'), findsOneWidget);
       expect(find.text('ACTIVE (Deterministic)'), findsOneWidget);
       expect(find.text('4 Active Loads'), findsOneWidget);
-      expect(find.text('12 W (Physical Floor)'), findsOneWidget);
+      expect(find.text('12 W (Assumed Residual)'), findsOneWidget);
 
       // 5. Local Database Persistence
       expect(find.text('LOCAL DATABASE PERSISTENCE'), findsOneWidget);

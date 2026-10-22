@@ -16,6 +16,11 @@ class PowerTimelineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final powers = points.map((p) => p.activePowerW).toList();
+    final minPower = powers.isEmpty ? 0.0 : powers.reduce((a, b) => a < b ? a : b);
+    final maxPower = powers.isEmpty ? 0.0 : powers.reduce((a, b) => a > b ? a : b);
+    final isConstant = (maxPower - minPower) < 0.5;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(16),
@@ -38,15 +43,37 @@ class PowerTimelineChart extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(
-                  'POWER TIMELINE',
-                  style: GoogleFonts.inter(
-                    color: EnergyMirrorColors.textPrimary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.6,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'POWER TIMELINE',
+                        style: GoogleFonts.inter(
+                          color: EnergyMirrorColors.textPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.6,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: EnergyMirrorColors.softMint,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'SIMULATED',
+                        style: GoogleFonts.inter(
+                          color: EnergyMirrorColors.mintAccent,
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 8),
@@ -147,8 +174,8 @@ class PowerTimelineChart extends StatelessWidget {
                           .entries
                           .map((e) => FlSpot(e.key.toDouble(), e.value.activePowerW))
                           .toList(),
-                      isCurved: true,
-                      curveSmoothness: 0.2,
+                      isCurved: !isConstant,
+                      curveSmoothness: isConstant ? 0.0 : 0.15,
                       color: EnergyMirrorColors.primaryBlue,
                       barWidth: 2.2,
                       isStrokeCapRound: true,

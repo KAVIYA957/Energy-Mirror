@@ -138,7 +138,7 @@ class SimulatorScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 12),
                       _buildBulletPoint(
-                        'Controllable Telemetry: Generates deterministic appliance states (Water Heater 140W, Water Pump 75W, Ceiling Fan 45W, LED Bulb 12W) with a fixed 12W standby floor.',
+                        'Controllable Telemetry: Generates deterministic appliance states (Water Heater 140W, Water Pump 75W, Ceiling Fan 45W, LED Bulb 12W) with a fixed 12W assumed residual.',
                       ),
                       const SizedBox(height: 8),
                       _buildBulletPoint(
@@ -146,7 +146,7 @@ class SimulatorScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       _buildBulletPoint(
-                        'Accounting Invariant: When all 4 appliances are OFF, aggregate power remains exactly 12 W (standby floor). Total power reconciles across all 16 ON/OFF combinations.',
+                        'Accounting Invariant: When all 4 appliances are OFF, aggregate power remains exactly 12 W (assumed residual). Total power reconciles across all 16 ON/OFF combinations.',
                       ),
                     ],
                   ),

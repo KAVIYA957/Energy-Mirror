@@ -210,10 +210,10 @@ void main() {
       // 2. Verify Accounting Bar
       expect(find.text('AGGREGATE'), findsWidgets);
       expect(find.text('ATTRIBUTED'), findsWidgets);
-      expect(find.text('STANDBY FLOOR'), findsOneWidget);
+      expect(find.text('ASSUMED RESIDUAL'), findsOneWidget);
       expect(find.text('284 W'), findsWidgets); // aggregate
       expect(find.text('272 W'), findsOneWidget); // attributed
-      expect(find.text('12 W'), findsWidgets); // standby floor
+      expect(find.text('12 W'), findsWidgets); // assumed residual
 
       // 3. Verify 4 Switches
       expect(find.byType(Switch), findsNWidgets(4));

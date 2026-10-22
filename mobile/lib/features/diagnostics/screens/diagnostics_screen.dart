@@ -246,7 +246,7 @@ class DiagnosticsScreen extends ConsumerWidget {
                   rows: [
                     _buildRow('Simulator Subsystem', data?.simulatorActive == true ? 'ACTIVE (Deterministic)' : 'IDLE', EnergyMirrorColors.mintAccent),
                     _buildRow('Virtual Appliances', '${data?.simulatorAppliancesCount ?? 4} Active Loads', EnergyMirrorColors.textSecondary),
-                    _buildRow('Unattributed Standby', '${data?.unattributedBaselineW.toInt() ?? 12} W (Physical Floor)', EnergyMirrorColors.amberAccent),
+                    _buildRow('Unattributed Standby', '${data?.unattributedBaselineW.toInt() ?? 12} W (Assumed Residual)', EnergyMirrorColors.amberAccent),
                     _buildRow('Event Classifier', 'Rule-Based Step (Derivative Delta P)', EnergyMirrorColors.textPrimary),
                     _buildRow('ML Classification', 'None (Deterministic Template Matching)', EnergyMirrorColors.textMuted),
                     _buildRow('Recorded Transitions', '${data?.recentEventsCount ?? 0} events', EnergyMirrorColors.textSecondary),

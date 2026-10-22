@@ -33,7 +33,7 @@ class EnergyBadge extends StatelessWidget {
 
   factory EnergyBadge.simulated({String? tooltip}) => EnergyBadge(
         type: EnergyBadgeType.simulated,
-        tooltip: tooltip ?? 'Calibrated mathematical simulation running at 1 Hz',
+        tooltip: tooltip ?? 'Deterministic mathematical simulation running at 1 Hz',
       );
 
   factory EnergyBadge.ruleBased({String? tooltip}) => EnergyBadge(
@@ -43,7 +43,7 @@ class EnergyBadge extends StatelessWidget {
 
   factory EnergyBadge.unsupported({String? tooltip}) => EnergyBadge(
         type: EnergyBadgeType.unsupported,
-        tooltip: tooltip ?? 'Load profile uncalibrated in active rule dictionary',
+        tooltip: tooltip ?? 'Load profile outside active rule dictionary envelope',
       );
 
   factory EnergyBadge.sqlite({String? tooltip}) => EnergyBadge(

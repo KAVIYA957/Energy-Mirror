@@ -38,10 +38,10 @@ Energy Mirror has undergone a comprehensive, deep software audit and a next-leve
 
 In accordance with physical and methodological truth-in-reporting:
 1. **Mandatory Physical Accounting Invariant:**
-   $$P_{\text{aggregate}} (W) \equiv \sum P_{\text{attributed}} (W) + \text{Standby Floor } (12.0\text{ W})$$
-   - Baseline (All 4 ON): 284.0 W aggregate = 272.0 W attributed + 12.0 W standby floor.
-   - Water Heater OFF: 144.0 W aggregate = 132.0 W attributed + 12.0 W standby floor.
-   - All 4 Appliances OFF: 12.0 W aggregate = 0.0 W attributed + 12.0 W standby floor.
+   $$P_{\text{aggregate}} (W) \equiv \sum P_{\text{attributed}} (W) + \text{Assumed Residual } (12.0\text{ W})$$
+   - Baseline (All 4 ON): 284.0 W aggregate = 272.0 W attributed + 12.0 W assumed residual.
+   - Water Heater OFF: 144.0 W aggregate = 132.0 W attributed + 12.0 W assumed residual.
+   - All 4 Appliances OFF: 12.0 W aggregate = 0.0 W attributed + 12.0 W assumed residual.
 2. **Protected Baseline Appliances:**
    `heater_01` (140 W), `pump_01` (75 W), `fan_01` (45 W), and `bulb_01` (12 W) are protected from deletion; deletion attempts are strictly rejected with `HTTP 400 Bad Request`.
 3. **Zero Fabricated Hardware Data:**
@@ -181,3 +181,42 @@ powershell -ExecutionPolicy Bypass -File .\start_demo.ps1 -CheckOnly
 
 ### Safe Shutdown
 Press `Ctrl + C` in both terminal windows.
+
+---
+
+## 7. Focused Final UI/UX Polish Verification (October 22, 2026)
+
+Following local launch verification, a focused final UI/UX polish was executed based on mobile screenshot inspection (393 × 852 px):
+
+### Key Refinements Applied:
+1. **Accurate Terminology Everywhere:**
+   - Replaced all descriptions of “12 W Physical Floor” with **“12 W Assumed Residual”** across Diagnostics (`diagnostics_screen.dart`), Simulator Accounting (`simulator_lab_panel.dart`), Simulator Guidance (`simulator_screen.dart`), and test suites (`diagnostics_test.dart`, `simulator_lab_test.dart`).
+   - Audited tolerance badges: Relabeled synthetic rule matching thresholds from “CALIBRATED (±12W)” to **“RULE ENVELOPE (±12W)”** without changing detector logic or thresholds.
+   - Updated Appliance Detail Sheet: “Sub-Meter Hardware” relabeled to **“None (Estimated from Simulated Aggregate)”**, detection capability labeled as **“PRODUCTION_RULE_MATCHED (Rule Envelope)”**.
+   - Maintained all truth banners: `SIMULATED DATA`, `SIMULATED TELEMETRY`, `RULE-BASED ESTIMATE`, and `ENABLE_HARDWARE_INGEST=false`.
+
+2. **Chart Clarity & Flatline Invariant:**
+   - Added explicit `SIMULATED` pill in the Dashboard Power Timeline chart header.
+   - Implemented `isConstant` detection across `PowerTimelineChart` and `HistoryScreen`: when power samples are constant (e.g. at 284 W baseline), `isCurved` is set to `false` and `curveSmoothness` to `0.0`, rendering a crisp, perfectly flat horizontal line with zero bezier wave artifacts or artificial gap interpolation.
+   - Preserved honest range banner (`Showing available Xm of requested Y window (no artificial gap interpolation)`).
+
+3. **Narrow-Screen Layout Polish (393 × 852 px):**
+   - Refactored `ApplianceRegistryPanel` header into two flexible rows using `Expanded`: Row 1 contains Icon + `APPLIANCE REGISTRY` + Refresh icon + `+ Add` button; Row 2 contains `${appliances.length} Devices` badge + `Dynamic definitions & NILM rule envelope gating`. Completely eliminated all text clipping and ellipsis truncation on narrow viewports.
+   - Ensured bottom navigation bar is balanced and centered at 393 × 852 px with 64px touch targets.
+
+### Final Verification Results:
+| Check | Command | Verified Result |
+| :--- | :--- | :--- |
+| **Flutter Analyze** | `flutter analyze` | **PASS** — No issues found (0 warnings, 0 errors) |
+| **Flutter Tests** | `flutter test` | **PASS** — 38 / 38 unit & widget tests passed |
+| **Flutter Web Release Build** | `flutter build web --release` | **PASS** — `Built build\web` (86.0s) |
+| **Backend Tests** | `pytest backend\tests` | **PASS** — 92 / 92 passed in 5.54s |
+| **Simulator Invariants** | Live HTTP check | **PASS** — Baseline 284.0 W (272 W + 12 W) -> Heater OFF 144.0 W (132 W + 12 W) -> Reset 284.0 W |
+| **Console Errors** | Edge CDP DevTools | **PASS** — 0 uncaught console errors across all 4 screens |
+| **Mobile Screenshots** | Edge CDP (393 × 852) | **PASS** — Captured and visually inspected |
+
+### Captured Artifacts:
+- Dashboard (Mobile 393 × 852): [`mobile_polished_dashboard.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/mobile_polished_dashboard.png)
+- Simulator (Mobile 393 × 852): [`mobile_polished_simulator.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/mobile_polished_simulator.png)
+- Diagnostics (Mobile 393 × 852): [`mobile_polished_diagnostics.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/mobile_polished_diagnostics.png)
+- History (Mobile 393 × 852): [`mobile_polished_history.png`](file:///C:/Users/Kaviya/.gemini/antigravity-ide/brain/7dc16fac-9045-4d93-ba5c-85a4ffbdd5da/mobile_polished_history.png)

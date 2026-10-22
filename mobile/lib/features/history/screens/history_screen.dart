@@ -77,6 +77,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       energyKwh = (avgPower * actualHours) / 1000.0;
     }
 
+    final isConstant = points.isNotEmpty && (maxPower - minPower) < 0.5;
+
     // Deduplicate transitions in window by event description and minute bucket
     final seenKeys = <String>{};
     final eventsWithPoints = <HistoryPoint>[];
@@ -537,8 +539,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                                   spots: points.asMap().entries.map((e) {
                                     return FlSpot(e.key.toDouble(), e.value.activePowerW);
                                   }).toList(),
-                                  isCurved: true,
-                                  curveSmoothness: 0.15,
+                                  isCurved: !isConstant,
+                                  curveSmoothness: isConstant ? 0.0 : 0.15,
                                   color: EnergyMirrorColors.livingCurrentCyan,
                                   barWidth: 2.2,
                                   isStrokeCapRound: true,
