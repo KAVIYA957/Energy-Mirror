@@ -11,8 +11,8 @@
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0+-D71F00?style=flat-square&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org)
 [![Alembic](https://img.shields.io/badge/Alembic-Migrations%20@%208f8361eca0e9-orange?style=flat-square)](https://alembic.sqlalchemy.org)
 [![Tests](https://img.shields.io/badge/Tests-193%20Automated%20Passing-brightgreen?style=flat-square&logo=pytest&logoColor=white)](https://pytest.org)
-[![Security](https://img.shields.io/badge/Security-Local%20Loopback%20Guarded-blueviolet?style=flat-square)](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/API_SECURITY_HARDENING_REPORT.md)
-[![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%20AAA%20%7C%2060%20FPS-success?style=flat-square)](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/UI_UX_RESEARCH_AND_DECISIONS.md)
+[![Security](https://img.shields.io/badge/Security-Local%20Loopback%20Guarded-blueviolet?style=flat-square)](docs/API_SECURITY_HARDENING_REPORT.md)
+[![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%20AAA%20%7C%2060%20FPS-success?style=flat-square)](docs/UI_UX_RESEARCH_AND_DECISIONS.md)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
@@ -382,7 +382,7 @@ Automated real-browser acceptance testing has been verified against the live rev
 
 ## 8. Hardware Specifications & Procurement Blueprint
 
-For academic reviewers and engineering teams preparing to transition Energy Mirror from simulation to live hardware, complete schematics and bill-of-materials are documented in [HARDWARE_ARCHITECTURE_REVIEW.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/HARDWARE_ARCHITECTURE_REVIEW.md).
+For academic reviewers and engineering teams preparing to transition Energy Mirror from simulation to live hardware, complete schematics and bill-of-materials are documented in [HARDWARE_ARCHITECTURE_REVIEW.md](docs/HARDWARE_ARCHITECTURE_REVIEW.md).
 
 ### Bill of Materials (BOM)
 
@@ -417,6 +417,14 @@ To resolve this limitation without expensive metrology equipment, Energy Mirror 
 
 ```
 Energy Mirror/
+├── docs/                                # All 31 Technical Reports, Audits & Specifications
+│   ├── README.md                        # Documentation Hub & Report Index
+│   ├── BENCHMARK_AUDIT_REPORT.md        # 193 Automated Tests & Coverage Audit
+│   ├── HARDWARE_ARCHITECTURE_REVIEW.md  # BOM, Schematics & Isolation Plan
+│   ├── DEMO_PRESENTATION_NOTES.md       # Reviewer & Evaluator Walkthrough
+│   ├── REAL_DATA_NILM_VALIDATION_REPORT.md # REFIT & iAWE Empirical Validation
+│   └── ...                              # 26 Additional Specialized Engineering Reports
+│
 ├── backend/                             # Python & FastAPI Service
 │   ├── alembic/                         # Alembic database migrations
 │   │   ├── versions/                    # Version scripts (8f8361eca0e9_create_initial_schema.py)
@@ -473,20 +481,21 @@ Energy Mirror/
 
 ## 10. Project Documentation Index
 
-Energy Mirror is documented across an exhaustive series of audit, benchmark, and architectural reports:
+All specialized engineering reports, empirical benchmarks, and safety audits have been consolidated into the [`docs/`](docs/README.md) directory:
 
 | Document | Primary Focus |
 |:---------|:--------------|
-| [BENCHMARK_AUDIT_REPORT.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/BENCHMARK_AUDIT_REPORT.md) | Comprehensive audit of all 193 automated tests, coverage, and benchmarks |
-| [DEMO_PRESENTATION_NOTES.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/DEMO_PRESENTATION_NOTES.md) | Structured presentation script and talking points for technical judges |
-| [HARDWARE_ARCHITECTURE_REVIEW.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/HARDWARE_ARCHITECTURE_REVIEW.md) | Schematics, safety ratings, optical isolation, and itemized procurement BOM |
-| [API_SECURITY_HARDENING_REPORT.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/API_SECURITY_HARDENING_REPORT.md) | Loopback authorization, timing-safe authentication, and CORS verification |
-| [DYNAMIC_APPLIANCE_REGISTRY_REPORT.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/DYNAMIC_APPLIANCE_REGISTRY_REPORT.md) | Registry schema, capability honesty tags, and dynamic CRUD lifecycle |
-| [POSTGRESQL_ALEMBIC_MIGRATION_REPORT.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/POSTGRESQL_ALEMBIC_MIGRATION_REPORT.md) | Dual-engine database design, schema evolution, and migration testing |
-| [REAL_DATA_NILM_VALIDATION_REPORT.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/REAL_DATA_NILM_VALIDATION_REPORT.md) | Empirical validation on public datasets (UK REFIT & Indian iAWE) |
-| [UI_UX_RESEARCH_AND_DECISIONS.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/UI_UX_RESEARCH_AND_DECISIONS.md) | Electrum Slate design system, WCAG AAA compliance, and interaction design |
-| [SCREENSHOT_QA_AND_FIX_REPORT.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/SCREENSHOT_QA_AND_FIX_REPORT.md) | Visual evidence, responsive checks (393px to 1440px), and Edge browser QA |
-| [KNOWN_LIMITATIONS.md](file:///c:/Users/Kaviya/Downloads/Energy%20Mirror/KNOWN_LIMITATIONS.md) | Explicit algorithmic boundary conditions and simultaneous switching limits |
+| [docs/README.md](docs/README.md) | **Documentation Hub** index categorizing all 31 reports |
+| [BENCHMARK_AUDIT_REPORT.md](docs/BENCHMARK_AUDIT_REPORT.md) | Comprehensive audit of all 193 automated tests, coverage, and benchmarks |
+| [DEMO_PRESENTATION_NOTES.md](docs/DEMO_PRESENTATION_NOTES.md) | Structured presentation script and talking points for technical judges |
+| [HARDWARE_ARCHITECTURE_REVIEW.md](docs/HARDWARE_ARCHITECTURE_REVIEW.md) | Schematics, safety ratings, optical isolation, and itemized procurement BOM |
+| [API_SECURITY_HARDENING_REPORT.md](docs/API_SECURITY_HARDENING_REPORT.md) | Loopback authorization, timing-safe authentication, and CORS verification |
+| [DYNAMIC_APPLIANCE_REGISTRY_REPORT.md](docs/DYNAMIC_APPLIANCE_REGISTRY_REPORT.md) | Registry schema, capability honesty tags, and dynamic CRUD lifecycle |
+| [POSTGRESQL_ALEMBIC_MIGRATION_REPORT.md](docs/POSTGRESQL_ALEMBIC_MIGRATION_REPORT.md) | Dual-engine database design, schema evolution, and migration testing |
+| [REAL_DATA_NILM_VALIDATION_REPORT.md](docs/REAL_DATA_NILM_VALIDATION_REPORT.md) | Empirical validation on public datasets (UK REFIT & Indian iAWE) |
+| [UI_UX_RESEARCH_AND_DECISIONS.md](docs/UI_UX_RESEARCH_AND_DECISIONS.md) | Electrum Slate design system, WCAG AAA compliance, and interaction design |
+| [SCREENSHOT_QA_AND_FIX_REPORT.md](docs/SCREENSHOT_QA_AND_FIX_REPORT.md) | Visual evidence, responsive checks (393px to 1440px), and Edge browser QA |
+| [KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md) | Explicit algorithmic boundary conditions and simultaneous switching limits |
 
 ---
 
