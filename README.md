@@ -32,6 +32,18 @@ Residential electrical monitoring has long suffered from an unresolved dilemma b
 ### The Energy Mirror Solution
 **Energy Mirror** implements **Non-Intrusive Load Monitoring (NILM)** to extract appliance-level operational intelligence from a **single aggregate sensing point** installed at the home's main electrical service distribution panel. By mathematically decomposing aggregate active power ($P$), power factor ($PF$), apparent power ($S$), and high-frequency edge transition signatures, Energy Mirror provides granular appliance breakdown without a single smart plug.
 
+<div align="center">
+
+![NILM Disaggregation Principle](docs/assets/nilm_concept_diagram.svg)
+
+*Figure 1.1: Non-Intrusive Load Monitoring (NILM) Single-Point Disaggregation Principle.*  
+*(High-Resolution Vector: [nilm_concept_diagram.svg](docs/assets/nilm_concept_diagram.svg) • High-Resolution Raster: [nilm_concept_diagram.png](docs/assets/nilm_concept_diagram.png))*
+
+</div>
+
+<details>
+<summary><b>Click to expand ASCII Concept Breakdown</b></summary>
+
 ```
        SINGLE SERVICE PANEL SENSOR
    [PZEM-004T v3.0 / Current Transformer]
@@ -45,6 +57,7 @@ Residential electrical monitoring has long suffered from an unresolved dilemma b
 Water Heater     Water Pump      Ceiling Fan     ... All from ONE Sensing Point!
 (140.0 W Active) (75.0 W Active) (45.0 W Active)
 ```
+</details>
 
 ---
 
