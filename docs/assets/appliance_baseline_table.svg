@@ -50,16 +50,17 @@
     </g>
   </g>
 
-  <!-- 2. TABLE HEADER ROW (Total width=1540, aligned columns) -->
-  <!-- Col 1: 55, Col 2: 350, Col 3: 520, Col 4: 720, Col 5: 940 (width 400!), Col 6: 1370 -->
+  <!-- 2. TABLE HEADER ROW (Aligned Columns & Centers) -->
+  <!-- Col 1: 55, Col 2: 350, Col 3: 520, Col 4: 720, Col 5: 930 (width 400!), Col 6: Center 1435! -->
   <g transform="translate(30, 185)">
     <rect x="0" y="0" width="1540" height="42" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1.2"/>
     <text x="35" y="26" fill="#94A3B8" font-size="12" font-weight="800">APPLIANCE / LOAD NAME</text>
     <text x="350" y="26" fill="#94A3B8" font-size="12" font-weight="800">ACTIVE POWER (W)</text>
     <text x="520" y="26" fill="#94A3B8" font-size="12" font-weight="800">POWER FACTOR (PF)</text>
     <text x="720" y="26" fill="#94A3B8" font-size="12" font-weight="800">NOMINAL SHARE (%)</text>
-    <text x="940" y="26" fill="#94A3B8" font-size="12" font-weight="800">ELECTRICAL SIGNATURE &amp; PHYSICS</text>
-    <text x="1370" y="26" fill="#94A3B8" font-size="12" font-weight="800">DETECTION ENVELOPE</text>
+    <text x="930" y="26" fill="#94A3B8" font-size="12" font-weight="800">ELECTRICAL SIGNATURE &amp; PHYSICS</text>
+    <!-- Center Column 6 Header directly above badges at 1435! -->
+    <text x="1435" y="26" fill="#94A3B8" font-size="11.5" font-weight="800" text-anchor="middle">DETECTION ENVELOPE</text>
   </g>
 
   <!-- 3. TABLE BODY ROWS -->
@@ -83,11 +84,11 @@
       <rect x="65" y="6" width="56" height="12" rx="4" fill="#EF4444"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Pure Resistive Nichrome</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">No inrush spike; instant flat step transition</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Pure Resistive Nichrome</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">No inrush spike; instant flat step transition</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 2 -->
@@ -110,11 +111,11 @@
       <rect x="65" y="6" width="30" height="12" rx="4" fill="#3B82F6"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Inductive Motor Inrush</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Lagging PF transition envelope with starting spike</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Inductive Motor Inrush</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Lagging PF transition envelope with starting spike</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 3 -->
@@ -137,11 +138,11 @@
       <rect x="65" y="6" width="18" height="12" rx="4" fill="#10B981"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Rotary Inductive Load</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Moderate inductive phase shift with stable plateau</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Rotary Inductive Load</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Moderate inductive phase shift with stable plateau</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 4 -->
@@ -164,11 +165,11 @@
       <rect x="65" y="6" width="6" height="12" rx="4" fill="#F59E0B"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">SMPS Driver Rectifier</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Capacitive filter leading PF; scaled via N=10 CT turn</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">SMPS Driver Rectifier</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Capacitive filter leading PF; scaled via N=10 CT turn</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 5 -->
@@ -191,18 +192,19 @@
       <rect x="65" y="6" width="6" height="12" rx="4" fill="#A855F7"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Parasitic Ambient Standby Load</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Smoke detectors, Wi-Fi router, microwave clock</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Parasitic Ambient Standby Load</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Smoke detectors, Wi-Fi router, microwave clock</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#3B0764" stroke="#A855F7" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#E9D5FF" font-size="11" font-weight="800" text-anchor="middle">RESIDUAL BASELINE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#3B0764" stroke="#A855F7" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#E9D5FF" font-size="11" font-weight="800" text-anchor="middle">RESIDUAL BASELINE</text>
   </g>
 
   <!-- 4. TOTAL RECONCILIATION SUMMARY FOOTER -->
+  <!-- Left title width 300px, subtitle cleanly contained without running under the 284W box! -->
   <g transform="translate(30, 645)" filter="url(#cardShadow)">
     <rect x="0" y="0" width="1540" height="85" rx="12" fill="url(#totGrad)" stroke="#00E5FF" stroke-width="2"/>
-    <text x="35" y="38" fill="#FFFFFF" font-size="18" font-weight="800">TOTAL HOUSEHOLD AGGREGATE</text>
-    <text x="35" y="62" fill="#00E5FF" font-size="12" font-weight="700">P_aggregate = Sum(P_attributed 272W) + P_residual (12W)</text>
+    <text x="35" y="36" fill="#FFFFFF" font-size="16.5" font-weight="800">TOTAL HOUSEHOLD AGGREGATE</text>
+    <text x="35" y="58" fill="#00E5FF" font-size="11.5" font-weight="700">P_agg ≡ P_attr (272W) + P_floor (12W)</text>
 
     <rect x="350" y="22" width="130" height="42" rx="8" fill="#0A2239" stroke="#00E5FF" stroke-width="1.6"/>
     <text x="415" y="50" fill="#00E5FF" font-size="19" font-weight="800" text-anchor="middle">284.0 W</text>
@@ -213,8 +215,9 @@
     <rect x="720" y="22" width="140" height="42" rx="8" fill="#0A2239" stroke="#00E5FF" stroke-width="1.6"/>
     <text x="790" y="50" fill="#00E5FF" font-size="18" font-weight="800" text-anchor="middle">100.0%</text>
 
-    <rect x="940" y="22" width="575" height="42" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.6"/>
-    <text x="1227" y="48" fill="#E6FFFA" font-size="13" font-weight="800" text-anchor="middle">✓ ZERO POWER LEAKAGE • EXACT ARITHMETIC RECONCILIATION</text>
+    <!-- Roomy, comfortable green box with 100px padding! -->
+    <rect x="910" y="22" width="600" height="42" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.6"/>
+    <text x="1210" y="48" fill="#E6FFFA" font-size="12" font-weight="800" text-anchor="middle">✓ ZERO POWER LEAKAGE • EXACT RECONCILIATION</text>
   </g>
 
   <!-- Footnotes -->

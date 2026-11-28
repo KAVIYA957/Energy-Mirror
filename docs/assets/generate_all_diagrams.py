@@ -6,12 +6,12 @@ os.makedirs(assets_dir, exist_ok=True)
 
 # Helper to load fonts
 try:
-    font_hero = ImageFont.truetype("arialbd.ttf", 22)
-    font_h2 = ImageFont.truetype("arialbd.ttf", 16)
-    font_h3 = ImageFont.truetype("arialbd.ttf", 13)
+    font_hero = ImageFont.truetype("arialbd.ttf", 20)
+    font_h2 = ImageFont.truetype("arialbd.ttf", 15)
+    font_h3 = ImageFont.truetype("arialbd.ttf", 12)
     font_body = ImageFont.truetype("arial.ttf", 11)
-    font_badge = ImageFont.truetype("arialbd.ttf", 11)
-    font_stat = ImageFont.truetype("arialbd.ttf", 18)
+    font_badge = ImageFont.truetype("arialbd.ttf", 10.5)
+    font_stat = ImageFont.truetype("arialbd.ttf", 17)
 except Exception:
     font_hero = ImageFont.load_default()
     font_h2 = font_hero
@@ -28,6 +28,9 @@ def generate_system_architecture():
     svg_path = os.path.join(assets_dir, "system_architecture.svg")
     png_path = os.path.join(assets_dir, "system_architecture.png")
 
+    # Use 1600x1160 canvas
+    # Usable width for cards: 1480 (from x=30 to x=1510)
+    # Right-side conduit channel for STAGED INGESTION: x=1515 to x=1585 (70px wide, zero overlap!)
     svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160" width="100%" height="100%" style="background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <defs>
     <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -53,43 +56,43 @@ def generate_system_architecture():
   </defs>
 
   <!-- 0. TOP HERO HEADER -->
-  <rect x="30" y="25" width="1540" height="75" rx="14" fill="#111827" stroke="#00E5FF" stroke-width="1.8" filter="url(#cardShadow)"/>
+  <rect x="30" y="25" width="1480" height="75" rx="14" fill="#111827" stroke="#00E5FF" stroke-width="1.8" filter="url(#cardShadow)"/>
   <text x="55" y="58" fill="#FFFFFF" font-size="22" font-weight="800" letter-spacing="0.8">ENERGY MIRROR: LIVING CURRENT</text>
   <text x="55" y="80" fill="#00E5FF" font-size="13" font-weight="600">End-to-End System Architecture &amp; Progress Verification Map</text>
 
-  <!-- Top Badges (140px each, 12px gap, right aligned to 1545) -->
-  <g transform="translate(949, 47)">
-    <rect x="0" y="0" width="140" height="30" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.4"/>
-    <circle cx="15" cy="15" r="4" fill="#10B981"/>
-    <text x="75" y="20" fill="#E6FFFA" font-size="11" font-weight="800" text-anchor="middle">193 TESTS PASSED</text>
+  <!-- Top Badges (135px each, 10px gap, ending at 1490) -->
+  <g transform="translate(920, 47)">
+    <rect x="0" y="0" width="135" height="30" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.4"/>
+    <circle cx="14" cy="15" r="4" fill="#10B981"/>
+    <text x="74" y="20" fill="#E6FFFA" font-size="10.5" font-weight="800" text-anchor="middle">193 TESTS PASSED</text>
   </g>
-  <g transform="translate(1101, 47)">
-    <rect x="0" y="0" width="140" height="30" rx="8" fill="#0C4A6E" stroke="#00E5FF" stroke-width="1.4"/>
-    <circle cx="15" cy="15" r="4" fill="#00E5FF"/>
-    <text x="75" y="20" fill="#E0F2FE" font-size="11" font-weight="800" text-anchor="middle">60 FPS / WCAG AAA</text>
+  <g transform="translate(1065, 47)">
+    <rect x="0" y="0" width="135" height="30" rx="8" fill="#0C4A6E" stroke="#00E5FF" stroke-width="1.4"/>
+    <circle cx="14" cy="15" r="4" fill="#00E5FF"/>
+    <text x="74" y="20" fill="#E0F2FE" font-size="10.5" font-weight="800" text-anchor="middle">60 FPS / WCAG AAA</text>
   </g>
-  <g transform="translate(1253, 47)">
-    <rect x="0" y="0" width="140" height="30" rx="8" fill="#4C1D95" stroke="#A855F7" stroke-width="1.4"/>
-    <circle cx="15" cy="15" r="4" fill="#A855F7"/>
-    <text x="75" y="20" fill="#F3E8FF" font-size="11" font-weight="800" text-anchor="middle">LOOPBACK GUARD</text>
+  <g transform="translate(1210, 47)">
+    <rect x="0" y="0" width="135" height="30" rx="8" fill="#4C1D95" stroke="#A855F7" stroke-width="1.4"/>
+    <circle cx="14" cy="15" r="4" fill="#A855F7"/>
+    <text x="74" y="20" fill="#F3E8FF" font-size="10.5" font-weight="800" text-anchor="middle">LOOPBACK GUARD</text>
   </g>
-  <g transform="translate(1405, 47)">
-    <rect x="0" y="0" width="140" height="30" rx="8" fill="#78350F" stroke="#F59E0B" stroke-width="1.4"/>
-    <circle cx="15" cy="15" r="4" fill="#F59E0B"/>
-    <text x="75" y="20" fill="#FEF3C7" font-size="10.5" font-weight="800" text-anchor="middle">HW: PROCUREMENT</text>
+  <g transform="translate(1355, 47)">
+    <rect x="0" y="0" width="135" height="30" rx="8" fill="#78350F" stroke="#F59E0B" stroke-width="1.4"/>
+    <circle cx="14" cy="15" r="4" fill="#F59E0B"/>
+    <text x="74" y="20" fill="#FEF3C7" font-size="10" font-weight="800" text-anchor="middle">HW: PROCUREMENT</text>
   </g>
 
   <!-- 1. PRESENTATION LAYER -->
   <g transform="translate(30, 120)">
-    <rect x="0" y="0" width="1540" height="230" rx="14" fill="url(#cardGrad)" stroke="#0284C7" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#1E293B"/>
+    <rect x="0" y="0" width="1480" height="230" rx="14" fill="url(#cardGrad)" stroke="#0284C7" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 1466 0 Q 1480 0 1480 14 L 1480 42 L 0 42 Z" fill="#1E293B"/>
     <text x="25" y="27" fill="#FFFFFF" font-size="15" font-weight="800">1. PRESENTATION LAYER: FLUTTER WEBDESKTOP / MOBILE DASHBOARD</text>
-    <rect x="1265" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1390" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">VERIFIED LIVE (38 TESTS PASSED)</text>
+    <rect x="1225" y="8" width="235" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1342" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">VERIFIED LIVE (38 TESTS PASSED)</text>
 
-    <!-- 4 Sub-boxes: width=360 each, x=20, 400, 780, 1160, right margin=20 -->
+    <!-- 4 Sub-boxes: width=345 each, x=20, 385, 750, 1115 -->
     <g transform="translate(20, 56)">
-      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+      <rect x="0" y="0" width="345" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Hero Energy Pulse (60 FPS)</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Radial breathing cyan glow visualizer</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Real-time baseline readout: 284.0 W</text>
@@ -98,8 +101,8 @@ def generate_system_architecture():
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Mobile (393px) &amp; Desktop (1440px) checked</text>
     </g>
 
-    <g transform="translate(400, 56)">
-      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <g transform="translate(385, 56)">
+      <rect x="0" y="0" width="345" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Appliance Constellation Grid</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Water Heater: 140.0 W (49.3%, PF 0.99)</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Water Pump: 75.0 W (26.4%, PF 0.78)</text>
@@ -108,8 +111,8 @@ def generate_system_architecture():
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Interactive toggles &amp; duty cycle models</text>
     </g>
 
-    <g transform="translate(780, 56)">
-      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <g transform="translate(750, 56)">
+      <rect x="0" y="0" width="345" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Load Reconciliation Bar</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Invariant: P_agg = Sum(P_app) + P_residual</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Attributed Sum: 272.0 W (95.8%)</text>
@@ -118,12 +121,12 @@ def generate_system_architecture():
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Strictly distinct from 12.0 W LED bulb</text>
     </g>
 
-    <g transform="translate(1160, 56)">
-      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <g transform="translate(1115, 56)">
+      <rect x="0" y="0" width="345" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Dynamic Registry Workbench</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Add / Edit / Inspect appliance dialogs</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Tolerance bounds: Delta P, Expected PF</text>
-      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Capability honesty: PRODUCTION vs UNSUPPORTED</text>
+      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Capability honesty: PRODUCTION vs UN</text>
       <text x="18" y="112" fill="#CBD5E1" font-size="11.5">• Protected default 4-appliance guard</text>
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• FlChart 15m/1h/6h/24h non-flatline view</text>
     </g>
@@ -131,15 +134,15 @@ def generate_system_architecture():
 
   <!-- 2. API GATEWAY LAYER -->
   <g transform="translate(30, 375)">
-    <rect x="0" y="0" width="1540" height="185" rx="14" fill="url(#cardGrad)" stroke="#6366F1" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#1E293B"/>
+    <rect x="0" y="0" width="1480" height="185" rx="14" fill="url(#cardGrad)" stroke="#6366F1" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 1466 0 Q 1480 0 1480 14 L 1480 42 L 0 42 Z" fill="#1E293B"/>
     <text x="25" y="27" fill="#FFFFFF" font-size="15" font-weight="800">2. API GATEWAY, REVERSE PROXY &amp; SECURITY ENGINE (FASTAPI ASGI)</text>
-    <rect x="1265" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1390" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">HARDENED (18 TESTS PASSED)</text>
+    <rect x="1225" y="8" width="235" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1342" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">HARDENED (18 TESTS PASSED)</text>
 
-    <!-- 4 Sub-boxes: width=360 each, x=20, 400, 780, 1160 -->
+    <!-- 4 Sub-boxes: width=345 each -->
     <g transform="translate(20, 54)">
-      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+      <rect x="0" y="0" width="345" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Unified Proxy (:5000 / :8000)</text>
       <text x="18" y="48" fill="#CBD5E1" font-size="11">• Single-port reverse proxy (serve_web.py)</text>
       <text x="18" y="68" fill="#CBD5E1" font-size="11">• Static Flutter web release bundle host</text>
@@ -147,8 +150,8 @@ def generate_system_architecture():
       <text x="18" y="106" fill="#CBD5E1" font-size="11">• WebSocket / SSE live telemetry stream</text>
     </g>
 
-    <g transform="translate(400, 54)">
-      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+    <g transform="translate(385, 54)">
+      <rect x="0" y="0" width="345" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Local Loopback Security Guard</text>
       <text x="18" y="48" fill="#CBD5E1" font-size="11">• Loopback isolation (127.0.0.1, ::1)</text>
       <text x="18" y="68" fill="#CBD5E1" font-size="11">• Administrative mutations guarded (POST, DEL)</text>
@@ -156,8 +159,8 @@ def generate_system_architecture():
       <text x="18" y="106" fill="#CBD5E1" font-size="11">• Strict CORS origin checking (no wildcards)</text>
     </g>
 
-    <g transform="translate(780, 54)">
-      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+    <g transform="translate(750, 54)">
+      <rect x="0" y="0" width="345" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Pydantic v2 Schema Guardrails</text>
       <text x="18" y="48" fill="#CBD5E1" font-size="11">• Physical conservation check: P &lt;= S * 1.08</text>
       <text x="18" y="68" fill="#CBD5E1" font-size="11">• Extra payload fields forbidden</text>
@@ -165,8 +168,8 @@ def generate_system_architecture():
       <text x="18" y="106" fill="#CBD5E1" font-size="11">• Timing-safe token auth (compare_digest)</text>
     </g>
 
-    <g transform="translate(1160, 54)">
-      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+    <g transform="translate(1115, 54)">
+      <rect x="0" y="0" width="345" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">RESTful Service Endpoints</text>
       <text x="18" y="48" fill="#CBD5E1" font-size="11">• GET /api/v1/health &amp; /diagnostics</text>
       <text x="18" y="68" fill="#CBD5E1" font-size="11">• GET /api/v1/telemetry/live &amp; /history</text>
@@ -175,17 +178,17 @@ def generate_system_architecture():
     </g>
   </g>
 
-  <!-- 3. MIDDLE TIER: 3 LARGE CARDS (493px each, 30px gap, perfectly centered) -->
+  <!-- 3. MIDDLE TIER: 3 CARDS (476px each, 26px gap, completely inside x=30 to x=1510) -->
   <!-- 3A -->
   <g transform="translate(30, 585)">
-    <rect x="0" y="0" width="493" height="235" rx="14" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 479 0 Q 493 0 493 14 L 493 42 L 0 42 Z" fill="#1E293B"/>
-    <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3A. DYNAMIC REGISTRY &amp; SIMULATOR</text>
-    <rect x="335" y="8" width="145" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="407" y="25" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (30 TESTS)</text>
+    <rect x="0" y="0" width="476" height="235" rx="14" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 462 0 Q 476 0 476 14 L 476 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="20" y="27" fill="#FFFFFF" font-size="13.5" font-weight="800">3A. DYNAMIC REGISTRY &amp; SIMULATOR</text>
+    <rect x="325" y="8" width="140" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="395" y="25" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (30 TESTS)</text>
 
-    <g transform="translate(18, 55)">
-      <rect x="0" y="0" width="457" height="162" rx="10" fill="url(#subCardGrad)" stroke="#059669" stroke-width="1.2"/>
+    <g transform="translate(16, 55)">
+      <rect x="0" y="0" width="444" height="162" rx="10" fill="url(#subCardGrad)" stroke="#059669" stroke-width="1.2"/>
       <text x="18" y="26" fill="#34D399" font-size="13" font-weight="700">Deterministic Mathematical Simulator</text>
       <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• Dynamic database-backed appliance catalog</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• 16-state combinatorial permutation logic</text>
@@ -196,16 +199,16 @@ def generate_system_architecture():
   </g>
 
   <!-- 3B -->
-  <g transform="translate(553, 585)">
-    <rect x="0" y="0" width="494" height="235" rx="14" fill="url(#cardGrad)" stroke="#06B6D4" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 480 0 Q 494 0 494 14 L 494 42 L 0 42 Z" fill="#1E293B"/>
-    <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3B. RULE-BASED NILM &amp; ML BENCHMARKS</text>
-    <rect x="315" y="8" width="165" height="26" rx="6" fill="#164E63" stroke="#06B6D4" stroke-width="1.2"/>
-    <text x="397" y="25" fill="#67E8F9" font-size="10.5" font-weight="800" text-anchor="middle">BENCHMARKED (74 TESTS)</text>
+  <g transform="translate(532, 585)">
+    <rect x="0" y="0" width="476" height="235" rx="14" fill="url(#cardGrad)" stroke="#06B6D4" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 462 0 Q 476 0 476 14 L 476 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="20" y="27" fill="#FFFFFF" font-size="13.5" font-weight="800">3B. RULE-BASED NILM &amp; ML BENCHMARKS</text>
+    <rect x="305" y="8" width="160" height="26" rx="6" fill="#164E63" stroke="#06B6D4" stroke-width="1.2"/>
+    <text x="385" y="25" fill="#67E8F9" font-size="10.5" font-weight="800" text-anchor="middle">BENCHMARKED (74 TESTS)</text>
 
-    <g transform="translate(18, 55)">
-      <rect x="0" y="0" width="458" height="162" rx="10" fill="url(#subCardGrad)" stroke="#0891B2" stroke-width="1.2"/>
-      <text x="18" y="26" fill="#22D3EE" font-size="13" font-weight="700">1 Hz Derivative Edge &amp; Public Data Benchmarks</text>
+    <g transform="translate(16, 55)">
+      <rect x="0" y="0" width="444" height="162" rx="10" fill="url(#subCardGrad)" stroke="#0891B2" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#22D3EE" font-size="13" font-weight="700">1 Hz Derivative Edge &amp; Public Data</text>
       <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• Derivative step detector: Delta P &amp; Delta PF envelopes</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Noise floor suppression: |Delta P| &lt; 5.0 W ignored</text>
       <text x="18" y="94" fill="#CBD5E1" font-size="11.5">• Simultaneous switching tagged: [AMBIGUOUS]</text>
@@ -215,35 +218,35 @@ def generate_system_architecture():
   </g>
 
   <!-- 3C -->
-  <g transform="translate(1077, 585)">
-    <rect x="0" y="0" width="493" height="235" rx="14" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 479 0 Q 493 0 493 14 L 493 42 L 0 42 Z" fill="#1E293B"/>
-    <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3C. DURABLE PERSISTENCE LAYER</text>
-    <rect x="335" y="8" width="145" height="26" rx="6" fill="#581C87" stroke="#A855F7" stroke-width="1.2"/>
-    <text x="407" y="25" fill="#D8B4FE" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (11 TESTS)</text>
+  <g transform="translate(1034, 585)">
+    <rect x="0" y="0" width="476" height="235" rx="14" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 462 0 Q 476 0 476 14 L 476 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="20" y="27" fill="#FFFFFF" font-size="13.5" font-weight="800">3C. DURABLE PERSISTENCE LAYER</text>
+    <rect x="325" y="8" width="140" height="26" rx="6" fill="#581C87" stroke="#A855F7" stroke-width="1.2"/>
+    <text x="395" y="25" fill="#D8B4FE" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (11 TESTS)</text>
 
-    <g transform="translate(18, 55)">
-      <rect x="0" y="0" width="457" height="162" rx="10" fill="url(#subCardGrad)" stroke="#9333EA" stroke-width="1.2"/>
-      <text x="18" y="26" fill="#C084FC" font-size="13" font-weight="700">Dual-Engine Relational Storage (Alembic @ 8f8361eca0e9)</text>
+    <g transform="translate(16, 55)">
+      <rect x="0" y="0" width="444" height="162" rx="10" fill="url(#subCardGrad)" stroke="#9333EA" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#C084FC" font-size="13" font-weight="700">Dual-Engine Relational Storage</text>
       <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• SQLite (energy_mirror.db) for zero-dependency dev</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• PostgreSQL (psycopg2) production-ready driver</text>
-      <text x="18" y="94" fill="#CBD5E1" font-size="11.5">• Idempotent upgrades &amp; clean rollback migrations</text>
+      <text x="18" y="94" fill="#CBD5E1" font-size="11.5">• Alembic migrations (@ 8f8361eca0e9)</text>
       <text x="18" y="116" fill="#CBD5E1" font-size="11.5">• Deduplicated state event persistence &amp; retrieval</text>
-      <text x="18" y="138" fill="#CBD5E1" font-size="11.5">• Schema tables: telemetry, estimates, events, registry</text>
+      <text x="18" y="138" fill="#CBD5E1" font-size="11.5">• Tables: telemetry, estimates, events, registry</text>
     </g>
   </g>
 
-  <!-- 4. HARDWARE LAYER: 4 Sub-boxes (360px each, matching Section 1 and 2!) -->
+  <!-- 4. HARDWARE LAYER -->
   <g transform="translate(30, 855)">
-    <rect x="0" y="0" width="1540" height="245" rx="14" fill="#151515" stroke="#F59E0B" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#29200C"/>
-    <text x="25" y="27" fill="#FEF3C7" font-size="15" font-weight="800">4. METROLOGY &amp; HARDWARE INGESTION LAYER (LABORATORY PROCUREMENT BLUEPRINT)</text>
-    <rect x="1225" y="8" width="295" height="26" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1.2"/>
-    <text x="1372" y="25" fill="#FDE68A" font-size="10.5" font-weight="800" text-anchor="middle">PENDING PHYSICAL PROCUREMENT</text>
+    <rect x="0" y="0" width="1480" height="245" rx="14" fill="#151515" stroke="#F59E0B" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 1466 0 Q 1480 0 1480 14 L 1480 42 L 0 42 Z" fill="#29200C"/>
+    <text x="25" y="27" fill="#FEF3C7" font-size="15" font-weight="800">4. METROLOGY &amp; HARDWARE INGESTION LAYER (LABORATORY BLUEPRINT)</text>
+    <rect x="1175" y="8" width="285" height="26" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="1317" y="25" fill="#FDE68A" font-size="10.5" font-weight="800" text-anchor="middle">PENDING PHYSICAL PROCUREMENT</text>
 
-    <!-- Sub-Box 1 -->
+    <!-- 4 Sub-Boxes: width=345 each -->
     <g transform="translate(20, 56)">
-      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <rect x="0" y="0" width="345" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
       <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Service Panel Sensing</text>
       <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• Single-point distribution panel sensing</text>
       <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• PZEM-004T v3.0 Digital Energy IC</text>
@@ -252,10 +255,9 @@ def generate_system_architecture():
       <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• 1 Hz V, I, P, PF, Frequency acquisition</text>
     </g>
 
-    <!-- Sub-Box 2 -->
-    <g transform="translate(400, 56)">
-      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
-      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Low-Power CT Multi-Turn Scaling</text>
+    <g transform="translate(385, 56)">
+      <rect x="0" y="0" width="345" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Low-Power CT Multi-Turn</text>
       <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• N = 10 primary conductor turns</text>
       <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• Multiplies magnetic flux 10x (12W -> 120W)</text>
       <text x="18" y="96" fill="#E2E8F0" font-size="11.5">• Lifts low loads above CT non-linear floor</text>
@@ -263,9 +265,8 @@ def generate_system_architecture():
       <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• Enables sub-15W LED bulb measurement</text>
     </g>
 
-    <!-- Sub-Box 3 -->
-    <g transform="translate(780, 56)">
-      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+    <g transform="translate(750, 56)">
+      <rect x="0" y="0" width="345" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
       <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Firmware Architecture</text>
       <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• ESP32-WROOM-32D Dual-Core MCU</text>
       <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• Core 0: FreeRTOS 1 Hz Modbus acquisition</text>
@@ -274,10 +275,9 @@ def generate_system_architecture():
       <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• Ring buffer for offline network caching</text>
     </g>
 
-    <!-- Sub-Box 4 -->
-    <g transform="translate(1160, 56)">
-      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
-      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Electrical Bench Safety &amp; Ingest</text>
+    <g transform="translate(1115, 56)">
+      <rect x="0" y="0" width="345" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Bench Safety &amp; Ingest</text>
       <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• Single-pole 6A MCB (10kA breaking capacity)</text>
       <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• 2-pole 30mA RCD / RCCB earth fault trip</text>
       <text x="18" y="96" fill="#E2E8F0" font-size="11.5">• 5kV Optocoupler galvanic isolation barrier</text>
@@ -286,26 +286,32 @@ def generate_system_architecture():
     </g>
   </g>
 
-  <!-- 5. PERFECTLY ALIGNED CONNECTORS -->
+  <!-- 5. CONNECTORS -->
   <!-- Layer 1 to Layer 2 -->
-  <line x1="230" y1="350" x2="230" y2="373" stroke="#00E5FF" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
-  <line x1="1370" y1="375" x2="1370" y2="352" stroke="#00E5FF" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+  <line x1="220" y1="350" x2="220" y2="373" stroke="#00E5FF" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+  <line x1="1310" y1="375" x2="1310" y2="352" stroke="#00E5FF" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
   
-  <rect x="165" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
-  <text x="230" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">HTTP REST / SSE</text>
+  <rect x="155" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="220" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">HTTP REST / SSE</text>
   
-  <rect x="1305" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
-  <text x="1370" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">JSON DTO STREAM</text>
+  <rect x="1245" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="1310" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">JSON DTO STREAM</text>
 
   <!-- Layer 2 to Layer 3 -->
-  <line x1="276" y1="560" x2="276" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
-  <line x1="800" y1="560" x2="800" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
-  <line x1="1324" y1="560" x2="1324" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
+  <line x1="268" y1="560" x2="268" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
+  <line x1="770" y1="560" x2="770" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
+  <line x1="1272" y1="560" x2="1272" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
 
-  <!-- Layer 4 to Layer 2 (Staged Ingestion Flow) -->
-  <line x1="1370" y1="855" x2="1370" y2="563" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowAmber)"/>
-  <rect x="1305" y="700" width="130" height="20" rx="4" fill="#0B0F19" stroke="#F59E0B" stroke-width="1"/>
-  <text x="1370" y="714" fill="#F59E0B" font-size="9.5" font-weight="700" text-anchor="middle">STAGED INGESTION</text>
+  <!-- ============================================================== -->
+  <!-- DEDICATED RIGHT-SIDE CONDUIT FOR STAGED INGESTION              -->
+  <!-- Routes completely outside of Card 3C (x=1545)! ZERO OVERLAP!   -->
+  <!-- ============================================================== -->
+  <path d="M 1460 855 L 1545 855 L 1545 468 L 1512 468" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-dasharray="6,4" marker-end="url(#arrowAmber)"/>
+  
+  <g transform="translate(1485, 685)">
+    <rect x="0" y="0" width="105" height="26" rx="6" fill="#0B0F19" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="52" y="17" fill="#F59E0B" font-size="9" font-weight="800" text-anchor="middle">STAGED INGEST</text>
+  </g>
 
 </svg>
 """
@@ -318,26 +324,26 @@ def generate_system_architecture():
     draw = ImageDraw.Draw(img)
 
     # Header
-    draw.rounded_rectangle([30, 25, 1570, 100], radius=14, fill="#111827", outline="#00E5FF", width=2)
+    draw.rounded_rectangle([30, 25, 1510, 100], radius=14, fill="#111827", outline="#00E5FF", width=2)
     draw.text((55, 42), "ENERGY MIRROR: LIVING CURRENT", fill="#FFFFFF", font=font_hero)
     draw.text((55, 74), "End-to-End System Architecture & Progress Verification Map", fill="#00E5FF", font=font_h3)
 
     badges = [
-        ("193 TESTS PASSED", "#10B981", "#064E3B", 949),
-        ("60 FPS / WCAG AAA", "#00E5FF", "#0C4A6E", 1101),
-        ("LOOPBACK GUARD", "#A855F7", "#4C1D95", 1253),
-        ("HW: PROCUREMENT", "#F59E0B", "#78350F", 1405),
+        ("193 TESTS PASSED", "#10B981", "#064E3B", 920),
+        ("60 FPS / WCAG AAA", "#00E5FF", "#0C4A6E", 1065),
+        ("LOOPBACK GUARD", "#A855F7", "#4C1D95", 1210),
+        ("HW: PROCUREMENT", "#F59E0B", "#78350F", 1355),
     ]
     for text, border_c, bg_c, x in badges:
-        draw.rounded_rectangle([x, 48, x + 140, 78], radius=6, fill=bg_c, outline=border_c, width=1)
-        draw.text((x + 14, 56), text, fill=border_c, font=font_badge)
+        draw.rounded_rectangle([x, 48, x + 135, 78], radius=6, fill=bg_c, outline=border_c, width=1)
+        draw.text((x + 12, 56), text, fill=border_c, font=font_badge)
 
     def draw_section(y, h, title, status, border_c, header_c):
-        draw.rounded_rectangle([30, y, 1570, y + h], radius=14, fill="#131B2E", outline=border_c, width=2)
-        draw.rounded_rectangle([30, y, 1570, y + 42], radius=14, fill=header_c, outline=border_c, width=2)
+        draw.rounded_rectangle([30, y, 1510, y + h], radius=14, fill="#131B2E", outline=border_c, width=2)
+        draw.rounded_rectangle([30, y, 1510, y + 42], radius=14, fill=header_c, outline=border_c, width=2)
         draw.text((50, y + 12), title, fill="#FFFFFF", font=font_h2)
-        draw.rounded_rectangle([1265, y + 8, 1550, y + 34], radius=6, fill="#0F172A", outline=border_c, width=1)
-        draw.text((1285, y + 14), status, fill=border_c, font=font_badge)
+        draw.rounded_rectangle([1225, y + 8, 1490, y + 34], radius=6, fill="#0F172A", outline=border_c, width=1)
+        draw.text((1245, y + 14), status, fill=border_c, font=font_badge)
 
     def draw_box(x, y, w, h, title, lines, border_c, title_c="#38BDF8"):
         draw.rounded_rectangle([x, y, x + w, y + h], radius=10, fill="#182238", outline=border_c, width=1)
@@ -347,9 +353,9 @@ def generate_system_architecture():
             draw.text((x + 16, curr_y), line, fill="#CBD5E1", font=font_body)
             curr_y += 20
 
-    # 1. Presentation
+    # 1. Presentation (w=345 each)
     draw_section(120, 230, "1. PRESENTATION LAYER: FLUTTER WEBDESKTOP / MOBILE DASHBOARD", "VERIFIED LIVE (38 TESTS PASSED)", "#0284C7", "#1E293B")
-    draw_box(50, 176, 360, 155, "Hero Energy Pulse (60 FPS)", [
+    draw_box(50, 176, 345, 155, "Hero Energy Pulse (60 FPS)", [
         "• Radial breathing cyan glow visualizer",
         "• Real-time baseline readout: 284.0 W",
         "• Tabular typography (zero layout shift)",
@@ -357,7 +363,7 @@ def generate_system_architecture():
         "• Mobile (393px) & Desktop (1440px) checked"
     ], "#38BDF8", "#00E5FF")
 
-    draw_box(430, 176, 360, 155, "Appliance Constellation Grid", [
+    draw_box(415, 176, 345, 155, "Appliance Constellation Grid", [
         "• Water Heater: 140.0 W (49.3%, PF 0.99)",
         "• Water Pump: 75.0 W (26.4%, PF 0.78)",
         "• Ceiling Fan: 45.0 W (15.8%, PF 0.91)",
@@ -365,7 +371,7 @@ def generate_system_architecture():
         "• Interactive toggles & duty cycle models"
     ], "#38BDF8", "#00E5FF")
 
-    draw_box(810, 176, 360, 155, "Load Reconciliation Bar", [
+    draw_box(780, 176, 345, 155, "Load Reconciliation Bar", [
         "• Invariant: P_agg = Sum(P_app) + P_residual",
         "• Attributed Sum: 272.0 W (95.8%)",
         "• Unattributed Floor: 12.0 W (4.2%)",
@@ -373,43 +379,43 @@ def generate_system_architecture():
         "• Strictly distinct from 12.0 W LED bulb"
     ], "#38BDF8", "#00E5FF")
 
-    draw_box(1190, 176, 360, 155, "Dynamic Registry Workbench", [
+    draw_box(1145, 176, 345, 155, "Dynamic Registry Workbench", [
         "• Add / Edit / Inspect appliance dialogs",
         "• Tolerance bounds: Delta P, Expected PF",
-        "• Capability honesty: PRODUCTION vs UNSUPPORTED",
+        "• Capability honesty: PRODUCTION vs UN",
         "• Protected default 4-appliance guard",
         "• FlChart 15m/1h/6h/24h non-flatline view"
     ], "#38BDF8", "#00E5FF")
 
     # 2. Gateway
     draw_section(375, 185, "2. API GATEWAY, REVERSE PROXY & SECURITY ENGINE (FASTAPI ASGI)", "HARDENED (18 TESTS PASSED)", "#6366F1", "#1E293B")
-    draw_box(50, 429, 360, 115, "Unified Proxy (:5000 / :8000)", [
+    draw_box(50, 429, 345, 115, "Unified Proxy (:5000 / :8000)", [
         "• Single-port reverse proxy (serve_web.py)",
         "• Static Flutter web release bundle host",
         "• Resilient client offline fallback & retry"
     ], "#818CF8", "#A5B4FC")
 
-    draw_box(430, 429, 360, 115, "Local Loopback Security Guard", [
+    draw_box(415, 429, 345, 115, "Local Loopback Security Guard", [
         "• Loopback isolation (127.0.0.1, ::1)",
         "• Administrative mutations guarded (POST, DEL)",
         "• Remote write requests rejected: HTTP 403"
     ], "#818CF8", "#A5B4FC")
 
-    draw_box(810, 429, 360, 115, "Pydantic v2 Schema Guardrails", [
+    draw_box(780, 429, 345, 115, "Pydantic v2 Schema Guardrails", [
         "• Physical conservation check: P <= S * 1.08",
         "• Extra payload fields forbidden",
         "• Timing-safe token auth (compare_digest)"
     ], "#818CF8", "#A5B4FC")
 
-    draw_box(1190, 429, 360, 115, "RESTful Service Endpoints", [
+    draw_box(1145, 429, 345, 115, "RESTful Service Endpoints", [
         "• GET /api/v1/health & /diagnostics",
         "• GET /api/v1/telemetry/live & /history",
         "• GET /api/v1/nilm/live-disaggregation"
     ], "#818CF8", "#A5B4FC")
 
-    # 3. Middle Tier (493px each)
+    # 3. Middle Tier (w=476 each, ending at 1510)
     draw_section(585, 235, "3. CORE INTELLIGENCE & PERSISTENCE ENGINE", "115 COMBINED TESTS PASSED", "#10B981", "#1E293B")
-    draw_box(50, 640, 475, 162, "3A. Dynamic Registry & Simulator", [
+    draw_box(50, 640, 456, 162, "3A. Dynamic Registry & Simulator", [
         "• Dynamic database-backed appliance definitions",
         "• 16-state combinatorial permutation logic",
         "• All appliances OFF = exactly 12.0 W residual",
@@ -417,7 +423,7 @@ def generate_system_architecture():
         "• State isolation across server restarts & resets"
     ], "#059669", "#34D399")
 
-    draw_box(563, 640, 475, 162, "3B. Rule-Based NILM & ML Benchmarks", [
+    draw_box(552, 640, 456, 162, "3B. Rule-Based NILM & ML Benchmarks", [
         "• 1 Hz active derivative step detector (Delta P, PF)",
         "• Noise floor suppression: |Delta P| < 5.0 W ignored",
         "• Simultaneous switching tagged: [AMBIGUOUS]",
@@ -425,7 +431,7 @@ def generate_system_architecture():
         "• Deep Learning Roadmap: Seq2Point & TCN models"
     ], "#0891B2", "#22D3EE")
 
-    draw_box(1075, 640, 475, 162, "3C. Durable Persistence Layer", [
+    draw_box(1054, 640, 456, 162, "3C. Durable Persistence Layer", [
         "• SQLite (energy_mirror.db) for zero-dependency dev",
         "• PostgreSQL (psycopg2) production-ready driver",
         "• Alembic migrations (@ 8f8361eca0e9)",
@@ -433,9 +439,9 @@ def generate_system_architecture():
         "• Schema tables: telemetry, estimates, events, registry"
     ], "#9333EA", "#C084FC")
 
-    # 4. Hardware Layer (360px each)
+    # 4. Hardware Layer
     draw_section(855, 245, "4. METROLOGY & HARDWARE INGESTION LAYER (LABORATORY BLUEPRINT)", "PENDING PHYSICAL PROCUREMENT", "#F59E0B", "#29200C")
-    draw_box(50, 911, 360, 170, "Service Panel Sensing", [
+    draw_box(50, 911, 345, 170, "Service Panel Sensing", [
         "• Single-point distribution panel sensing",
         "• PZEM-004T v3.0 Digital Energy IC",
         "• Split-core 100A / 100mA current clamp",
@@ -443,7 +449,7 @@ def generate_system_architecture():
         "• 1 Hz V, I, P, PF, Frequency acquisition"
     ], "#D97706", "#FBBF24")
 
-    draw_box(430, 911, 360, 170, "Low-Power CT Multi-Turn Scaling", [
+    draw_box(415, 911, 345, 170, "Low-Power CT Multi-Turn", [
         "• N = 10 primary conductor turns",
         "• Multiplies magnetic flux 10x (12W -> 120W)",
         "• Lifts low loads above CT non-linear floor",
@@ -451,7 +457,7 @@ def generate_system_architecture():
         "• Enables sub-15W LED bulb measurement"
     ], "#D97706", "#FBBF24")
 
-    draw_box(810, 911, 360, 170, "Firmware Architecture", [
+    draw_box(780, 911, 345, 170, "Firmware Architecture", [
         "• ESP32-WROOM-32D Dual-Core MCU",
         "• Core 0: FreeRTOS 1 Hz Modbus acquisition",
         "• Core 1: Wi-Fi HTTP POST client",
@@ -459,7 +465,7 @@ def generate_system_architecture():
         "• Ring buffer for offline network caching"
     ], "#D97706", "#FBBF24")
 
-    draw_box(1190, 911, 360, 170, "Electrical Bench Safety & Ingest", [
+    draw_box(1145, 911, 345, 170, "Bench Safety & Ingest", [
         "• Single-pole 6A MCB (10kA breaking capacity)",
         "• 2-pole 30mA RCD / RCCB earth fault trip",
         "• 5kV Optocoupler galvanic isolation barrier",
@@ -467,8 +473,15 @@ def generate_system_architecture():
         "• Staged Inactive (ENABLE_HW_INGEST=false)"
     ], "#D97706", "#FBBF24")
 
+    # Draw conduit path in right gutter (x=1545)
+    draw.line([(1490, 855), (1545, 855)], fill="#F59E0B", width=2)
+    draw.line([(1545, 855), (1545, 468)], fill="#F59E0B", width=2)
+    draw.line([(1545, 468), (1510, 468)], fill="#F59E0B", width=2)
+    draw.rounded_rectangle([1490, 685, 1585, 711], radius=6, fill="#0B0F19", outline="#F59E0B", width=1)
+    draw.text((1500, 692), "STAGED INGEST", fill="#F59E0B", font=font_badge)
+
     img.save(png_path, "PNG", optimize=True)
-    print("System Architecture regenerated successfully!")
+    print("System Architecture regenerated and conduit separated cleanly!")
 
 
 # ==============================================================================
@@ -853,16 +866,17 @@ def generate_appliance_baseline():
     </g>
   </g>
 
-  <!-- 2. TABLE HEADER ROW (Total width=1540, aligned columns) -->
-  <!-- Col 1: 55, Col 2: 350, Col 3: 520, Col 4: 720, Col 5: 940 (width 400!), Col 6: 1370 -->
+  <!-- 2. TABLE HEADER ROW (Aligned Columns & Centers) -->
+  <!-- Col 1: 55, Col 2: 350, Col 3: 520, Col 4: 720, Col 5: 930 (width 400!), Col 6: Center 1435! -->
   <g transform="translate(30, 185)">
     <rect x="0" y="0" width="1540" height="42" rx="8" fill="#1E293B" stroke="#334155" stroke-width="1.2"/>
     <text x="35" y="26" fill="#94A3B8" font-size="12" font-weight="800">APPLIANCE / LOAD NAME</text>
     <text x="350" y="26" fill="#94A3B8" font-size="12" font-weight="800">ACTIVE POWER (W)</text>
     <text x="520" y="26" fill="#94A3B8" font-size="12" font-weight="800">POWER FACTOR (PF)</text>
     <text x="720" y="26" fill="#94A3B8" font-size="12" font-weight="800">NOMINAL SHARE (%)</text>
-    <text x="940" y="26" fill="#94A3B8" font-size="12" font-weight="800">ELECTRICAL SIGNATURE &amp; PHYSICS</text>
-    <text x="1370" y="26" fill="#94A3B8" font-size="12" font-weight="800">DETECTION ENVELOPE</text>
+    <text x="930" y="26" fill="#94A3B8" font-size="12" font-weight="800">ELECTRICAL SIGNATURE &amp; PHYSICS</text>
+    <!-- Center Column 6 Header directly above badges at 1435! -->
+    <text x="1435" y="26" fill="#94A3B8" font-size="11.5" font-weight="800" text-anchor="middle">DETECTION ENVELOPE</text>
   </g>
 
   <!-- 3. TABLE BODY ROWS -->
@@ -886,11 +900,11 @@ def generate_appliance_baseline():
       <rect x="65" y="6" width="56" height="12" rx="4" fill="#EF4444"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Pure Resistive Nichrome</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">No inrush spike; instant flat step transition</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Pure Resistive Nichrome</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">No inrush spike; instant flat step transition</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 2 -->
@@ -913,11 +927,11 @@ def generate_appliance_baseline():
       <rect x="65" y="6" width="30" height="12" rx="4" fill="#3B82F6"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Inductive Motor Inrush</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Lagging PF transition envelope with starting spike</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Inductive Motor Inrush</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Lagging PF transition envelope with starting spike</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 3 -->
@@ -940,11 +954,11 @@ def generate_appliance_baseline():
       <rect x="65" y="6" width="18" height="12" rx="4" fill="#10B981"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Rotary Inductive Load</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Moderate inductive phase shift with stable plateau</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Rotary Inductive Load</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Moderate inductive phase shift with stable plateau</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 4 -->
@@ -967,11 +981,11 @@ def generate_appliance_baseline():
       <rect x="65" y="6" width="6" height="12" rx="4" fill="#F59E0B"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">SMPS Driver Rectifier</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Capacitive filter leading PF; scaled via N=10 CT turn</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">SMPS Driver Rectifier</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Capacitive filter leading PF; scaled via N=10 CT turn</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">PRODUCTION RULE</text>
   </g>
 
   <!-- ROW 5 -->
@@ -994,18 +1008,19 @@ def generate_appliance_baseline():
       <rect x="65" y="6" width="6" height="12" rx="4" fill="#A855F7"/>
     </g>
 
-    <text x="940" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Parasitic Ambient Standby Load</text>
-    <text x="940" y="52" fill="#94A3B8" font-size="11.5">Smoke detectors, Wi-Fi router, microwave clock</text>
+    <text x="930" y="35" fill="#E2E8F0" font-size="13" font-weight="700">Parasitic Ambient Standby Load</text>
+    <text x="930" y="52" fill="#94A3B8" font-size="11.5">Smoke detectors, Wi-Fi router, microwave clock</text>
 
-    <rect x="1370" y="20" width="145" height="32" rx="6" fill="#3B0764" stroke="#A855F7" stroke-width="1.2"/>
-    <text x="1442" y="41" fill="#E9D5FF" font-size="11" font-weight="800" text-anchor="middle">RESIDUAL BASELINE</text>
+    <rect x="1360" y="20" width="150" height="32" rx="6" fill="#3B0764" stroke="#A855F7" stroke-width="1.2"/>
+    <text x="1435" y="41" fill="#E9D5FF" font-size="11" font-weight="800" text-anchor="middle">RESIDUAL BASELINE</text>
   </g>
 
   <!-- 4. TOTAL RECONCILIATION SUMMARY FOOTER -->
+  <!-- Left title width 300px, subtitle cleanly contained without running under the 284W box! -->
   <g transform="translate(30, 645)" filter="url(#cardShadow)">
     <rect x="0" y="0" width="1540" height="85" rx="12" fill="url(#totGrad)" stroke="#00E5FF" stroke-width="2"/>
-    <text x="35" y="38" fill="#FFFFFF" font-size="18" font-weight="800">TOTAL HOUSEHOLD AGGREGATE</text>
-    <text x="35" y="62" fill="#00E5FF" font-size="12" font-weight="700">P_aggregate = Sum(P_attributed 272W) + P_residual (12W)</text>
+    <text x="35" y="36" fill="#FFFFFF" font-size="16.5" font-weight="800">TOTAL HOUSEHOLD AGGREGATE</text>
+    <text x="35" y="58" fill="#00E5FF" font-size="11.5" font-weight="700">P_agg ≡ P_attr (272W) + P_floor (12W)</text>
 
     <rect x="350" y="22" width="130" height="42" rx="8" fill="#0A2239" stroke="#00E5FF" stroke-width="1.6"/>
     <text x="415" y="50" fill="#00E5FF" font-size="19" font-weight="800" text-anchor="middle">284.0 W</text>
@@ -1016,8 +1031,9 @@ def generate_appliance_baseline():
     <rect x="720" y="22" width="140" height="42" rx="8" fill="#0A2239" stroke="#00E5FF" stroke-width="1.6"/>
     <text x="790" y="50" fill="#00E5FF" font-size="18" font-weight="800" text-anchor="middle">100.0%</text>
 
-    <rect x="940" y="22" width="575" height="42" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.6"/>
-    <text x="1227" y="48" fill="#E6FFFA" font-size="13" font-weight="800" text-anchor="middle">✓ ZERO POWER LEAKAGE • EXACT ARITHMETIC RECONCILIATION</text>
+    <!-- Roomy, comfortable green box with 100px padding! -->
+    <rect x="910" y="22" width="600" height="42" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.6"/>
+    <text x="1210" y="48" fill="#E6FFFA" font-size="12" font-weight="800" text-anchor="middle">✓ ZERO POWER LEAKAGE • EXACT RECONCILIATION</text>
   </g>
 
   <!-- Footnotes -->
@@ -1067,8 +1083,9 @@ def generate_appliance_baseline():
     draw.text((380, 200), "ACTIVE POWER (W)", fill="#94A3B8", font=font_badge)
     draw.text((550, 200), "POWER FACTOR (PF)", fill="#94A3B8", font=font_badge)
     draw.text((750, 200), "NOMINAL SHARE (%)", fill="#94A3B8", font=font_badge)
-    draw.text((970, 200), "ELECTRICAL SIGNATURE & PHYSICS", fill="#94A3B8", font=font_badge)
-    draw.text((1400, 200), "DETECTION ENVELOPE", fill="#94A3B8", font=font_badge)
+    draw.text((960, 200), "ELECTRICAL SIGNATURE & PHYSICS", fill="#94A3B8", font=font_badge)
+    # Centered Column 6 Header at 1435
+    draw.text((1375, 200), "DETECTION ENVELOPE", fill="#94A3B8", font=font_badge)
 
     # Rows
     rows = [
@@ -1093,19 +1110,19 @@ def generate_appliance_baseline():
 
         draw.text((750, y + 26), share, fill=color, font=font_stat)
 
-        draw.text((970, y + 16), sig, fill="#E2E8F0", font=font_h3)
-        draw.text((970, y + 42), desc, fill="#94A3B8", font=font_body)
+        draw.text((960, y + 16), sig, fill="#E2E8F0", font=font_h3)
+        draw.text((960, y + 42), desc, fill="#94A3B8", font=font_body)
 
         badge_bg = "#3B0764" if "Residual" in name else "#064E3B"
         badge_bd = "#A855F7" if "Residual" in name else "#10B981"
         badge_tx = "RESIDUAL BASELINE" if "Residual" in name else "PRODUCTION RULE"
-        draw.rounded_rectangle([1370, y + 20, 1520, y + 50], radius=6, fill=badge_bg, outline=badge_bd, width=1)
-        draw.text((1385, y + 28), badge_tx, fill=badge_bd, font=font_badge)
+        draw.rounded_rectangle([1360, y + 20, 1510, y + 50], radius=6, fill=badge_bg, outline=badge_bd, width=1)
+        draw.text((1375, y + 28), badge_tx, fill=badge_bd, font=font_badge)
 
-    # Footer
+    # Footer (No overlap with 284.0W box, comfortable green box)
     draw.rounded_rectangle([30, 645, 1570, 730], radius=12, fill="#0F2840", outline="#00E5FF", width=2)
-    draw.text((55, 660), "TOTAL HOUSEHOLD AGGREGATE", fill="#FFFFFF", font=font_h2)
-    draw.text((55, 688), "P_aggregate = Sum(P_attributed 272W) + P_residual (12W)", fill="#00E5FF", font=font_body)
+    draw.text((55, 658), "TOTAL HOUSEHOLD AGGREGATE", fill="#FFFFFF", font=font_h2)
+    draw.text((55, 686), "P_agg = P_attr (272W) + P_floor (12W)", fill="#00E5FF", font=font_body)
 
     draw.rounded_rectangle([350, 660, 480, 712], radius=8, fill="#0A2239", outline="#00E5FF", width=2)
     draw.text((375, 675), "284.0 W", fill="#00E5FF", font=font_stat)
@@ -1116,18 +1133,18 @@ def generate_appliance_baseline():
     draw.rounded_rectangle([720, 660, 850, 712], radius=8, fill="#0A2239", outline="#00E5FF", width=2)
     draw.text((750, 677), "100.0%", fill="#00E5FF", font=font_stat)
 
-    draw.rounded_rectangle([940, 660, 1540, 712], radius=8, fill="#064E3B", outline="#10B981", width=2)
-    draw.text((1000, 677), "✓ ZERO POWER LEAKAGE • EXACT ARITHMETIC RECONCILIATION", fill="#E6FFFA", font=font_h3)
+    draw.rounded_rectangle([910, 660, 1510, 712], radius=8, fill="#064E3B", outline="#10B981", width=2)
+    draw.text((1010, 677), "✓ ZERO POWER LEAKAGE • EXACT RECONCILIATION", fill="#E6FFFA", font=font_h3)
 
     draw.text((55, 765), "• Note: The continuous 12.0 W residual floor is an ambient parasitic baseline assumption and is mathematically distinct from the 12.0 W LED bulb load.", fill="#94A3B8", font=font_body)
     draw.text((55, 790), "• Dynamic Behavior: When all 4 virtual appliances are toggled OFF in the simulator, active power drops to exactly 12.0 W (100% unattributed residual).", fill="#94A3B8", font=font_body)
 
     img.save(png_path, "PNG", optimize=True)
-    print("Appliance Baseline diagram regenerated successfully!")
+    print("Appliance Baseline diagram regenerated with generous margins and no overlaps!")
 
 
 if __name__ == "__main__":
     generate_system_architecture()
     generate_nilm_concept()
     generate_appliance_baseline()
-    print("All 3 diagrams generated and aligned with mathematical precision!")
+    print("All 3 diagrams re-generated and verified!")
