@@ -6,6 +6,14 @@ Welcome to the **Energy Mirror Documentation Hub**. This directory houses all sp
 
 ## 1. System Architecture & Hardware Blueprints
 
+<div align="center">
+
+![Energy Mirror System Architecture](assets/system_architecture.svg)
+
+*High-Resolution System Architecture Map ([SVG](assets/system_architecture.svg) • [PNG](assets/system_architecture.png))*
+
+</div>
+
 * **[HARDWARE_ARCHITECTURE_REVIEW.md](HARDWARE_ARCHITECTURE_REVIEW.md)**  
   Complete hardware design, circuit schematics, optical isolation barrier specifications, $N=10$ multi-turn CT scaling derivation, 6A MCB / 30mA RCD safety requirements, and itemized component Bill of Materials (BOM).
 * **[LOW_POWER_FEASIBILITY_REPORT.md](LOW_POWER_FEASIBILITY_REPORT.md)**  

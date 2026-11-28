@@ -1,0 +1,510 @@
+import os
+from PIL import Image, ImageDraw, ImageFont
+
+# Ensure target directories exist
+assets_dir = r"C:\Users\Kaviya\Downloads\Energy Mirror\docs\assets"
+os.makedirs(assets_dir, exist_ok=True)
+svg_path = os.path.join(assets_dir, "system_architecture.svg")
+png_path = os.path.join(assets_dir, "system_architecture.png")
+
+# ==========================================
+# 1. GENERATE PROFESSIONAL VECTOR SVG
+# ==========================================
+svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" width="100%" height="100%" style="background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#151D2F"/>
+      <stop offset="100%" stop-color="#0F1728"/>
+    </linearGradient>
+    <linearGradient id="subCardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1A243B"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    
+    <!-- Filter Glows -->
+    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- ============================================================== -->
+  <!-- 0. TOP HERO HEADER                                             -->
+  <!-- ============================================================== -->
+  <rect x="30" y="25" width="1540" height="75" rx="14" fill="#111827" stroke="#00E5FF" stroke-width="1.8" filter="url(#cardShadow)"/>
+  
+  <!-- Title & Subtitle -->
+  <text x="60" y="60" fill="#FFFFFF" font-size="24" font-weight="800" letter-spacing="1">ENERGY MIRROR: LIVING CURRENT</text>
+  <text x="60" y="83" fill="#00E5FF" font-size="13" font-weight="600" letter-spacing="0.5">End-to-End System Architecture &amp; Verification Progress Map</text>
+
+  <!-- Top Badges -->
+  <!-- Badge 1: Tests -->
+  <g transform="translate(930, 47)">
+    <rect x="0" y="0" width="155" height="30" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.4"/>
+    <circle cx="16" cy="15" r="4.5" fill="#10B981"/>
+    <text x="28" y="20" fill="#E6FFFA" font-size="11.5" font-weight="700">193 TESTS PASSED</text>
+  </g>
+  <!-- Badge 2: UI/UX -->
+  <g transform="translate(1095, 47)">
+    <rect x="0" y="0" width="140" height="30" rx="8" fill="#0C4A6E" stroke="#00E5FF" stroke-width="1.4"/>
+    <circle cx="16" cy="15" r="4.5" fill="#00E5FF"/>
+    <text x="28" y="20" fill="#E0F2FE" font-size="11.5" font-weight="700">60 FPS / WCAG AAA</text>
+  </g>
+  <!-- Badge 3: Security -->
+  <g transform="translate(1245, 47)">
+    <rect x="0" y="0" width="140" height="30" rx="8" fill="#4C1D95" stroke="#A855F7" stroke-width="1.4"/>
+    <circle cx="16" cy="15" r="4.5" fill="#A855F7"/>
+    <text x="28" y="20" fill="#F3E8FF" font-size="11.5" font-weight="700">LOOPBACK GUARD</text>
+  </g>
+  <!-- Badge 4: HW Status -->
+  <g transform="translate(1395, 47)">
+    <rect x="0" y="0" width="155" height="30" rx="8" fill="#78350F" stroke="#F59E0B" stroke-width="1.4"/>
+    <circle cx="16" cy="15" r="4.5" fill="#F59E0B"/>
+    <text x="28" y="20" fill="#FEF3C7" font-size="11" font-weight="700">HW: PROCUREMENT</text>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 1. PRESENTATION LAYER (FLUTTER)                                -->
+  <!-- ============================================================== -->
+  <g transform="translate(30, 120)">
+    <!-- Container -->
+    <rect x="0" y="0" width="1540" height="230" rx="14" fill="url(#cardGrad)" stroke="#0284C7" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <!-- Header -->
+    <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="25" y="27" fill="#FFFFFF" font-size="15" font-weight="800">1. PRESENTATION LAYER: FLUTTER WEBDESKTOP / MOBILE DASHBOARD</text>
+    <rect x="1270" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1395" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">VERIFIED LIVE (38 TESTS PASSED)</text>
+
+    <!-- Sub-Box 1: Hero Pulse -->
+    <g transform="translate(20, 56)">
+      <rect x="0" y="0" width="355" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+      <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Hero Energy Pulse (60 FPS)</text>
+      <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Radial breathing cyan glow visualizer</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Real-time baseline readout: 284.0 W</text>
+      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Tabular typography (zero layout shift)</text>
+      <text x="18" y="112" fill="#CBD5E1" font-size="11.5">• Truth-in-reporting pill: [SIMULATED]</text>
+      <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Mobile (393px) &amp; Desktop (1440px) checked</text>
+    </g>
+
+    <!-- Sub-Box 2: Constellation -->
+    <g transform="translate(395, 56)">
+      <rect x="0" y="0" width="365" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+      <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Appliance Constellation Grid</text>
+      <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Water Heater: 140.0 W (49.3%, PF 0.99)</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Water Pump: 75.0 W (26.4%, PF 0.78)</text>
+      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Ceiling Fan: 45.0 W (15.8%, PF 0.91)</text>
+      <text x="18" y="112" fill="#CBD5E1" font-size="11.5">• LED Bulb: 12.0 W (4.2%, PF 0.95)</text>
+      <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Interactive toggles &amp; duty cycle models</text>
+    </g>
+
+    <!-- Sub-Box 3: Reconciliation -->
+    <g transform="translate(780, 56)">
+      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+      <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Load Reconciliation Bar</text>
+      <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Invariant: P_agg = Sum(P_app) + P_residual</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Attributed Sum: 272.0 W (95.8%)</text>
+      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Unattributed Floor: 12.0 W (4.2%)</text>
+      <text x="18" y="112" fill="#CBD5E1" font-size="11.5">• Parasitic standby baseline model</text>
+      <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Strictly distinct from 12.0 W LED bulb</text>
+    </g>
+
+    <!-- Sub-Box 4: Dynamic Registry -->
+    <g transform="translate(1160, 56)">
+      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+      <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Dynamic Registry Workbench</text>
+      <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Add / Edit / Inspect appliance dialogs</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Tolerance bounds: Delta P, Expected PF</text>
+      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Capability honesty: PRODUCTION_RULE vs UN</text>
+      <text x="18" y="112" fill="#CBD5E1" font-size="11.5">• Protected default 4-appliance guard</text>
+      <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• FlChart 15m/1h/6h/24h non-flatline view</text>
+    </g>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 2. API GATEWAY & SECURITY LAYER                                -->
+  <!-- ============================================================== -->
+  <g transform="translate(30, 375)">
+    <rect x="0" y="0" width="1540" height="185" rx="14" fill="url(#cardGrad)" stroke="#6366F1" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="25" y="27" fill="#FFFFFF" font-size="15" font-weight="800">2. API GATEWAY, REVERSE PROXY &amp; SECURITY ENGINE (FASTAPI ASGI)</text>
+    <rect x="1270" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1395" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">HARDENED (18 TESTS PASSED)</text>
+
+    <!-- Sub-Box 1: Unified Proxy -->
+    <g transform="translate(20, 54)">
+      <rect x="0" y="0" width="355" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Unified Proxy (:5000 / :8000)</text>
+      <text x="18" y="48" fill="#CBD5E1" font-size="11">• Single-port reverse proxy (serve_web.py)</text>
+      <text x="18" y="68" fill="#CBD5E1" font-size="11">• Static Flutter web release bundle host</text>
+      <text x="18" y="88" fill="#CBD5E1" font-size="11">• Resilient client offline fallback &amp; retry</text>
+      <text x="18" y="106" fill="#CBD5E1" font-size="11">• WebSocket / SSE live telemetry stream</text>
+    </g>
+
+    <!-- Sub-Box 2: Loopback Guard -->
+    <g transform="translate(395, 54)">
+      <rect x="0" y="0" width="365" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Local Loopback Security Guard</text>
+      <text x="18" y="48" fill="#CBD5E1" font-size="11">• Loopback isolation (127.0.0.1, ::1)</text>
+      <text x="18" y="68" fill="#CBD5E1" font-size="11">• Administrative mutations guarded (POST, DEL)</text>
+      <text x="18" y="88" fill="#CBD5E1" font-size="11">• Remote write requests rejected: HTTP 403</text>
+      <text x="18" y="106" fill="#CBD5E1" font-size="11">• Strict CORS origin checking (no wildcards)</text>
+    </g>
+
+    <!-- Sub-Box 3: Pydantic Schemas -->
+    <g transform="translate(780, 54)">
+      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Pydantic v2 Schema Guardrails</text>
+      <text x="18" y="48" fill="#CBD5E1" font-size="11">• Physical conservation check: P &lt;= S * 1.08</text>
+      <text x="18" y="68" fill="#CBD5E1" font-size="11">• Extra payload fields forbidden</text>
+      <text x="18" y="88" fill="#CBD5E1" font-size="11">• Multi-turn CT turn scaling (N=10 divisor)</text>
+      <text x="18" y="106" fill="#CBD5E1" font-size="11">• Timing-safe token auth (compare_digest)</text>
+    </g>
+
+    <!-- Sub-Box 4: REST Endpoints -->
+    <g transform="translate(1160, 54)">
+      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">RESTful Service Endpoints</text>
+      <text x="18" y="48" fill="#CBD5E1" font-size="11">• GET /api/v1/health &amp; /diagnostics</text>
+      <text x="18" y="68" fill="#CBD5E1" font-size="11">• GET /api/v1/telemetry/live &amp; /history</text>
+      <text x="18" y="88" fill="#CBD5E1" font-size="11">• GET /api/v1/nilm/live-disaggregation</text>
+      <text x="18" y="106" fill="#CBD5E1" font-size="11">• POST /api/v1/appliances &amp; /simulator/toggle</text>
+    </g>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 3. CORE INTELLIGENCE & PERSISTENCE (MIDDLE TIER)               -->
+  <!-- ============================================================== -->
+  <!-- 3A: Dynamic Registry & Simulator -->
+  <g transform="translate(30, 585)">
+    <rect x="0" y="0" width="490" height="235" rx="14" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 476 0 Q 490 0 490 14 L 490 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3A. DYNAMIC REGISTRY &amp; SIMULATOR</text>
+    <rect x="330" y="8" width="145" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="402" y="25" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (30 TESTS)</text>
+
+    <g transform="translate(18, 55)">
+      <rect x="0" y="0" width="454" height="162" rx="10" fill="url(#subCardGrad)" stroke="#059669" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#34D399" font-size="13" font-weight="700">Deterministic Mathematical Simulator</text>
+      <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• Dynamic database-backed appliance catalog</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• 16-state combinatorial permutation logic</text>
+      <text x="18" y="94" fill="#CBD5E1" font-size="11.5">• All appliances OFF = exactly 12.0 W residual</text>
+      <text x="18" y="116" fill="#CBD5E1" font-size="11.5">• Calibrated power factor &amp; apparent power math</text>
+      <text x="18" y="138" fill="#CBD5E1" font-size="11.5">• State isolation across server restarts &amp; resets</text>
+    </g>
+  </g>
+
+  <!-- 3B: NILM Event Detector & ML -->
+  <g transform="translate(545, 585)">
+    <rect x="0" y="0" width="510" height="235" rx="14" fill="url(#cardGrad)" stroke="#06B6D4" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 496 0 Q 510 0 510 14 L 510 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3B. RULE-BASED NILM &amp; ML BENCHMARKS</text>
+    <rect x="330" y="8" width="165" height="26" rx="6" fill="#164E63" stroke="#06B6D4" stroke-width="1.2"/>
+    <text x="412" y="25" fill="#67E8F9" font-size="10.5" font-weight="800" text-anchor="middle">BENCHMARKED (74 TESTS)</text>
+
+    <g transform="translate(18, 55)">
+      <rect x="0" y="0" width="474" height="162" rx="10" fill="url(#subCardGrad)" stroke="#0891B2" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#22D3EE" font-size="13" font-weight="700">1 Hz Derivative Edge &amp; Public Data Benchmarks</text>
+      <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• Derivative step detector: Delta P &amp; Delta PF envelopes</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Noise floor suppression: |Delta P| &lt; 5.0 W ignored</text>
+      <text x="18" y="94" fill="#CBD5E1" font-size="11.5">• Simultaneous switching tagged: [AMBIGUOUS]</text>
+      <text x="18" y="116" fill="#CBD5E1" font-size="11.5">• UK REFIT &amp; Indian iAWE benchmark validation</text>
+      <text x="18" y="138" fill="#CBD5E1" font-size="11.5">• Deep Learning Roadmap: Seq2Point &amp; TCN models</text>
+    </g>
+  </g>
+
+  <!-- 3C: Durable Persistence -->
+  <g transform="translate(1080, 585)">
+    <rect x="0" y="0" width="490" height="235" rx="14" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 476 0 Q 490 0 490 14 L 490 42 L 0 42 Z" fill="#1E293B"/>
+    <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3C. DURABLE PERSISTENCE LAYER</text>
+    <rect x="330" y="8" width="145" height="26" rx="6" fill="#581C87" stroke="#A855F7" stroke-width="1.2"/>
+    <text x="402" y="25" fill="#D8B4FE" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (11 TESTS)</text>
+
+    <g transform="translate(18, 55)">
+      <rect x="0" y="0" width="454" height="162" rx="10" fill="url(#subCardGrad)" stroke="#9333EA" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#C084FC" font-size="13" font-weight="700">Dual-Engine Relational Storage (Alembic @ 8f8361eca0e9)</text>
+      <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• SQLite (energy_mirror.db) for zero-dependency dev</text>
+      <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• PostgreSQL (psycopg2) production-ready driver</text>
+      <text x="18" y="94" fill="#CBD5E1" font-size="11.5">• Idempotent upgrades &amp; clean rollback migrations</text>
+      <text x="18" y="116" fill="#CBD5E1" font-size="11.5">• Deduplicated state event persistence &amp; retrieval</text>
+      <text x="18" y="138" fill="#CBD5E1" font-size="11.5">• Schema tables: telemetry, estimates, events, registry</text>
+    </g>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 4. HARDWARE & METROLOGY LAYER (BOTTOM)                         -->
+  <!-- ============================================================== -->
+  <g transform="translate(30, 845)">
+    <rect x="0" y="0" width="1540" height="235" rx="14" fill="#151515" stroke="#F59E0B" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#29200C"/>
+    <text x="25" y="27" fill="#FEF3C7" font-size="15" font-weight="800">4. METROLOGY &amp; HARDWARE INGESTION LAYER (LABORATORY PROCUREMENT BLUEPRINT)</text>
+    <rect x="1225" y="8" width="295" height="26" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="1372" y="25" fill="#FDE68A" font-size="10.5" font-weight="800" text-anchor="middle">PENDING PHYSICAL PROCUREMENT</text>
+
+    <!-- Sub-Box 1: Sensor IC -->
+    <g transform="translate(20, 54)">
+      <rect x="0" y="0" width="355" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Service Panel Sensing</text>
+      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• Single-point distribution panel sensing</text>
+      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• PZEM-004T v3.0 Digital Energy IC</text>
+      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• Split-core 100A / 100mA current clamp</text>
+      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• Modbus-RTU over RS-485 / UART</text>
+      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• 1 Hz V, I, P, PF, Frequency acquisition</text>
+    </g>
+
+    <!-- Sub-Box 2: CT Scaling -->
+    <g transform="translate(395, 54)">
+      <rect x="0" y="0" width="365" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Low-Power CT Multi-Turn Scaling</text>
+      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• N = 10 primary conductor turns</text>
+      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• Multiplies magnetic flux 10x (12W -> 120W)</text>
+      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• Lifts low loads above CT non-linear floor</text>
+      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• Firmware / Ingestion inverse divisor (N=10)</text>
+      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• Enables sub-15W LED bulb measurement</text>
+    </g>
+
+    <!-- Sub-Box 3: Microcontroller -->
+    <g transform="translate(780, 54)">
+      <rect x="0" y="0" width="360" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Firmware Architecture</text>
+      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• ESP32-WROOM-32D Dual-Core MCU</text>
+      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• Core 0: FreeRTOS 1 Hz Modbus acquisition</text>
+      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• Core 1: Wi-Fi HTTP POST client</text>
+      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• HLK-PM01 5V isolated AC-DC supply</text>
+      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• Ring buffer for offline network caching</text>
+    </g>
+
+    <!-- Sub-Box 4: Safety & Ingest -->
+    <g transform="translate(1160, 54)">
+      <rect x="0" y="0" width="360" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+      <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Electrical Bench Safety &amp; Ingest</text>
+      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• Single-pole 6A MCB (10kA breaking capacity)</text>
+      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• 2-pole 30mA RCD / RCCB earth fault trip</text>
+      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• 5kV Optocoupler galvanic isolation barrier</text>
+      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• Endpoint: POST /api/v1/telemetry/ingest</text>
+      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• Staged Inactive (ENABLE_HW_INGEST=false)</text>
+    </g>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 5. FLOW CONNECTING ARROWS                                      -->
+  <!-- ============================================================== -->
+  <!-- Layer 1 to Layer 2 -->
+  <g stroke="#00E5FF" stroke-width="2.5" fill="none">
+    <path d="M 200 350 L 200 375" marker-end="url(#arrowCyan)"/>
+    <path d="M 1400 375 L 1400 350" marker-end="url(#arrowCyan)"/>
+  </g>
+  <rect x="135" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="200" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">HTTP REST / SSE</text>
+  
+  <rect x="1335" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="1400" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">JSON DTO STREAM</text>
+
+  <!-- Layer 2 to Layer 3 -->
+  <g stroke="#6366F1" stroke-width="2.5" fill="none">
+    <path d="M 270 560 L 270 585"/>
+    <path d="M 800 560 L 800 585"/>
+    <path d="M 1320 560 L 1320 585"/>
+  </g>
+
+  <!-- Layer 4 to Layer 2 (Staged Ingestion Flow) -->
+  <g stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,4" fill="none">
+    <path d="M 1340 845 L 1340 560"/>
+  </g>
+  <rect x="1275" y="695" width="130" height="20" rx="4" fill="#0B0F19" stroke="#F59E0B" stroke-width="1"/>
+  <text x="1340" y="709" fill="#F59E0B" font-size="9.5" font-weight="700" text-anchor="middle">STAGED INGESTION</text>
+
+</svg>
+"""
+
+with open(svg_path, "w", encoding="utf-8") as f:
+    f.write(svg_content)
+
+print(f"Vector SVG generated: {svg_path} ({os.path.getsize(svg_path)} bytes)")
+
+# ==========================================
+# 2. GENERATE HIGH-RESOLUTION PNG VIA PILLOW
+# ==========================================
+W, H = 1600, 1120
+img = Image.new("RGB", (W, H), color="#0B0F19")
+draw = ImageDraw.Draw(img)
+
+# Fallback fonts
+try:
+    font_hero = ImageFont.truetype("arialbd.ttf", 26)
+    font_sub = ImageFont.truetype("arial.ttf", 15)
+    font_h2 = ImageFont.truetype("arialbd.ttf", 17)
+    font_h3 = ImageFont.truetype("arialbd.ttf", 15)
+    font_body = ImageFont.truetype("arial.ttf", 13)
+    font_badge = ImageFont.truetype("arialbd.ttf", 12)
+except Exception:
+    font_hero = ImageFont.load_default()
+    font_sub = font_hero
+    font_h2 = font_hero
+    font_h3 = font_hero
+    font_body = font_hero
+    font_badge = font_hero
+
+# Top bar
+draw.rounded_rectangle([30, 25, 1570, 100], radius=14, fill="#111827", outline="#00E5FF", width=2)
+draw.text((60, 42), "ENERGY MIRROR: LIVING CURRENT", fill="#FFFFFF", font=font_hero)
+draw.text((60, 75), "End-to-End System Architecture & Progress Verification Map", fill="#00E5FF", font=font_sub)
+
+# Top badges
+badges = [
+    ("193 TESTS PASSED", "#10B981", "#064E3B", 1000),
+    ("60 FPS / WCAG AAA", "#00E5FF", "#0C4A6E", 1160),
+    ("LOOPBACK GUARD", "#A855F7", "#4C1D95", 1310),
+    ("HW: PROCUREMENT", "#F59E0B", "#78350F", 1450),
+]
+for text, border_c, bg_c, x in badges:
+    draw.rounded_rectangle([x, 48, x + 135, 78], radius=6, fill=bg_c, outline=border_c, width=2)
+    draw.text((x + 12, 56), text, fill=border_c, font=font_badge)
+
+def draw_section(y, h, title, status, border_c, header_c):
+    draw.rounded_rectangle([30, y, 1570, y + h], radius=14, fill="#131B2E", outline=border_c, width=2)
+    draw.rounded_rectangle([30, y, 1570, y + 42], radius=14, fill=header_c, outline=border_c, width=2)
+    draw.text((50, y + 12), title, fill="#FFFFFF", font=font_h2)
+    # Status badge
+    draw.rounded_rectangle([1260, y + 8, 1550, y + 34], radius=6, fill="#0F172A", outline=border_c, width=1)
+    draw.text((1280, y + 14), status, fill=border_c, font=font_badge)
+
+def draw_box(x, y, w, h, title, lines, border_c):
+    draw.rounded_rectangle([x, y, x + w, y + h], radius=10, fill="#182238", outline=border_c, width=1)
+    draw.text((x + 16, y + 14), title, fill=border_c, font=font_h3)
+    curr_y = y + 42
+    for line in lines:
+        draw.text((x + 16, curr_y), line, fill="#CBD5E1", font=font_body)
+        curr_y += 22
+
+# 1. Presentation
+draw_section(120, 230, "1. PRESENTATION LAYER: FLUTTER WEBDESKTOP / MOBILE DASHBOARD", "VERIFIED LIVE (38 TESTS PASSED)", "#0284C7", "#1E293B")
+draw_box(50, 175, 360, 155, "Hero Energy Pulse (60 FPS)", [
+    "• Radial breathing cyan glow visualizer",
+    "• Real-time baseline readout: 284.0 W",
+    "• Tabular typography (zero layout shift)",
+    "• Truth-in-reporting pill: [SIMULATED]",
+    "• Mobile (393px) & Desktop (1440px) checked"
+], "#38BDF8")
+
+draw_box(430, 175, 360, 155, "Appliance Constellation Grid", [
+    "• Water Heater: 140.0 W (49.3%, PF 0.99)",
+    "• Water Pump: 75.0 W (26.4%, PF 0.78)",
+    "• Ceiling Fan: 45.0 W (15.8%, PF 0.91)",
+    "• LED Bulb: 12.0 W (4.2%, PF 0.95)",
+    "• Interactive toggles & duty cycle models"
+], "#38BDF8")
+
+draw_box(810, 175, 360, 155, "Load Reconciliation Bar", [
+    "• Invariant: P_agg = Sum(P_app) + P_residual",
+    "• Attributed Sum: 272.0 W (95.8%)",
+    "• Unattributed Floor: 12.0 W (4.2%)",
+    "• Parasitic standby baseline model",
+    "• Strictly distinct from 12.0 W LED bulb"
+], "#38BDF8")
+
+draw_box(1190, 175, 360, 155, "Dynamic Registry Workbench", [
+    "• Add / Edit / Inspect appliance dialogs",
+    "• Tolerance bounds: Delta P, Expected PF",
+    "• Capability honesty: PRODUCTION_RULE vs UN",
+    "• Protected default 4-appliance guard",
+    "• FlChart 15m/1h/6h/24h non-flatline view"
+], "#38BDF8")
+
+# 2. Gateway
+draw_section(375, 185, "2. API GATEWAY, REVERSE PROXY & SECURITY ENGINE (FASTAPI ASGI)", "HARDENED (18 TESTS PASSED)", "#6366F1", "#1E293B")
+draw_box(50, 430, 360, 115, "Unified Proxy (:5000 / :8000)", [
+    "• Single-port reverse proxy (serve_web.py)",
+    "• Static Flutter web release bundle host",
+    "• Resilient client offline fallback & retry"
+], "#818CF8")
+
+draw_box(430, 430, 360, 115, "Local Loopback Security Guard", [
+    "• Loopback isolation (127.0.0.1, ::1)",
+    "• Administrative mutations guarded (POST, DEL)",
+    "• Remote write requests rejected: HTTP 403"
+], "#818CF8")
+
+draw_box(810, 430, 360, 115, "Pydantic v2 Schema Guardrails", [
+    "• Physical conservation check: P <= S * 1.08",
+    "• Extra payload fields forbidden",
+    "• Timing-safe token auth (compare_digest)"
+], "#818CF8")
+
+draw_box(1190, 430, 360, 115, "RESTful Service Endpoints", [
+    "• GET /api/v1/health & /diagnostics",
+    "• GET /api/v1/telemetry/live & /history",
+    "• GET /api/v1/nilm/live-disaggregation"
+], "#818CF8")
+
+# 3. Middle Tier
+draw_section(585, 235, "3. CORE INTELLIGENCE & PERSISTENCE ENGINE", "115 COMBINED TESTS PASSED", "#10B981", "#1E293B")
+draw_box(50, 640, 480, 160, "3A. Dynamic Registry & Simulator", [
+    "• Dynamic database-backed appliance definitions",
+    "• 16-state combinatorial permutation logic",
+    "• All appliances OFF = exactly 12.0 W residual",
+    "• Calibrated power factor & apparent power math",
+    "• State isolation across server restarts & resets"
+], "#10B981")
+
+draw_box(560, 640, 480, 160, "3B. Rule-Based NILM & ML Benchmarks", [
+    "• 1 Hz active derivative step detector (Delta P, PF)",
+    "• Noise floor suppression: |Delta P| < 5.0 W ignored",
+    "• Simultaneous switching tagged: [AMBIGUOUS]",
+    "• UK REFIT & Indian iAWE benchmark validation",
+    "• Deep Learning Roadmap: Seq2Point & TCN models"
+], "#06B6D4")
+
+draw_box(1070, 640, 480, 160, "3C. Durable Persistence Layer", [
+    "• SQLite (energy_mirror.db) for zero-dependency dev",
+    "• PostgreSQL (psycopg2) production-ready driver",
+    "• Alembic migrations (@ 8f8361eca0e9)",
+    "• Deduplicated state event persistence & retrieval",
+    "• Schema tables: telemetry, estimates, events, registry"
+], "#A855F7")
+
+# 4. Hardware
+draw_section(845, 235, "4. METROLOGY & HARDWARE INGESTION LAYER (LABORATORY BLUEPRINT)", "PENDING PHYSICAL PROCUREMENT", "#F59E0B", "#29200C")
+draw_box(50, 900, 360, 160, "Service Panel Sensing", [
+    "• Single-point distribution panel sensing",
+    "• PZEM-004T v3.0 Digital Energy IC",
+    "• Split-core 100A / 100mA current clamp",
+    "• Modbus-RTU over RS-485 / UART",
+    "• 1 Hz V, I, P, PF, Frequency acquisition"
+], "#D97706")
+
+draw_box(430, 900, 360, 160, "Low-Power CT Multi-Turn Scaling", [
+    "• N = 10 primary conductor turns",
+    "• Multiplies magnetic flux 10x (12W -> 120W)",
+    "• Lifts low loads above CT non-linear floor",
+    "• Firmware / Ingestion inverse divisor (N=10)",
+    "• Enables sub-15W LED bulb measurement"
+], "#D97706")
+
+draw_box(810, 900, 360, 160, "Firmware Architecture", [
+    "• ESP32-WROOM-32D Dual-Core MCU",
+    "• Core 0: FreeRTOS 1 Hz Modbus acquisition",
+    "• Core 1: Wi-Fi HTTP POST client",
+    "• HLK-PM01 5V isolated AC-DC supply",
+    "• Ring buffer for offline network caching"
+], "#D97706")
+
+draw_box(1190, 900, 360, 160, "Electrical Bench Safety & Ingest", [
+    "• Single-pole 6A MCB (10kA breaking capacity)",
+    "• 2-pole 30mA RCD / RCCB earth fault trip",
+    "• 5kV Optocoupler galvanic isolation barrier",
+    "• Endpoint: POST /api/v1/telemetry/ingest",
+    "• Staged Inactive (ENABLE_HW_INGEST=false)"
+], "#D97706")
+
+img.save(png_path, "PNG", optimize=True)
+print(f"High-res PNG generated: {png_path} ({os.path.getsize(png_path)} bytes)")

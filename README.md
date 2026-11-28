@@ -54,6 +54,18 @@ Energy Mirror is built on an asynchronous, decoupled, multi-tier reactive archit
 
 ### Architectural Diagram
 
+<div align="center">
+
+![Energy Mirror System Architecture](docs/assets/system_architecture.svg)
+
+*Figure 2.1: End-to-End System Architecture, Inter-Layer Data Contracts, and Verification Progress.*  
+*(High-Resolution Vector: [system_architecture.svg](docs/assets/system_architecture.svg) • High-Resolution Raster: [system_architecture.png](docs/assets/system_architecture.png))*
+
+</div>
+
+<details>
+<summary><b>Click to expand ASCII Architecture Breakdown</b></summary>
+
 ```
 +-----------------------------------------------------------------------------------------+
 |                                    PRESENTATION LAYER                                   |
@@ -99,6 +111,7 @@ Energy Mirror is built on an asynchronous, decoupled, multi-tier reactive archit
 |   - High-Voltage Safety: 6A MCB, 30mA RCD, 5kV Optocoupler Galvanic Isolation Barrier   |
 +-----------------------------------------------------------------------------------------+
 ```
+</details>
 
 ---
 
