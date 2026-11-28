@@ -858,11 +858,11 @@ def generate_appliance_baseline():
 
       <!-- 4. LED Bulb (4.2% = 62.5px) -->
       <rect x="1361" y="0" width="62" height="18" fill="#F59E0B"/>
-      <text x="1392" y="13" fill="#000000" font-size="9" font-weight="800" text-anchor="middle">12W</text>
+      <text x="1392" y="13" fill="#000000" font-size="8.5" font-weight="800" text-anchor="middle">12W LED</text>
 
       <!-- 5. Standby Floor (4.2% = 62.5px) -->
       <path d="M 1425 0 L 1484 0 Q 1490 0 1490 6 L 1490 12 Q 1490 18 1484 18 L 1425 18 Z" fill="#A855F7"/>
-      <text x="1457" y="13" fill="#FFFFFF" font-size="9" font-weight="800" text-anchor="middle">Floor</text>
+      <text x="1457" y="13" fill="#FFFFFF" font-size="8.5" font-weight="800" text-anchor="middle">12W Floor</text>
     </g>
   </g>
 
@@ -1020,7 +1020,7 @@ def generate_appliance_baseline():
   <g transform="translate(30, 645)" filter="url(#cardShadow)">
     <rect x="0" y="0" width="1540" height="85" rx="12" fill="url(#totGrad)" stroke="#00E5FF" stroke-width="2"/>
     <text x="35" y="36" fill="#FFFFFF" font-size="16.5" font-weight="800">TOTAL HOUSEHOLD AGGREGATE</text>
-    <text x="35" y="58" fill="#00E5FF" font-size="11.5" font-weight="700">P_agg ≡ P_attr (272W) + P_floor (12W)</text>
+    <text x="35" y="58" fill="#38BDF8" font-size="12" font-weight="700">P_agg = 272W (Loads) + <tspan fill="#C084FC" font-weight="800">12W (Floor)</tspan></text>
 
     <rect x="350" y="22" width="130" height="42" rx="8" fill="#0A2239" stroke="#00E5FF" stroke-width="1.6"/>
     <text x="415" y="50" fill="#00E5FF" font-size="19" font-weight="800" text-anchor="middle">284.0 W</text>
@@ -1072,10 +1072,10 @@ def generate_appliance_baseline():
     draw.text((1260, 141), "Fan 45W (15.8%)", fill="#FFFFFF", font=font_badge)
 
     draw.rectangle([1416, 137, 1478, 157], fill="#F59E0B")
-    draw.text((1432, 141), "12W", fill="#000000", font=font_badge)
+    draw.text((1424, 141), "12W LED", fill="#000000", font=font_badge)
 
     draw.rounded_rectangle([1480, 137, 1545, 157], radius=4, fill="#A855F7")
-    draw.text((1495, 141), "Floor", fill="#FFFFFF", font=font_badge)
+    draw.text((1486, 141), "12W Floor", fill="#FFFFFF", font=font_badge)
 
     # Table Header
     draw.rounded_rectangle([30, 185, 1570, 227], radius=8, fill="#1E293B", outline="#334155", width=1)
@@ -1122,7 +1122,9 @@ def generate_appliance_baseline():
     # Footer (No overlap with 284.0W box, comfortable green box)
     draw.rounded_rectangle([30, 645, 1570, 730], radius=12, fill="#0F2840", outline="#00E5FF", width=2)
     draw.text((55, 658), "TOTAL HOUSEHOLD AGGREGATE", fill="#FFFFFF", font=font_h2)
-    draw.text((55, 686), "P_agg = P_attr (272W) + P_floor (12W)", fill="#00E5FF", font=font_body)
+    w_prefix = font_h3.getlength("P_agg = 272W (Loads) + ")
+    draw.text((55, 686), "P_agg = 272W (Loads) + ", fill="#38BDF8", font=font_h3)
+    draw.text((55 + w_prefix, 686), "12W (Floor)", fill="#C084FC", font=font_h3)
 
     draw.rounded_rectangle([350, 660, 480, 712], radius=8, fill="#0A2239", outline="#00E5FF", width=2)
     draw.text((375, 675), "284.0 W", fill="#00E5FF", font=font_stat)
