@@ -1,11 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" width="100%" height="100%" style="background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1160" width="100%" height="100%" style="background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <defs>
-    <!-- Gradients -->
-    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.9"/>
-      <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.9"/>
-      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.9"/>
-    </linearGradient>
     <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#151D2F"/>
       <stop offset="100%" stop-color="#0F1728"/>
@@ -14,67 +8,58 @@
       <stop offset="0%" stop-color="#1A243B"/>
       <stop offset="100%" stop-color="#111827"/>
     </linearGradient>
-    
-    <!-- Filter Glows -->
-    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
     <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="110%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.4"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
     </filter>
+    <marker id="arrowCyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 Z" fill="#00E5FF"/>
+    </marker>
+    <marker id="arrowIndigo" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 Z" fill="#6366F1"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M 0 0 L 8 4 L 0 8 Z" fill="#F59E0B"/>
+    </marker>
   </defs>
 
-  <!-- ============================================================== -->
-  <!-- 0. TOP HERO HEADER                                             -->
-  <!-- ============================================================== -->
+  <!-- 0. TOP HERO HEADER -->
   <rect x="30" y="25" width="1540" height="75" rx="14" fill="#111827" stroke="#00E5FF" stroke-width="1.8" filter="url(#cardShadow)"/>
-  
-  <!-- Title & Subtitle -->
-  <text x="60" y="60" fill="#FFFFFF" font-size="24" font-weight="800" letter-spacing="1">ENERGY MIRROR: LIVING CURRENT</text>
-  <text x="60" y="83" fill="#00E5FF" font-size="13" font-weight="600" letter-spacing="0.5">End-to-End System Architecture &amp; Verification Progress Map</text>
+  <text x="55" y="58" fill="#FFFFFF" font-size="22" font-weight="800" letter-spacing="0.8">ENERGY MIRROR: LIVING CURRENT</text>
+  <text x="55" y="80" fill="#00E5FF" font-size="13" font-weight="600">End-to-End System Architecture &amp; Progress Verification Map</text>
 
-  <!-- Top Badges -->
-  <!-- Badge 1: Tests -->
-  <g transform="translate(930, 47)">
-    <rect x="0" y="0" width="155" height="30" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.4"/>
-    <circle cx="16" cy="15" r="4.5" fill="#10B981"/>
-    <text x="28" y="20" fill="#E6FFFA" font-size="11.5" font-weight="700">193 TESTS PASSED</text>
+  <!-- Top Badges (140px each, 12px gap, right aligned to 1545) -->
+  <g transform="translate(949, 47)">
+    <rect x="0" y="0" width="140" height="30" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1.4"/>
+    <circle cx="15" cy="15" r="4" fill="#10B981"/>
+    <text x="75" y="20" fill="#E6FFFA" font-size="11" font-weight="800" text-anchor="middle">193 TESTS PASSED</text>
   </g>
-  <!-- Badge 2: UI/UX -->
-  <g transform="translate(1095, 47)">
+  <g transform="translate(1101, 47)">
     <rect x="0" y="0" width="140" height="30" rx="8" fill="#0C4A6E" stroke="#00E5FF" stroke-width="1.4"/>
-    <circle cx="16" cy="15" r="4.5" fill="#00E5FF"/>
-    <text x="28" y="20" fill="#E0F2FE" font-size="11.5" font-weight="700">60 FPS / WCAG AAA</text>
+    <circle cx="15" cy="15" r="4" fill="#00E5FF"/>
+    <text x="75" y="20" fill="#E0F2FE" font-size="11" font-weight="800" text-anchor="middle">60 FPS / WCAG AAA</text>
   </g>
-  <!-- Badge 3: Security -->
-  <g transform="translate(1245, 47)">
+  <g transform="translate(1253, 47)">
     <rect x="0" y="0" width="140" height="30" rx="8" fill="#4C1D95" stroke="#A855F7" stroke-width="1.4"/>
-    <circle cx="16" cy="15" r="4.5" fill="#A855F7"/>
-    <text x="28" y="20" fill="#F3E8FF" font-size="11.5" font-weight="700">LOOPBACK GUARD</text>
+    <circle cx="15" cy="15" r="4" fill="#A855F7"/>
+    <text x="75" y="20" fill="#F3E8FF" font-size="11" font-weight="800" text-anchor="middle">LOOPBACK GUARD</text>
   </g>
-  <!-- Badge 4: HW Status -->
-  <g transform="translate(1395, 47)">
-    <rect x="0" y="0" width="155" height="30" rx="8" fill="#78350F" stroke="#F59E0B" stroke-width="1.4"/>
-    <circle cx="16" cy="15" r="4.5" fill="#F59E0B"/>
-    <text x="28" y="20" fill="#FEF3C7" font-size="11" font-weight="700">HW: PROCUREMENT</text>
+  <g transform="translate(1405, 47)">
+    <rect x="0" y="0" width="140" height="30" rx="8" fill="#78350F" stroke="#F59E0B" stroke-width="1.4"/>
+    <circle cx="15" cy="15" r="4" fill="#F59E0B"/>
+    <text x="75" y="20" fill="#FEF3C7" font-size="10.5" font-weight="800" text-anchor="middle">HW: PROCUREMENT</text>
   </g>
 
-  <!-- ============================================================== -->
-  <!-- 1. PRESENTATION LAYER (FLUTTER)                                -->
-  <!-- ============================================================== -->
+  <!-- 1. PRESENTATION LAYER -->
   <g transform="translate(30, 120)">
-    <!-- Container -->
     <rect x="0" y="0" width="1540" height="230" rx="14" fill="url(#cardGrad)" stroke="#0284C7" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <!-- Header -->
     <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#1E293B"/>
     <text x="25" y="27" fill="#FFFFFF" font-size="15" font-weight="800">1. PRESENTATION LAYER: FLUTTER WEBDESKTOP / MOBILE DASHBOARD</text>
-    <rect x="1270" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1395" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">VERIFIED LIVE (38 TESTS PASSED)</text>
+    <rect x="1265" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1390" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">VERIFIED LIVE (38 TESTS PASSED)</text>
 
-    <!-- Sub-Box 1: Hero Pulse -->
+    <!-- 4 Sub-boxes: width=360 each, x=20, 400, 780, 1160, right margin=20 -->
     <g transform="translate(20, 56)">
-      <rect x="0" y="0" width="355" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Hero Energy Pulse (60 FPS)</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Radial breathing cyan glow visualizer</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Real-time baseline readout: 284.0 W</text>
@@ -83,9 +68,8 @@
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Mobile (393px) &amp; Desktop (1440px) checked</text>
     </g>
 
-    <!-- Sub-Box 2: Constellation -->
-    <g transform="translate(395, 56)">
-      <rect x="0" y="0" width="365" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
+    <g transform="translate(400, 56)">
+      <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Appliance Constellation Grid</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Water Heater: 140.0 W (49.3%, PF 0.99)</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Water Pump: 75.0 W (26.4%, PF 0.78)</text>
@@ -94,7 +78,6 @@
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Interactive toggles &amp; duty cycle models</text>
     </g>
 
-    <!-- Sub-Box 3: Reconciliation -->
     <g transform="translate(780, 56)">
       <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Load Reconciliation Bar</text>
@@ -105,31 +88,28 @@
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• Strictly distinct from 12.0 W LED bulb</text>
     </g>
 
-    <!-- Sub-Box 4: Dynamic Registry -->
     <g transform="translate(1160, 56)">
       <rect x="0" y="0" width="360" height="155" rx="10" fill="url(#subCardGrad)" stroke="#38BDF8" stroke-width="1.2"/>
       <text x="18" y="28" fill="#00E5FF" font-size="13.5" font-weight="700">Dynamic Registry Workbench</text>
       <text x="18" y="52" fill="#CBD5E1" font-size="11.5">• Add / Edit / Inspect appliance dialogs</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Tolerance bounds: Delta P, Expected PF</text>
-      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Capability honesty: PRODUCTION_RULE vs UN</text>
+      <text x="18" y="92" fill="#CBD5E1" font-size="11.5">• Capability honesty: PRODUCTION vs UNSUPPORTED</text>
       <text x="18" y="112" fill="#CBD5E1" font-size="11.5">• Protected default 4-appliance guard</text>
       <text x="18" y="132" fill="#CBD5E1" font-size="11.5">• FlChart 15m/1h/6h/24h non-flatline view</text>
     </g>
   </g>
 
-  <!-- ============================================================== -->
-  <!-- 2. API GATEWAY & SECURITY LAYER                                -->
-  <!-- ============================================================== -->
+  <!-- 2. API GATEWAY LAYER -->
   <g transform="translate(30, 375)">
     <rect x="0" y="0" width="1540" height="185" rx="14" fill="url(#cardGrad)" stroke="#6366F1" stroke-width="1.8" filter="url(#cardShadow)"/>
     <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#1E293B"/>
     <text x="25" y="27" fill="#FFFFFF" font-size="15" font-weight="800">2. API GATEWAY, REVERSE PROXY &amp; SECURITY ENGINE (FASTAPI ASGI)</text>
-    <rect x="1270" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="1395" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">HARDENED (18 TESTS PASSED)</text>
+    <rect x="1265" y="8" width="250" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="1390" y="25" fill="#34D399" font-size="11" font-weight="800" text-anchor="middle">HARDENED (18 TESTS PASSED)</text>
 
-    <!-- Sub-Box 1: Unified Proxy -->
+    <!-- 4 Sub-boxes: width=360 each, x=20, 400, 780, 1160 -->
     <g transform="translate(20, 54)">
-      <rect x="0" y="0" width="355" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Unified Proxy (:5000 / :8000)</text>
       <text x="18" y="48" fill="#CBD5E1" font-size="11">• Single-port reverse proxy (serve_web.py)</text>
       <text x="18" y="68" fill="#CBD5E1" font-size="11">• Static Flutter web release bundle host</text>
@@ -137,9 +117,8 @@
       <text x="18" y="106" fill="#CBD5E1" font-size="11">• WebSocket / SSE live telemetry stream</text>
     </g>
 
-    <!-- Sub-Box 2: Loopback Guard -->
-    <g transform="translate(395, 54)">
-      <rect x="0" y="0" width="365" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
+    <g transform="translate(400, 54)">
+      <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Local Loopback Security Guard</text>
       <text x="18" y="48" fill="#CBD5E1" font-size="11">• Loopback isolation (127.0.0.1, ::1)</text>
       <text x="18" y="68" fill="#CBD5E1" font-size="11">• Administrative mutations guarded (POST, DEL)</text>
@@ -147,7 +126,6 @@
       <text x="18" y="106" fill="#CBD5E1" font-size="11">• Strict CORS origin checking (no wildcards)</text>
     </g>
 
-    <!-- Sub-Box 3: Pydantic Schemas -->
     <g transform="translate(780, 54)">
       <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">Pydantic v2 Schema Guardrails</text>
@@ -157,7 +135,6 @@
       <text x="18" y="106" fill="#CBD5E1" font-size="11">• Timing-safe token auth (compare_digest)</text>
     </g>
 
-    <!-- Sub-Box 4: REST Endpoints -->
     <g transform="translate(1160, 54)">
       <rect x="0" y="0" width="360" height="115" rx="10" fill="url(#subCardGrad)" stroke="#818CF8" stroke-width="1.2"/>
       <text x="18" y="26" fill="#A5B4FC" font-size="13" font-weight="700">RESTful Service Endpoints</text>
@@ -168,19 +145,17 @@
     </g>
   </g>
 
-  <!-- ============================================================== -->
-  <!-- 3. CORE INTELLIGENCE & PERSISTENCE (MIDDLE TIER)               -->
-  <!-- ============================================================== -->
-  <!-- 3A: Dynamic Registry & Simulator -->
+  <!-- 3. MIDDLE TIER: 3 LARGE CARDS (493px each, 30px gap, perfectly centered) -->
+  <!-- 3A -->
   <g transform="translate(30, 585)">
-    <rect x="0" y="0" width="490" height="235" rx="14" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 476 0 Q 490 0 490 14 L 490 42 L 0 42 Z" fill="#1E293B"/>
+    <rect x="0" y="0" width="493" height="235" rx="14" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 479 0 Q 493 0 493 14 L 493 42 L 0 42 Z" fill="#1E293B"/>
     <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3A. DYNAMIC REGISTRY &amp; SIMULATOR</text>
-    <rect x="330" y="8" width="145" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-    <text x="402" y="25" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (30 TESTS)</text>
+    <rect x="335" y="8" width="145" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+    <text x="407" y="25" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (30 TESTS)</text>
 
     <g transform="translate(18, 55)">
-      <rect x="0" y="0" width="454" height="162" rx="10" fill="url(#subCardGrad)" stroke="#059669" stroke-width="1.2"/>
+      <rect x="0" y="0" width="457" height="162" rx="10" fill="url(#subCardGrad)" stroke="#059669" stroke-width="1.2"/>
       <text x="18" y="26" fill="#34D399" font-size="13" font-weight="700">Deterministic Mathematical Simulator</text>
       <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• Dynamic database-backed appliance catalog</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• 16-state combinatorial permutation logic</text>
@@ -190,16 +165,16 @@
     </g>
   </g>
 
-  <!-- 3B: NILM Event Detector & ML -->
-  <g transform="translate(545, 585)">
-    <rect x="0" y="0" width="510" height="235" rx="14" fill="url(#cardGrad)" stroke="#06B6D4" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 496 0 Q 510 0 510 14 L 510 42 L 0 42 Z" fill="#1E293B"/>
+  <!-- 3B -->
+  <g transform="translate(553, 585)">
+    <rect x="0" y="0" width="494" height="235" rx="14" fill="url(#cardGrad)" stroke="#06B6D4" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 480 0 Q 494 0 494 14 L 494 42 L 0 42 Z" fill="#1E293B"/>
     <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3B. RULE-BASED NILM &amp; ML BENCHMARKS</text>
-    <rect x="330" y="8" width="165" height="26" rx="6" fill="#164E63" stroke="#06B6D4" stroke-width="1.2"/>
-    <text x="412" y="25" fill="#67E8F9" font-size="10.5" font-weight="800" text-anchor="middle">BENCHMARKED (74 TESTS)</text>
+    <rect x="315" y="8" width="165" height="26" rx="6" fill="#164E63" stroke="#06B6D4" stroke-width="1.2"/>
+    <text x="397" y="25" fill="#67E8F9" font-size="10.5" font-weight="800" text-anchor="middle">BENCHMARKED (74 TESTS)</text>
 
     <g transform="translate(18, 55)">
-      <rect x="0" y="0" width="474" height="162" rx="10" fill="url(#subCardGrad)" stroke="#0891B2" stroke-width="1.2"/>
+      <rect x="0" y="0" width="458" height="162" rx="10" fill="url(#subCardGrad)" stroke="#0891B2" stroke-width="1.2"/>
       <text x="18" y="26" fill="#22D3EE" font-size="13" font-weight="700">1 Hz Derivative Edge &amp; Public Data Benchmarks</text>
       <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• Derivative step detector: Delta P &amp; Delta PF envelopes</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• Noise floor suppression: |Delta P| &lt; 5.0 W ignored</text>
@@ -209,16 +184,16 @@
     </g>
   </g>
 
-  <!-- 3C: Durable Persistence -->
-  <g transform="translate(1080, 585)">
-    <rect x="0" y="0" width="490" height="235" rx="14" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.8" filter="url(#cardShadow)"/>
-    <path d="M 0 14 Q 0 0 14 0 L 476 0 Q 490 0 490 14 L 490 42 L 0 42 Z" fill="#1E293B"/>
+  <!-- 3C -->
+  <g transform="translate(1077, 585)">
+    <rect x="0" y="0" width="493" height="235" rx="14" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.8" filter="url(#cardShadow)"/>
+    <path d="M 0 14 Q 0 0 14 0 L 479 0 Q 493 0 493 14 L 493 42 L 0 42 Z" fill="#1E293B"/>
     <text x="20" y="27" fill="#FFFFFF" font-size="14" font-weight="800">3C. DURABLE PERSISTENCE LAYER</text>
-    <rect x="330" y="8" width="145" height="26" rx="6" fill="#581C87" stroke="#A855F7" stroke-width="1.2"/>
-    <text x="402" y="25" fill="#D8B4FE" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (11 TESTS)</text>
+    <rect x="335" y="8" width="145" height="26" rx="6" fill="#581C87" stroke="#A855F7" stroke-width="1.2"/>
+    <text x="407" y="25" fill="#D8B4FE" font-size="10.5" font-weight="800" text-anchor="middle">VERIFIED (11 TESTS)</text>
 
     <g transform="translate(18, 55)">
-      <rect x="0" y="0" width="454" height="162" rx="10" fill="url(#subCardGrad)" stroke="#9333EA" stroke-width="1.2"/>
+      <rect x="0" y="0" width="457" height="162" rx="10" fill="url(#subCardGrad)" stroke="#9333EA" stroke-width="1.2"/>
       <text x="18" y="26" fill="#C084FC" font-size="13" font-weight="700">Dual-Engine Relational Storage (Alembic @ 8f8361eca0e9)</text>
       <text x="18" y="50" fill="#CBD5E1" font-size="11.5">• SQLite (energy_mirror.db) for zero-dependency dev</text>
       <text x="18" y="72" fill="#CBD5E1" font-size="11.5">• PostgreSQL (psycopg2) production-ready driver</text>
@@ -228,87 +203,78 @@
     </g>
   </g>
 
-  <!-- ============================================================== -->
-  <!-- 4. HARDWARE & METROLOGY LAYER (BOTTOM)                         -->
-  <!-- ============================================================== -->
-  <g transform="translate(30, 845)">
-    <rect x="0" y="0" width="1540" height="235" rx="14" fill="#151515" stroke="#F59E0B" stroke-width="1.8" filter="url(#cardShadow)"/>
+  <!-- 4. HARDWARE LAYER: 4 Sub-boxes (360px each, matching Section 1 and 2!) -->
+  <g transform="translate(30, 855)">
+    <rect x="0" y="0" width="1540" height="245" rx="14" fill="#151515" stroke="#F59E0B" stroke-width="1.8" filter="url(#cardShadow)"/>
     <path d="M 0 14 Q 0 0 14 0 L 1526 0 Q 1540 0 1540 14 L 1540 42 L 0 42 Z" fill="#29200C"/>
     <text x="25" y="27" fill="#FEF3C7" font-size="15" font-weight="800">4. METROLOGY &amp; HARDWARE INGESTION LAYER (LABORATORY PROCUREMENT BLUEPRINT)</text>
     <rect x="1225" y="8" width="295" height="26" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1.2"/>
     <text x="1372" y="25" fill="#FDE68A" font-size="10.5" font-weight="800" text-anchor="middle">PENDING PHYSICAL PROCUREMENT</text>
 
-    <!-- Sub-Box 1: Sensor IC -->
-    <g transform="translate(20, 54)">
-      <rect x="0" y="0" width="355" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+    <!-- Sub-Box 1 -->
+    <g transform="translate(20, 56)">
+      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
       <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Service Panel Sensing</text>
-      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• Single-point distribution panel sensing</text>
-      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• PZEM-004T v3.0 Digital Energy IC</text>
-      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• Split-core 100A / 100mA current clamp</text>
-      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• Modbus-RTU over RS-485 / UART</text>
-      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• 1 Hz V, I, P, PF, Frequency acquisition</text>
+      <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• Single-point distribution panel sensing</text>
+      <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• PZEM-004T v3.0 Digital Energy IC</text>
+      <text x="18" y="96" fill="#E2E8F0" font-size="11.5">• Split-core 100A / 100mA current clamp</text>
+      <text x="18" y="118" fill="#E2E8F0" font-size="11.5">• Modbus-RTU over RS-485 / UART</text>
+      <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• 1 Hz V, I, P, PF, Frequency acquisition</text>
     </g>
 
-    <!-- Sub-Box 2: CT Scaling -->
-    <g transform="translate(395, 54)">
-      <rect x="0" y="0" width="365" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+    <!-- Sub-Box 2 -->
+    <g transform="translate(400, 56)">
+      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
       <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Low-Power CT Multi-Turn Scaling</text>
-      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• N = 10 primary conductor turns</text>
-      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• Multiplies magnetic flux 10x (12W -> 120W)</text>
-      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• Lifts low loads above CT non-linear floor</text>
-      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• Firmware / Ingestion inverse divisor (N=10)</text>
-      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• Enables sub-15W LED bulb measurement</text>
+      <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• N = 10 primary conductor turns</text>
+      <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• Multiplies magnetic flux 10x (12W -> 120W)</text>
+      <text x="18" y="96" fill="#E2E8F0" font-size="11.5">• Lifts low loads above CT non-linear floor</text>
+      <text x="18" y="118" fill="#E2E8F0" font-size="11.5">• Firmware / Ingestion inverse divisor (N=10)</text>
+      <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• Enables sub-15W LED bulb measurement</text>
     </g>
 
-    <!-- Sub-Box 3: Microcontroller -->
-    <g transform="translate(780, 54)">
-      <rect x="0" y="0" width="360" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+    <!-- Sub-Box 3 -->
+    <g transform="translate(780, 56)">
+      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
       <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Firmware Architecture</text>
-      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• ESP32-WROOM-32D Dual-Core MCU</text>
-      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• Core 0: FreeRTOS 1 Hz Modbus acquisition</text>
-      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• Core 1: Wi-Fi HTTP POST client</text>
-      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• HLK-PM01 5V isolated AC-DC supply</text>
-      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• Ring buffer for offline network caching</text>
+      <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• ESP32-WROOM-32D Dual-Core MCU</text>
+      <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• Core 0: FreeRTOS 1 Hz Modbus acquisition</text>
+      <text x="18" y="96" fill="#E2E8F0" font-size="11.5">• Core 1: Wi-Fi HTTP POST client</text>
+      <text x="18" y="118" fill="#E2E8F0" font-size="11.5">• HLK-PM01 5V isolated AC-DC supply</text>
+      <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• Ring buffer for offline network caching</text>
     </g>
 
-    <!-- Sub-Box 4: Safety & Ingest -->
-    <g transform="translate(1160, 54)">
-      <rect x="0" y="0" width="360" height="162" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
+    <!-- Sub-Box 4 -->
+    <g transform="translate(1160, 56)">
+      <rect x="0" y="0" width="360" height="170" rx="10" fill="#1C180E" stroke="#D97706" stroke-width="1.2"/>
       <text x="18" y="26" fill="#FBBF24" font-size="13" font-weight="700">Electrical Bench Safety &amp; Ingest</text>
-      <text x="18" y="50" fill="#E2E8F0" font-size="11.5">• Single-pole 6A MCB (10kA breaking capacity)</text>
-      <text x="18" y="72" fill="#E2E8F0" font-size="11.5">• 2-pole 30mA RCD / RCCB earth fault trip</text>
-      <text x="18" y="94" fill="#E2E8F0" font-size="11.5">• 5kV Optocoupler galvanic isolation barrier</text>
-      <text x="18" y="116" fill="#E2E8F0" font-size="11.5">• Endpoint: POST /api/v1/telemetry/ingest</text>
-      <text x="18" y="138" fill="#E2E8F0" font-size="11.5">• Staged Inactive (ENABLE_HW_INGEST=false)</text>
+      <text x="18" y="52" fill="#E2E8F0" font-size="11.5">• Single-pole 6A MCB (10kA breaking capacity)</text>
+      <text x="18" y="74" fill="#E2E8F0" font-size="11.5">• 2-pole 30mA RCD / RCCB earth fault trip</text>
+      <text x="18" y="96" fill="#E2E8F0" font-size="11.5">• 5kV Optocoupler galvanic isolation barrier</text>
+      <text x="18" y="118" fill="#E2E8F0" font-size="11.5">• Endpoint: POST /api/v1/telemetry/ingest</text>
+      <text x="18" y="140" fill="#E2E8F0" font-size="11.5">• Staged Inactive (ENABLE_HW_INGEST=false)</text>
     </g>
   </g>
 
-  <!-- ============================================================== -->
-  <!-- 5. FLOW CONNECTING ARROWS                                      -->
-  <!-- ============================================================== -->
+  <!-- 5. PERFECTLY ALIGNED CONNECTORS -->
   <!-- Layer 1 to Layer 2 -->
-  <g stroke="#00E5FF" stroke-width="2.5" fill="none">
-    <path d="M 200 350 L 200 375" marker-end="url(#arrowCyan)"/>
-    <path d="M 1400 375 L 1400 350" marker-end="url(#arrowCyan)"/>
-  </g>
-  <rect x="135" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
-  <text x="200" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">HTTP REST / SSE</text>
+  <line x1="230" y1="350" x2="230" y2="373" stroke="#00E5FF" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
+  <line x1="1370" y1="375" x2="1370" y2="352" stroke="#00E5FF" stroke-width="2.5" marker-end="url(#arrowCyan)"/>
   
-  <rect x="1335" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
-  <text x="1400" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">JSON DTO STREAM</text>
+  <rect x="165" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="230" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">HTTP REST / SSE</text>
+  
+  <rect x="1305" y="354" width="130" height="18" rx="4" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="1370" y="367" fill="#00E5FF" font-size="10" font-weight="700" text-anchor="middle">JSON DTO STREAM</text>
 
   <!-- Layer 2 to Layer 3 -->
-  <g stroke="#6366F1" stroke-width="2.5" fill="none">
-    <path d="M 270 560 L 270 585"/>
-    <path d="M 800 560 L 800 585"/>
-    <path d="M 1320 560 L 1320 585"/>
-  </g>
+  <line x1="276" y1="560" x2="276" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
+  <line x1="800" y1="560" x2="800" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
+  <line x1="1324" y1="560" x2="1324" y2="583" stroke="#6366F1" stroke-width="2.5" marker-end="url(#arrowIndigo)"/>
 
   <!-- Layer 4 to Layer 2 (Staged Ingestion Flow) -->
-  <g stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,4" fill="none">
-    <path d="M 1340 845 L 1340 560"/>
-  </g>
-  <rect x="1275" y="695" width="130" height="20" rx="4" fill="#0B0F19" stroke="#F59E0B" stroke-width="1"/>
-  <text x="1340" y="709" fill="#F59E0B" font-size="9.5" font-weight="700" text-anchor="middle">STAGED INGESTION</text>
+  <line x1="1370" y1="855" x2="1370" y2="563" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowAmber)"/>
+  <rect x="1305" y="700" width="130" height="20" rx="4" fill="#0B0F19" stroke="#F59E0B" stroke-width="1"/>
+  <text x="1370" y="714" fill="#F59E0B" font-size="9.5" font-weight="700" text-anchor="middle">STAGED INGESTION</text>
 
 </svg>

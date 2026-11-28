@@ -1,6 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 780" width="100%" height="100%" style="background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 820" width="100%" height="100%" style="background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
   <defs>
-    <!-- Gradients -->
     <linearGradient id="panelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1E293B"/>
       <stop offset="100%" stop-color="#0F172A"/>
@@ -13,216 +12,192 @@
       <stop offset="0%" stop-color="#161F33"/>
       <stop offset="100%" stop-color="#0D1322"/>
     </linearGradient>
-    <linearGradient id="cyanLine" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00E5FF"/>
-      <stop offset="100%" stop-color="#38BDF8"/>
-    </linearGradient>
-    
-    <!-- Shadows & Glows -->
     <filter id="boxShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
-    </filter>
-    <filter id="glowCyan" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="4" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
     </filter>
   </defs>
 
-  <!-- ========================================== -->
-  <!-- 0. HEADER BANNER                           -->
-  <!-- ========================================== -->
-  <rect x="30" y="20" width="1540" height="60" rx="12" fill="#111827" stroke="#00E5FF" stroke-width="1.6" filter="url(#boxShadow)"/>
-  <text x="60" y="55" fill="#FFFFFF" font-size="20" font-weight="800" letter-spacing="0.8">NON-INTRUSIVE LOAD MONITORING (NILM) DISAGGREGATION PRINCIPLE</text>
-  <rect x="1230" y="35" width="315" height="28" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
-  <text x="1387" y="53" fill="#34D399" font-size="11.5" font-weight="800" text-anchor="middle">ZERO SMART PLUGS REQUIRED</text>
+  <!-- 0. HEADER BANNER -->
+  <rect x="30" y="20" width="1540" height="65" rx="12" fill="#111827" stroke="#00E5FF" stroke-width="1.8" filter="url(#boxShadow)"/>
+  <text x="55" y="56" fill="#FFFFFF" font-size="20" font-weight="800" letter-spacing="0.8">NON-INTRUSIVE LOAD MONITORING (NILM) DISAGGREGATION PRINCIPLE</text>
+  <rect x="1255" y="36" width="290" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1.2"/>
+  <text x="1400" y="56" fill="#34D399" font-size="11.5" font-weight="800" text-anchor="middle">ZERO SMART PLUGS REQUIRED</text>
 
-  <!-- ========================================== -->
-  <!-- 1. TOP NODE: SINGLE SERVICE PANEL SENSOR   -->
-  <!-- ========================================== -->
-  <g transform="translate(480, 105)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="640" height="135" rx="14" fill="url(#panelGrad)" stroke="#F59E0B" stroke-width="2"/>
+  <!-- 1. TOP NODE: SERVICE PANEL SENSOR (Centered at x=800, width=700) -->
+  <g transform="translate(450, 110)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="700" height="140" rx="14" fill="url(#panelGrad)" stroke="#F59E0B" stroke-width="2"/>
+    <rect x="25" y="-12" width="280" height="24" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1.2"/>
+    <text x="165" y="4" fill="#FDE68A" font-size="11" font-weight="800" text-anchor="middle">SINGLE SERVICE PANEL SENSING POINT</text>
     
-    <!-- Header Tag -->
-    <rect x="18" y="-12" width="280" height="24" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1.2"/>
-    <text x="158" y="4" fill="#FDE68A" font-size="11" font-weight="800" text-anchor="middle">SINGLE SERVICE PANEL SENSING POINT</text>
-    
-    <!-- Title & Specs -->
     <text x="30" y="42" fill="#FFFFFF" font-size="18" font-weight="800">Whole-Home Main Distribution Panel</text>
     <text x="30" y="66" fill="#FBBF24" font-size="13" font-weight="700">PZEM-004T v3.0 Metrology IC + Split-Core Current Transformer (CT)</text>
     
-    <!-- Badges Row -->
-    <g transform="translate(30, 85)">
-      <rect x="0" y="0" width="130" height="32" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
-      <text x="65" y="21" fill="#F8FAFC" font-size="12" font-weight="700" text-anchor="middle">Aggregate: 284.0 W</text>
+    <g transform="translate(25, 88)">
+      <rect x="0" y="0" width="150" height="34" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
+      <text x="75" y="22" fill="#F8FAFC" font-size="12" font-weight="700" text-anchor="middle">Aggregate: 284.0 W</text>
 
-      <rect x="145" y="0" width="130" height="32" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
-      <text x="210" y="21" fill="#F8FAFC" font-size="12" font-weight="700" text-anchor="middle">Voltage: 230.2 V</text>
+      <rect x="166" y="0" width="150" height="34" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
+      <text x="241" y="22" fill="#F8FAFC" font-size="12" font-weight="700" text-anchor="middle">Voltage: 230.2 V</text>
 
-      <rect x="290" y="0" width="130" height="32" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
-      <text x="355" y="21" fill="#F8FAFC" font-size="12" font-weight="700" text-anchor="middle">Power Factor: 0.96</text>
+      <rect x="332" y="0" width="150" height="34" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
+      <text x="407" y="22" fill="#F8FAFC" font-size="12" font-weight="700" text-anchor="middle">Power Factor: 0.96</text>
 
-      <rect x="435" y="0" width="145" height="32" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
-      <text x="507" y="21" fill="#00E5FF" font-size="12" font-weight="700" text-anchor="middle">Sampling: 1 Hz Clock</text>
+      <rect x="498" y="0" width="150" height="34" rx="6" fill="#1E293B" stroke="#64748B" stroke-width="1"/>
+      <text x="573" y="22" fill="#00E5FF" font-size="12" font-weight="700" text-anchor="middle">Sampling: 1 Hz Clock</text>
     </g>
   </g>
 
-  <!-- Arrow 1: Panel -> Backend -->
+  <!-- Connector Line 1 -->
   <g stroke="#00E5FF" stroke-width="2.5" fill="none">
-    <path d="M 800 240 L 800 295"/>
-    <polygon points="793,295 807,295 800,307" fill="#00E5FF" stroke="none"/>
+    <path d="M 800 250 L 800 310"/>
+    <polygon points="793,300 807,300 800,312" fill="#00E5FF" stroke="none"/>
   </g>
-  <rect x="670" y="255" width="260" height="24" rx="6" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
-  <text x="800" y="271" fill="#00E5FF" font-size="11" font-weight="700" text-anchor="middle">1 Hz Aggregate Active Power &amp; PF Stream</text>
+  <rect x="660" y="266" width="280" height="26" rx="6" fill="#0B0F19" stroke="#00E5FF" stroke-width="1"/>
+  <text x="800" y="283" fill="#00E5FF" font-size="11" font-weight="700" text-anchor="middle">1 Hz Aggregate Power &amp; PF Stream</text>
 
-  <!-- ========================================== -->
-  <!-- 2. MIDDLE NODE: ENERGY MIRROR BACKEND      -->
-  <!-- ========================================== -->
-  <g transform="translate(420, 310)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="760" height="135" rx="14" fill="url(#engineGrad)" stroke="#00E5FF" stroke-width="2"/>
-    
-    <!-- Header Tag -->
-    <rect x="20" y="-12" width="290" height="24" rx="6" fill="#0C4A6E" stroke="#00E5FF" stroke-width="1.2"/>
-    <text x="165" y="4" fill="#E0F2FE" font-size="11" font-weight="800" text-anchor="middle">ENERGY MIRROR DISAGGREGATION ENGINE</text>
+  <!-- 2. MIDDLE NODE: BACKEND ENGINE (Centered at x=800, width=780) -->
+  <g transform="translate(410, 310)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="780" height="140" rx="14" fill="url(#engineGrad)" stroke="#00E5FF" stroke-width="2"/>
+    <rect x="25" y="-12" width="290" height="24" rx="6" fill="#0C4A6E" stroke="#00E5FF" stroke-width="1.2"/>
+    <text x="170" y="4" fill="#E0F2FE" font-size="11" font-weight="800" text-anchor="middle">ENERGY MIRROR DISAGGREGATION ENGINE</text>
 
-    <!-- Title & Specs -->
     <text x="30" y="42" fill="#FFFFFF" font-size="19" font-weight="800">FastAPI Core + 1 Hz Derivative Edge NILM Detector</text>
     <text x="30" y="66" fill="#38BDF8" font-size="13" font-weight="600">Extracts Discrete Step Transitions: |Delta P| &gt;= 5.0 W &amp; Delta PF Envelopes</text>
     
-    <!-- Highlights Row -->
-    <g transform="translate(30, 85)">
-      <rect x="0" y="0" width="215" height="32" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
-      <text x="107" y="21" fill="#E2E8F0" font-size="11.5" font-weight="700" text-anchor="middle">Dynamic Signature Matching</text>
+    <g transform="translate(25, 88)">
+      <rect x="0" y="0" width="230" height="34" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+      <text x="115" y="22" fill="#E2E8F0" font-size="11.5" font-weight="700" text-anchor="middle">Dynamic Signature Matching</text>
 
-      <rect x="230" y="0" width="235" height="32" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
-      <text x="347" y="21" fill="#E2E8F0" font-size="11.5" font-weight="700" text-anchor="middle">Exact Conservation Accounting</text>
+      <rect x="250" y="0" width="230" height="34" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+      <text x="365" y="22" fill="#E2E8F0" font-size="11.5" font-weight="700" text-anchor="middle">Exact Conservation Accounting</text>
 
-      <rect x="480" y="0" width="220" height="32" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
-      <text x="590" y="21" fill="#34D399" font-size="11.5" font-weight="700" text-anchor="middle">Deduplicated State Events</text>
+      <rect x="500" y="0" width="230" height="34" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+      <text x="615" y="22" fill="#34D399" font-size="11.5" font-weight="700" text-anchor="middle">Deduplicated State Events</text>
     </g>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 3. BUS CONNECTOR ARROWS                    -->
-  <!-- ========================================== -->
-  <!-- Main stem down -->
-  <line x1="800" y1="445" x2="800" y2="495" stroke="#38BDF8" stroke-width="2.5"/>
-  
-  <!-- Horizontal distribution bus -->
-  <line x1="160" y1="495" x2="1440" y2="495" stroke="#38BDF8" stroke-width="2.5"/>
+  <!-- 3. BUS & DROP LINES -->
+  <line x1="800" y1="450" x2="800" y2="500" stroke="#38BDF8" stroke-width="2.5"/>
+  <line x1="174" y1="500" x2="1426" y2="500" stroke="#38BDF8" stroke-width="2.5"/>
 
-  <!-- Vertical drop lines to 5 appliances -->
-  <!-- 1. Heater -->
-  <line x1="160" y1="495" x2="160" y2="535" stroke="#38BDF8" stroke-width="2.5"/>
-  <polygon points="153,535 167,535 160,547" fill="#38BDF8" stroke="none"/>
+  <!-- Drop Lines (EXACT CENTERS: 174, 487, 800, 1113, 1426) -->
+  <g stroke="#38BDF8" stroke-width="2.5" fill="none">
+    <path d="M 174 500 L 174 548"/>
+    <polygon points="168,540 180,540 174,550" fill="#38BDF8" stroke="none"/>
 
-  <!-- 2. Pump -->
-  <line x1="480" y1="495" x2="480" y2="535" stroke="#38BDF8" stroke-width="2.5"/>
-  <polygon points="473,535 487,535 480,547" fill="#38BDF8" stroke="none"/>
+    <path d="M 487 500 L 487 548"/>
+    <polygon points="481,540 493,540 487,550" fill="#38BDF8" stroke="none"/>
 
-  <!-- 3. Fan -->
-  <line x1="800" y1="495" x2="800" y2="535" stroke="#38BDF8" stroke-width="2.5"/>
-  <polygon points="793,535 807,535 800,547" fill="#38BDF8" stroke="none"/>
+    <path d="M 800 500 L 800 548"/>
+    <polygon points="794,540 806,540 800,550" fill="#38BDF8" stroke="none"/>
 
-  <!-- 4. LED Bulb -->
-  <line x1="1120" y1="495" x2="1120" y2="535" stroke="#38BDF8" stroke-width="2.5"/>
-  <polygon points="1113,535 1127,535 1120,547" fill="#38BDF8" stroke="none"/>
+    <path d="M 1113 500 L 1113 548"/>
+    <polygon points="1107,540 1119,540 1113,550" fill="#38BDF8" stroke="none"/>
 
-  <!-- 5. Residual Floor -->
-  <line x1="1440" y1="495" x2="1440" y2="535" stroke="#38BDF8" stroke-width="2.5"/>
-  <polygon points="1433,535 1447,535 1440,547" fill="#38BDF8" stroke="none"/>
+    <path d="M 1426 500 L 1426 548"/>
+    <polygon points="1420,540 1432,540 1426,550" fill="#38BDF8" stroke="none"/>
+  </g>
 
   <!-- Center Callout Pill -->
-  <g transform="translate(620, 482)">
+  <g transform="translate(620, 487)">
     <rect x="0" y="0" width="360" height="26" rx="6" fill="#0B0F19" stroke="#00E5FF" stroke-width="1.4"/>
     <text x="180" y="18" fill="#00E5FF" font-size="11.5" font-weight="800" text-anchor="middle">... ALL EXTRACTED FROM ONE SENSING POINT!</text>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 4. BOTTOM ROW: DISAGGREGATED APPLIANCES    -->
-  <!-- ========================================== -->
-  <!-- Appliance 1: Water Heater -->
-  <g transform="translate(30, 550)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="280" height="205" rx="12" fill="url(#cardGrad)" stroke="#EF4444" stroke-width="1.6"/>
-    <rect x="15" y="15" width="32" height="32" rx="6" fill="#450A0A" stroke="#EF4444" stroke-width="1"/>
-    <text x="31" y="37" fill="#FCA5A5" font-size="16" font-weight="800" text-anchor="middle">♨</text>
-    <text x="58" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Water Heater</text>
+  <!-- 4. BOTTOM 5 APPLIANCE CARDS (288px width each, 25px gap, x=30, 343, 656, 969, 1282) -->
+  <!-- Card 1 -->
+  <g transform="translate(30, 552)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="288" height="235" rx="12" fill="url(#cardGrad)" stroke="#EF4444" stroke-width="1.8"/>
+    <rect x="18" y="15" width="34" height="34" rx="8" fill="#450A0A" stroke="#EF4444" stroke-width="1"/>
+    <text x="35" y="38" fill="#FCA5A5" font-size="18" font-weight="800" text-anchor="middle">♨</text>
+    <text x="62" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Water Heater</text>
 
-    <text x="20" y="75" fill="#EF4444" font-size="22" font-weight="800">140.0 W</text>
-    <text x="135" y="75" fill="#94A3B8" font-size="13" font-weight="600">(49.3% Share)</text>
+    <text x="18" y="78" fill="#EF4444" font-size="22" font-weight="800">140.0 W</text>
+    <text x="135" y="78" fill="#94A3B8" font-size="13" font-weight="600">(49.3% Share)</text>
 
-    <line x1="20" y1="92" x2="260" y2="92" stroke="#334155" stroke-width="1"/>
-    <text x="20" y="115" fill="#CBD5E1" font-size="11.5">• Signature: Pure Resistive</text>
-    <text x="20" y="137" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.99 (Unity)</text>
-    <text x="20" y="159" fill="#CBD5E1" font-size="11.5">• Step Delta: +140 W / -140 W</text>
-    <text x="20" y="181" fill="#10B981" font-size="11.5" font-weight="700">✓ Rule Envelope Matched</text>
+    <line x1="18" y1="95" x2="270" y2="95" stroke="#334155" stroke-width="1"/>
+    <text x="18" y="120" fill="#CBD5E1" font-size="11.5">• Signature: Pure Resistive</text>
+    <text x="18" y="144" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.99 (Unity)</text>
+    <text x="18" y="168" fill="#CBD5E1" font-size="11.5">• Step Delta: +140 W / -140 W</text>
+    
+    <rect x="18" y="190" width="165" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+    <text x="100" y="207" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">✓ Rule Envelope Matched</text>
   </g>
 
-  <!-- Appliance 2: Water Pump -->
-  <g transform="translate(345, 550)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="280" height="205" rx="12" fill="url(#cardGrad)" stroke="#3B82F6" stroke-width="1.6"/>
-    <rect x="15" y="15" width="32" height="32" rx="6" fill="#172554" stroke="#3B82F6" stroke-width="1"/>
-    <text x="31" y="37" fill="#93C5FD" font-size="16" font-weight="800" text-anchor="middle">💧</text>
-    <text x="58" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Water Pump</text>
+  <!-- Card 2 -->
+  <g transform="translate(343, 552)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="288" height="235" rx="12" fill="url(#cardGrad)" stroke="#3B82F6" stroke-width="1.8"/>
+    <rect x="18" y="15" width="34" height="34" rx="8" fill="#172554" stroke="#3B82F6" stroke-width="1"/>
+    <text x="35" y="38" fill="#93C5FD" font-size="18" font-weight="800" text-anchor="middle">💧</text>
+    <text x="62" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Water Pump</text>
 
-    <text x="20" y="75" fill="#3B82F6" font-size="22" font-weight="800">75.0 W</text>
-    <text x="120" y="75" fill="#94A3B8" font-size="13" font-weight="600">(26.4% Share)</text>
+    <text x="18" y="78" fill="#3B82F6" font-size="22" font-weight="800">75.0 W</text>
+    <text x="125" y="78" fill="#94A3B8" font-size="13" font-weight="600">(26.4% Share)</text>
 
-    <line x1="20" y1="92" x2="260" y2="92" stroke="#334155" stroke-width="1"/>
-    <text x="20" y="115" fill="#CBD5E1" font-size="11.5">• Signature: Inductive Motor</text>
-    <text x="20" y="137" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.78 Lagging</text>
-    <text x="20" y="159" fill="#CBD5E1" font-size="11.5">• Step Delta: +75 W (Inrush)</text>
-    <text x="20" y="181" fill="#10B981" font-size="11.5" font-weight="700">✓ Rule Envelope Matched</text>
+    <line x1="18" y1="95" x2="270" y2="95" stroke="#334155" stroke-width="1"/>
+    <text x="18" y="120" fill="#CBD5E1" font-size="11.5">• Signature: Inductive Motor</text>
+    <text x="18" y="144" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.78 Lagging</text>
+    <text x="18" y="168" fill="#CBD5E1" font-size="11.5">• Step Delta: +75 W (Inrush)</text>
+    
+    <rect x="18" y="190" width="165" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+    <text x="100" y="207" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">✓ Rule Envelope Matched</text>
   </g>
 
-  <!-- Appliance 3: Ceiling Fan -->
-  <g transform="translate(660, 550)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="280" height="205" rx="12" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.6"/>
-    <rect x="15" y="15" width="32" height="32" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
-    <text x="31" y="37" fill="#A7F3D0" font-size="16" font-weight="800" text-anchor="middle">🌀</text>
-    <text x="58" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Ceiling Fan</text>
+  <!-- Card 3 -->
+  <g transform="translate(656, 552)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="288" height="235" rx="12" fill="url(#cardGrad)" stroke="#10B981" stroke-width="1.8"/>
+    <rect x="18" y="15" width="34" height="34" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+    <text x="35" y="38" fill="#A7F3D0" font-size="18" font-weight="800" text-anchor="middle">🌀</text>
+    <text x="62" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Ceiling Fan</text>
 
-    <text x="20" y="75" fill="#10B981" font-size="22" font-weight="800">45.0 W</text>
-    <text x="120" y="75" fill="#94A3B8" font-size="13" font-weight="600">(15.8% Share)</text>
+    <text x="18" y="78" fill="#10B981" font-size="22" font-weight="800">45.0 W</text>
+    <text x="125" y="78" fill="#94A3B8" font-size="13" font-weight="600">(15.8% Share)</text>
 
-    <line x1="20" y1="92" x2="260" y2="92" stroke="#334155" stroke-width="1"/>
-    <text x="20" y="115" fill="#CBD5E1" font-size="11.5">• Signature: Rotary Inductive</text>
-    <text x="20" y="137" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.91 Lagging</text>
-    <text x="20" y="159" fill="#CBD5E1" font-size="11.5">• Step Delta: +45 W / -45 W</text>
-    <text x="20" y="181" fill="#10B981" font-size="11.5" font-weight="700">✓ Rule Envelope Matched</text>
+    <line x1="18" y1="95" x2="270" y2="95" stroke="#334155" stroke-width="1"/>
+    <text x="18" y="120" fill="#CBD5E1" font-size="11.5">• Signature: Rotary Inductive</text>
+    <text x="18" y="144" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.91 Lagging</text>
+    <text x="18" y="168" fill="#CBD5E1" font-size="11.5">• Step Delta: +45 W / -45 W</text>
+    
+    <rect x="18" y="190" width="165" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+    <text x="100" y="207" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">✓ Rule Envelope Matched</text>
   </g>
 
-  <!-- Appliance 4: LED Bulb -->
-  <g transform="translate(975, 550)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="280" height="205" rx="12" fill="url(#cardGrad)" stroke="#F59E0B" stroke-width="1.6"/>
-    <rect x="15" y="15" width="32" height="32" rx="6" fill="#78350F" stroke="#F59E0B" stroke-width="1"/>
-    <text x="31" y="37" fill="#FDE68A" font-size="16" font-weight="800" text-anchor="middle">💡</text>
-    <text x="58" y="36" fill="#FFFFFF" font-size="16" font-weight="800">LED Bulb</text>
+  <!-- Card 4 -->
+  <g transform="translate(969, 552)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="288" height="235" rx="12" fill="url(#cardGrad)" stroke="#F59E0B" stroke-width="1.8"/>
+    <rect x="18" y="15" width="34" height="34" rx="8" fill="#78350F" stroke="#F59E0B" stroke-width="1"/>
+    <text x="35" y="38" fill="#FDE68A" font-size="18" font-weight="800" text-anchor="middle">💡</text>
+    <text x="62" y="36" fill="#FFFFFF" font-size="16" font-weight="800">LED Bulb</text>
 
-    <text x="20" y="75" fill="#F59E0B" font-size="22" font-weight="800">12.0 W</text>
-    <text x="120" y="75" fill="#94A3B8" font-size="13" font-weight="600">(4.2% Share)</text>
+    <text x="18" y="78" fill="#F59E0B" font-size="22" font-weight="800">12.0 W</text>
+    <text x="115" y="78" fill="#94A3B8" font-size="13" font-weight="600">(4.2% Share)</text>
 
-    <line x1="20" y1="92" x2="260" y2="92" stroke="#334155" stroke-width="1"/>
-    <text x="20" y="115" fill="#CBD5E1" font-size="11.5">• Signature: SMPS Driver</text>
-    <text x="20" y="137" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.95 Leading</text>
-    <text x="20" y="159" fill="#CBD5E1" font-size="11.5">• Scaled via N=10 CT turn</text>
-    <text x="20" y="181" fill="#10B981" font-size="11.5" font-weight="700">✓ Rule Envelope Matched</text>
+    <line x1="18" y1="95" x2="270" y2="95" stroke="#334155" stroke-width="1"/>
+    <text x="18" y="120" fill="#CBD5E1" font-size="11.5">• Signature: SMPS Driver</text>
+    <text x="18" y="144" fill="#CBD5E1" font-size="11.5">• Power Factor: 0.95 Leading</text>
+    <text x="18" y="168" fill="#CBD5E1" font-size="11.5">• Scaled via N=10 CT turn</text>
+    
+    <rect x="18" y="190" width="165" height="26" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+    <text x="100" y="207" fill="#34D399" font-size="10.5" font-weight="800" text-anchor="middle">✓ Rule Envelope Matched</text>
   </g>
 
-  <!-- Appliance 5: Unattributed Residual Floor -->
-  <g transform="translate(1290, 550)" filter="url(#boxShadow)">
-    <rect x="0" y="0" width="280" height="205" rx="12" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.6"/>
-    <rect x="15" y="15" width="32" height="32" rx="6" fill="#4C1D95" stroke="#A855F7" stroke-width="1"/>
-    <text x="31" y="37" fill="#DDD6FE" font-size="16" font-weight="800" text-anchor="middle">⚡</text>
-    <text x="58" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Residual Floor</text>
+  <!-- Card 5 -->
+  <g transform="translate(1282, 552)" filter="url(#boxShadow)">
+    <rect x="0" y="0" width="288" height="235" rx="12" fill="url(#cardGrad)" stroke="#A855F7" stroke-width="1.8"/>
+    <rect x="18" y="15" width="34" height="34" rx="8" fill="#4C1D95" stroke="#A855F7" stroke-width="1"/>
+    <text x="35" y="38" fill="#DDD6FE" font-size="18" font-weight="800" text-anchor="middle">⚡</text>
+    <text x="62" y="36" fill="#FFFFFF" font-size="16" font-weight="800">Residual Floor</text>
 
-    <text x="20" y="75" fill="#A855F7" font-size="22" font-weight="800">12.0 W</text>
-    <text x="120" y="75" fill="#94A3B8" font-size="13" font-weight="600">(4.2% Floor)</text>
+    <text x="18" y="78" fill="#A855F7" font-size="22" font-weight="800">12.0 W</text>
+    <text x="115" y="78" fill="#94A3B8" font-size="13" font-weight="600">(4.2% Floor)</text>
 
-    <line x1="20" y1="92" x2="260" y2="92" stroke="#334155" stroke-width="1"/>
-    <text x="20" y="115" fill="#CBD5E1" font-size="11.5">• Parasitic Standby Baseline</text>
-    <text x="20" y="137" fill="#CBD5E1" font-size="11.5">• Smoke detectors, router, clock</text>
-    <text x="20" y="159" fill="#CBD5E1" font-size="11.5">• Distinct from 12W LED bulb</text>
-    <text x="20" y="181" fill="#A855F7" font-size="11.5" font-weight="700">⚖ Conservation Invariant</text>
+    <line x1="18" y1="95" x2="270" y2="95" stroke="#334155" stroke-width="1"/>
+    <text x="18" y="120" fill="#CBD5E1" font-size="11.5">• Parasitic Standby Baseline</text>
+    <text x="18" y="144" fill="#CBD5E1" font-size="11.5">• Smoke alarms, router, clock</text>
+    <text x="18" y="168" fill="#CBD5E1" font-size="11.5">• Distinct from 12.0 W LED</text>
+    
+    <rect x="18" y="190" width="180" height="26" rx="6" fill="#3B0764" stroke="#A855F7" stroke-width="1"/>
+    <text x="108" y="207" fill="#E9D5FF" font-size="10.5" font-weight="800" text-anchor="middle">✓ Conservation Invariant</text>
   </g>
 
 </svg>
