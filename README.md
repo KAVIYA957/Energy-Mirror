@@ -150,6 +150,18 @@ Within the Energy Mirror simulator:
 
 $$P_{\text{aggregate}} \equiv \sum_{k} P_{\text{attributed}, k} + P_{\text{unattributed}}$$
 
+<div align="center">
+
+![Virtual Appliance Baseline Configuration](docs/assets/appliance_baseline_table.svg)
+
+*Figure 3.1: Virtual Appliance Baseline Configuration, Power Proportions, and Exact Reconciliation Invariant.*  
+*(High-Resolution Vector: [appliance_baseline_table.svg](docs/assets/appliance_baseline_table.svg) • High-Resolution Raster: [appliance_baseline_table.png](docs/assets/appliance_baseline_table.png))*
+
+</div>
+
+<details>
+<summary><b>Click to expand ASCII Configuration Table</b></summary>
+
 ```
 +----------------------------------------------------------------------------------------+
 | VIRTUAL APPLIANCE BASELINE CONFIGURATION                                               |
@@ -165,6 +177,7 @@ $$P_{\text{aggregate}} \equiv \sum_{k} P_{\text{attributed}, k} + P_{\text{unatt
 | TOTAL AGGREGATE    | 284.0 W    | 0.96 Net     | 100.0%        | Exact Reconciliation  |
 +--------------------+------------+--------------+---------------+-----------------------+
 ```
+</details>
 
 * **All 4 Appliances ON:** $140\text{ W} + 75\text{ W} + 45\text{ W} + 12\text{ W} + 12\text{ W} = \mathbf{284.0\text{ W}}$
 * **Water Heater Toggled OFF:** $0\text{ W} + 75\text{ W} + 45\text{ W} + 12\text{ W} + 12\text{ W} = \mathbf{144.0\text{ W}}$
